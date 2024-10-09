@@ -11,18 +11,16 @@ const Stack = createNativeStackNavigator();
 const StackNavigation = () => {
   const [isActive, setIsActive] = useState<boolean>(false);
 
-  const splashScreenHandler = () => {
-    setIsActive(!isActive);
-  };
   useEffect(() => {
     setTimeout(() => {
-      splashScreenHandler();
+      setIsActive(!isActive);
     }, 3000);
-  },[]);
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {isActive ? (
+        {!isActive ? (
           <Stack.Screen
             options={{headerShown: false}}
             name="splashScreen"
