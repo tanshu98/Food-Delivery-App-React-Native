@@ -28,11 +28,11 @@ const StackNavigation = () => {
           />
         ) : (
           <>
-            <Stack.Screen
+            {/* <Stack.Screen
               options={{headerShown: false}}
               name="onboardingScreen"
               component={OnboardingScreen}
-            />
+            /> */}
             <Stack.Screen
               options={{headerShown: false}}
               name="loginScreen"

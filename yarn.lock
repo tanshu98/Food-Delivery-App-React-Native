@@ -4815,6 +4815,16 @@ react-native-codegen@0.0.7:
     jscodeshift "^0.11.0"
     nullthrows "^1.1.1"
 
+react-native-country-codes-picker@^2.3.5:
+  version "2.3.5"
+  resolved "https://registry.npmjs.org/react-native-country-codes-picker/-/react-native-country-codes-picker-2.3.5.tgz"
+  integrity sha512-dDQhd0bVvlmgb84NPhTOmTk5UVYPHtk3lqZI+BPb61H1rC2IDrTvPWENg6u1DMGliqWHQDBYpeH37zvxxQL71w==
+
+react-native-otp-entry@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.npmjs.org/react-native-otp-entry/-/react-native-otp-entry-1.7.2.tgz"
+  integrity sha512-95QQjBl79E/GKNBg9hY3Vib4L25hBEPm4uOX1WA3hc2SJo0dFWn0hUMgtAnCeZdm1MYJQwvpBwTE1IwbuixPRA==
+
 react-native-responsive-dimensions@^3.1.1:
   version "3.1.1"
   resolved "https://registry.npmjs.org/react-native-responsive-dimensions/-/react-native-responsive-dimensions-3.1.1.tgz"

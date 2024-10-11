@@ -1,5 +1,5 @@
 import React from 'react';
-import {ImageBackground, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {ImageBackground, SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 // import {SafeAreaView} from 'react-native-safe-area-context';
 import {splashBg} from '../assets';
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
@@ -7,6 +7,11 @@ import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimen
 const SplashScreen = () => {
   return (
     <View style={styles.safeAreaContainer}>
+          <StatusBar
+        backgroundColor={'rgba(0,0,0,0)'}
+        translucent={true}
+        barStyle={'light-content'}
+      />
       <ImageBackground
         source={splashBg}
         resizeMode="cover"

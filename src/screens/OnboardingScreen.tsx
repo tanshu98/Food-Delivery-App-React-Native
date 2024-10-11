@@ -94,7 +94,7 @@ const OnboardingScreen = ({navigation}: OnboardingScreenProps) => {
           {activeIndex !== data.length - 1 && (
             <TouchableOpacity
               style={styles.skipButton}
-              onPress={() => navigation.navigate('login')}>
+              onPress={() => navigation.navigate('loginScreen')}>
               <MaterialIcons
                 name={'skip-next'}
                 color={colors.black}
