@@ -9,8 +9,9 @@ export const loginbgTwo = require('./images/Loginbg2.png');
 export const loginStoreIcon = require('./images/store.png');
 export const customerIconWhite = require('./images/CustomerWhiteBg.png');
 export const customerIconRed = require('./images/CustomerRedBg.png');
-
 export const sellerIconStore = require('./images/SellerIcon.png');
+export const registerBg = require('./images/RegisterBg.png');
+
 
 
 
