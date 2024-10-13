@@ -33,11 +33,11 @@ const StackNavigation = () => {
               name="onboardingScreen"
               component={OnboardingScreen}
             /> */}
-            <Stack.Screen
+            {/* <Stack.Screen
               options={{headerShown: false}}
               name="loginScreen"
               component={LoginScreen}
-            />
+            /> */}
             <Stack.Screen
               options={{headerShown: false}}
               name="registerScreen"

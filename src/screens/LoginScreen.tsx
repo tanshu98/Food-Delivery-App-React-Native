@@ -22,99 +22,15 @@ import CountryCodes from '../components/CountryCodes';
 import PhoneIcon from 'react-native-vector-icons/MaterialIcons';
 import CustomerIcon from 'react-native-vector-icons/MaterialIcons';
 import {loginStoreIcon} from '../assets';
-import { customerIconWhite, customerIconRed } from '../assets';
+import {customerIconWhite, customerIconRed} from '../assets';
 
 import {OtpInput} from 'react-native-otp-entry';
-import { Formik } from 'formik';
+import {Formik} from 'formik';
 import * as Yup from 'yup';
 
 const LoginScreen = ({navigation}: {navigation: any}) => {
-  const [show, setShow] = useState(false);
-  const [countryCode, setCountryCode] = useState('');
+  
   const [selectedUserType, setSelectedUserType] = useState('Customer');
-
-  // return (
-
-  //   <View style={styles.loginContainer}>
-  //     <StatusBar
-  //       backgroundColor={'rgba(0,0,0,0)'}
-  //       translucent={true}
-  //       barStyle={'light-content'}
-  //     />
-  //     <ImageBackground source={loginbgOne} style={styles.bgContainer}>
-  //       <Image source={loginbgTwo} style={styles.bannerContainer} />
-  //       <View style={styles.loginWelcomeBack}>
-  //         <Text style={styles.title}>Login</Text>
-  //         <Text style={styles.subTitle}>Welcome Back!</Text>
-  //       </View>
-  //     </ImageBackground>
-
-  //     <View style={styles.loginForm}>
-  //       <View style={styles.codesMobileInputContainer}>
-  //         <CountryCodes />
-  //         <View style={styles.mobileInputContainer}>
-  //           <TextInput
-  //             placeholder="Mobile No"
-  //             placeholderTextColor={colors.black}
-  //             style={styles.mobileInput}
-  //           />
-  //           <PhoneIcon name="phone" size={20} color={colors.lightTextColor} />
-  //         </View>
-  //       </View>
-  //       <View style={styles.passwordInputContainer}>
-  //         <Text style={styles.passwordInputTitle}>Passcode</Text>
-  //         <OtpInput
-  //           numberOfDigits={6}
-  //           focusColor="green"
-  //           focusStickBlinkingDuration={500}
-  //           onTextChange={text => console.log(text)}
-  //           onFilled={text => console.log(`OTP is ${text}`)}
-  //           textInputProps={{
-  //             accessibilityLabel: 'One-Time Password',
-  //           }}
-  //         />
-  //         <Text style={styles.forgotPasscode}>Forgot Passcode?</Text>
-  //       </View>
-
-  //       {/* Customer and Seller Toggle */}
-  //       <View style={styles.customerSellerContainer}>
-  //         <TouchableOpacity style={styles.customerContainer}
-  //           onPress={() => setSelectedUserType('Customer')}
-          
-  //         >
-  //           <View style={styles.customerIconContainer}>
-  //             {selectedUserType === 'Customer' ? (
-  //                 <Image source={customerIconRed} />
-  //             ): (<Image source={customerIconWhite} />)}
-  //           </View>
-  //           <Text style={styles.customerText}>Customer</Text>
-  //         </TouchableOpacity>
-
-  //         <TouchableOpacity
-  //           onPress={() => setSelectedUserType('Seller')}
-  //           style={styles.sellerContainer}>
-  //           <View style={styles.sellerIconContainer}>
-  //             {selectedUserType === 'Seller' ? (
-  //               <Image source={sellerIconStore} />
-  //             ) : (
-  //               <Image source={loginStoreIcon} />
-  //             )}
-  //           </View>
-  //           <Text style={[styles.sellerText]}>Seller</Text>
-  //         </TouchableOpacity>
-  //       </View>
-
-  //       <TouchableOpacity style={styles.loginButton}>
-  //         <Text style={styles.loginButtonText}>Login</Text>
-  //       </TouchableOpacity>
-  //       <View style={styles.registerContainer}>
-  //         <TouchableOpacity style={styles.registerButton}>
-  //           <Text style={styles.registerButtonText}>Register</Text>
-  //         </TouchableOpacity>
-  //       </View>
-  //     </View>
-  //   </View>
-  // );
 
   const validationSchema = Yup.object().shape({
     mobileNumber: Yup.string()
@@ -127,108 +43,110 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
 
   return (
     <ScrollView>
-    <Formik
-      initialValues={{mobileNumber: '', passcode: ''}}
-      validationSchema={validationSchema}
-      onSubmit={values => {
-        // Handle form submission
-        console.log('Login details:', values);
-      }}>
-      {({handleSubmit, handleChange, values, errors, touched}) => (
-        <View style={styles.loginContainer}>
-          <StatusBar
-            backgroundColor={'rgba(0,0,0,0)'}
-            translucent={true}
-            barStyle={'light-content'}
-          />
-          <ImageBackground source={loginbgOne} style={styles.bgContainer}>
-            <Image source={loginbgTwo} style={styles.bannerContainer} />
-            <View style={styles.loginWelcomeBack}>
-              <Text style={styles.title}>Login</Text>
-              <Text style={styles.subTitle}>Welcome Back!</Text>
-            </View>
-          </ImageBackground>
+      <Formik
+        initialValues={{mobileNumber: '', passcode: ''}}
+        validationSchema={validationSchema}
+        onSubmit={values => {
+          // Handle form submission
+          console.log('Login details:', values);
+        }}>
+        {({handleSubmit, handleChange, values, errors, touched}) => (
+          <View style={styles.loginContainer}>
+            <StatusBar
+              backgroundColor={'rgba(0,0,0,0)'}
+              translucent={true}
+              barStyle={'light-content'}
+            />
+            <ImageBackground source={loginbgOne} style={styles.bgContainer}>
+              <Image source={loginbgTwo} style={styles.bannerContainer} />
+              <View style={styles.loginWelcomeBack}>
+                <Text style={styles.title}>Login</Text>
+                <Text style={styles.subTitle}>Welcome Back!</Text>
+              </View>
+            </ImageBackground>
 
-          <View style={styles.loginForm}>
-            <View style={styles.codesMobileInputContainer}>
-              <CountryCodes />
-              <View style={styles.mobileInputContainer}>
-                <TextInput
-                  placeholder="Mobile No"
-                  placeholderTextColor={colors.black}
-                  style={styles.mobileInput}
-                  keyboardType="number-pad"
-                  onChangeText={handleChange('mobileNumber')}
-                  value={values.mobileNumber}
+            <View style={styles.loginForm}>
+              <View style={styles.codesMobileInputContainer}>
+                <CountryCodes />
+                <View style={styles.mobileInputContainer}>
+                  <TextInput
+                    placeholder="Mobile No"
+                    placeholderTextColor={colors.black}
+                    style={styles.mobileInput}
+                    keyboardType="number-pad"
+                    onChangeText={handleChange('mobileNumber')}
+                    value={values.mobileNumber}
+                  />
+                  <PhoneIcon
+                    name="phone"
+                    size={20}
+                    color={colors.lightTextColor}
+                  />
+                </View>
+              </View>
+              {touched.mobileNumber && errors.mobileNumber && (
+                <Text style={styles.errorText}>{errors.mobileNumber}</Text>
+              )}
+
+              <View style={styles.passwordInputContainer}>
+                <Text style={styles.passwordInputTitle}>Passcode</Text>
+                <OtpInput
+                  numberOfDigits={6}
+                  focusColor="green"
+                  onTextChange={handleChange('passcode')}
+                  onFilled={text => console.log(`OTP is ${text}`)}
                 />
-                <PhoneIcon
-                  name="phone"
-                  size={20}
-                  color={colors.lightTextColor}
-                />
+                {touched.passcode && errors.passcode && (
+                  <Text style={styles.errorText}>{errors.passcode}</Text>
+                )}
+                <Text style={styles.forgotPasscode}>Forgot Passcode?</Text>
+              </View>
+
+              <View style={styles.customerSellerContainer}>
+                <TouchableOpacity
+                  style={styles.customerContainer}
+                  onPress={() => setSelectedUserType('Customer')}>
+                  <View style={styles.customerIconContainer}>
+                    {selectedUserType === 'Customer' ? (
+                      <Image source={customerIconRed} />
+                    ) : (
+                      <Image source={customerIconWhite} />
+                    )}
+                  </View>
+                  <Text style={styles.customerText}>Customer</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => setSelectedUserType('Seller')}
+                  style={styles.sellerContainer}>
+                  <View style={styles.sellerIconContainer}>
+                    {selectedUserType === 'Seller' ? (
+                      <Image source={sellerIconStore} />
+                    ) : (
+                      <Image source={loginStoreIcon} />
+                    )}
+                  </View>
+                  <Text style={styles.sellerText}>Seller</Text>
+                </TouchableOpacity>
+              </View>
+
+              <TouchableOpacity
+                style={styles.loginButton}
+                onPress={() => handleSubmit()}>
+                <Text style={styles.loginButtonText}>LOGIN</Text>
+              </TouchableOpacity>
+
+              <View style={styles.registerContainer}>
+                <TouchableOpacity
+                  style={styles.registerButton}
+                  onPress={() => navigation.navigate('registerScreen')}>
+                  <Text style={styles.registerButtonText}>Register Now?</Text>
+                </TouchableOpacity>
               </View>
             </View>
-            {touched.mobileNumber && errors.mobileNumber && (
-              <Text style={styles.errorText}>{errors.mobileNumber}</Text>
-            )}
-
-            <View style={styles.passwordInputContainer}>
-              <Text style={styles.passwordInputTitle}>Passcode</Text>
-              <OtpInput
-                numberOfDigits={6}
-                focusColor="green"
-                onTextChange={handleChange('passcode')}
-                onFilled={text => console.log(`OTP is ${text}`)}
-              />
-              {touched.passcode && errors.passcode && (
-                <Text style={styles.errorText}>{errors.passcode}</Text>
-              )}
-              <Text style={styles.forgotPasscode}>Forgot Passcode?</Text>
-            </View>
-
-            <View style={styles.customerSellerContainer}>
-              <TouchableOpacity
-                style={styles.customerContainer}
-                onPress={() => setSelectedUserType('Customer')}>
-                <View style={styles.customerIconContainer}>
-                  {selectedUserType === 'Customer' ? (
-                    <Image source={customerIconRed} />
-                  ) : (
-                    <Image source={customerIconWhite} />
-                  )}
-                </View>
-                <Text style={styles.customerText}>Customer</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => setSelectedUserType('Seller')}
-                style={styles.sellerContainer}>
-                <View style={styles.sellerIconContainer}>
-                  {selectedUserType === 'Seller' ? (
-                    <Image source={sellerIconStore} />
-                  ) : (
-                    <Image source={loginStoreIcon} />
-                  )}
-                </View>
-                <Text style={styles.sellerText}>Seller</Text>
-              </TouchableOpacity>
-            </View>
-
-            <TouchableOpacity
-              style={styles.loginButton}
-              onPress={()=>handleSubmit()}>
-              <Text style={styles.loginButtonText}>LOGIN</Text>
-            </TouchableOpacity>
-
-            <View style={styles.registerContainer}>
-              <TouchableOpacity style={styles.registerButton} onPress={() => navigation.navigate('registerScreen')}>
-                <Text style={styles.registerButtonText}>Register Now?</Text>
-              </TouchableOpacity>
-            </View>
           </View>
-        </View>
-      )}
-    </Formik>
+        )}
+      </Formik>
     </ScrollView>
   );
 };
@@ -236,11 +154,13 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
 const styles = StyleSheet.create({
   loginContainer: {
     flex: 1,
+    height: responsiveHeight(100),
+    width: responsiveWidth(100),
   },
   bgContainer: {
-    // flex: 1,
-    width: responsiveWidth(100),
-    height: responsiveWidth(100),
+    flex: 1,
+    // width: responsiveWidth(100),
+    // height: responsiveWidth(100),
     flexDirection: 'row',
   },
   bannerContainer: {
@@ -259,15 +179,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: responsiveFontSize(7),
     color: colors.white,
-    fontWeight: 'bold',
-    fontFamily: fonts.bai.regular,
+    // fontWeight: 'bold',
+    fontFamily: fonts.bai.semiBold,
   },
   subTitle: {
     fontSize: responsiveFontSize(2.4),
     marginLeft: 5,
     color: colors.white,
-    fontFamily: fonts.bai.medium,
-    fontWeight: '700',
+    fontFamily: fonts.bai.semiBold,
+    // fontWeight: '700',
   },
   loginForm: {
     flex: 1,
@@ -304,20 +224,20 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: fonts.montserrat.semiBold,
     fontSize: responsiveFontSize(2.5),
-    fontWeight: '600',
+    // fontWeight: '600',
   },
   passwordInputContainer: {},
   passwordInputTitle: {
     marginVertical: 15,
     fontFamily: fonts.montserrat.semiBold,
     fontSize: responsiveFontSize(2.2),
-    fontWeight: '600',
+    // fontWeight: '600',
     color: colors.black,
   },
   forgotPasscode: {
     fontFamily: fonts.montserrat.semiBold,
     fontSize: responsiveFontSize(2.2),
-    fontWeight: '600',
+    // fontWeight: '600',
     color: colors.red,
     alignSelf: 'flex-end',
     marginVertical: 15,
@@ -327,7 +247,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'space-between',
     alignItems: 'center',
     gap: 20,
-    marginVertical:10
+    marginVertical: 10,
   },
   customerContainer: {
     flexDirection: 'row',
@@ -350,7 +270,7 @@ const styles = StyleSheet.create({
   customerText: {
     fontFamily: fonts.montserrat.semiBold,
     fontSize: responsiveFontSize(2.2),
-    fontWeight: '600',
+    // fontWeight: '600',
     color: colors.black,
   },
 
@@ -379,7 +299,7 @@ const styles = StyleSheet.create({
   sellerText: {
     fontFamily: fonts.montserrat.semiBold,
     fontSize: responsiveFontSize(2.2),
-    fontWeight: '600',
+    // fontWeight: '600',
     color: colors.black,
   },
   loginButton: {
@@ -400,7 +320,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: responsiveFontSize(2.5),
     fontFamily: fonts.bai.semiBold,
-    fontWeight:'700'
+    // fontWeight:'700'
   },
   registerContainer: {
     flexDirection: 'row',
