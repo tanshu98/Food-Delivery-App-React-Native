@@ -3,6 +3,7 @@ import {
   Image,
   ImageBackground,
   Platform,
+  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -28,9 +29,14 @@ const validationSchema = Yup.object().shape({
     .required('Mobile number is required'),
 });
 
-const ForgetPasscodeScreen = ({navigation}:any) => {
+const ForgetPasscodeScreen = ({navigation}: any) => {
   return (
     <View style={styles.container}>
+      <StatusBar
+        backgroundColor={'rgba(0,0,0,0)'}
+        translucent={true}
+        barStyle={'light-content'}
+      />
       <View style={styles.forgetPasscodeContainer}>
         <ImageBackground source={ForgetPasscodeBanner} style={styles.topView}>
           <TouchableOpacity>
@@ -46,9 +52,8 @@ const ForgetPasscodeScreen = ({navigation}:any) => {
         validationSchema={validationSchema}
         onSubmit={values => {
           console.log('Form values', values);
-        //   navigation.navigate('');
-        }}
-      >
+          //   navigation.navigate('');
+        }}>
         {({
           handleChange,
           handleBlur,
@@ -76,8 +81,7 @@ const ForgetPasscodeScreen = ({navigation}:any) => {
 
             <TouchableOpacity
               style={styles.submitButton}
-              onPress={()=>handleSubmit()}
-            >
+              onPress={() => handleSubmit()}>
               <Text style={styles.submitButtonText}>SEND OTP</Text>
             </TouchableOpacity>
           </View>

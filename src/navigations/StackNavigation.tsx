@@ -8,6 +8,8 @@ import RegisterScreen from '../screens/RegisterScreen';
 import OtpScreen from '../screens/OtpScreen';
 import Toast from 'react-native-toast-message';
 import ForgetPasscodeScreen from '../screens/ForgetPasscodeScreen';
+import OtpVerificationScreen from '../screens/OtpVerificationScreen';
+import SetNewPasscodeScreen from '../screens/SetNewPasscodeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,7 +24,7 @@ const StackNavigation = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='otpScreen'>
+      <Stack.Navigator initialRouteName='setNewPasscodeScreen'>
         {!isActive ? (
           <Stack.Screen
             options={{headerShown: false}}
@@ -55,6 +57,16 @@ const StackNavigation = () => {
               options={{headerShown: false}}
               name="forgetPasscodeScreen"
               component={ForgetPasscodeScreen}
+            />
+            <Stack.Screen
+              options={{headerShown: false}}
+              name="otpVerificationScreen"
+              component={OtpVerificationScreen}
+            />
+            <Stack.Screen
+              options={{headerShown: false}}
+              name="setNewPasscodeScreen"
+              component={SetNewPasscodeScreen}
             />
           </>
         )}

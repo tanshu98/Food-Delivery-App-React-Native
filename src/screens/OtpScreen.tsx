@@ -6,6 +6,7 @@ import {
   Platform,
   SafeAreaView,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -64,6 +65,11 @@ const OtpScreen = ({navigation}: {navigation: any}) => {
     <ScrollView
       style={styles.safeAreaContainer}
       keyboardShouldPersistTaps="handled">
+          <StatusBar
+              backgroundColor={'rgba(0,0,0,0)'}
+              translucent={true}
+              barStyle={'light-content'}
+            />
       <ImageBackground
         source={otpBanner}
         resizeMode="cover"
@@ -90,9 +96,9 @@ const OtpScreen = ({navigation}: {navigation: any}) => {
           {/* </KeyboardAvoidingView> */}
           <View style={styles.resendOtp}>
             <Text style={styles.resendOtpText}>Resend OTP</Text>
-            <View style={styles.reloadIcon}>
+            <TouchableOpacity style={styles.reloadIcon} onPress={generateOtp}>
               <ReloadIcon name="reload1" size={18} color={colors.white} />
-            </View>
+            </TouchableOpacity>
           </View>
           <View style={styles.otpSubmitButton}>
             <TouchableOpacity onPress={handleSubmit}>
