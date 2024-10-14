@@ -5,6 +5,9 @@ import SplashScreen from '../screens/SplashScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import OtpScreen from '../screens/OtpScreen';
+import Toast from 'react-native-toast-message';
+import ForgetPasscodeScreen from '../screens/ForgetPasscodeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,7 +22,7 @@ const StackNavigation = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName='loginScreen'>
         {!isActive ? (
           <Stack.Screen
             options={{headerShown: false}}
@@ -28,24 +31,35 @@ const StackNavigation = () => {
           />
         ) : (
           <>
-            {/* <Stack.Screen
+            <Stack.Screen
               options={{headerShown: false}}
               name="onboardingScreen"
               component={OnboardingScreen}
-            /> */}
-            {/* <Stack.Screen
+            />
+            <Stack.Screen
               options={{headerShown: false}}
               name="loginScreen"
               component={LoginScreen}
-            /> */}
+            />
             <Stack.Screen
               options={{headerShown: false}}
               name="registerScreen"
               component={RegisterScreen}
             />
+              <Stack.Screen
+              options={{headerShown: false}}
+              name="otpScreen"
+              component={OtpScreen}
+            />
+               <Stack.Screen
+              options={{headerShown: false}}
+              name="forgetPasscodeScreen"
+              component={ForgetPasscodeScreen}
+            />
           </>
         )}
       </Stack.Navigator>
+      <Toast />
     </NavigationContainer>
   );
 };

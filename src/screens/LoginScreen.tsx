@@ -27,6 +27,7 @@ import {customerIconWhite, customerIconRed} from '../assets';
 import {OtpInput} from 'react-native-otp-entry';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import KeyboardWrapper from '../components/KeyboardWrapper';
 
 const LoginScreen = ({navigation}: {navigation: any}) => {
   
@@ -42,12 +43,12 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
   });
 
   return (
-    <ScrollView>
+    
+    <KeyboardWrapper>
       <Formik
         initialValues={{mobileNumber: '', passcode: ''}}
         validationSchema={validationSchema}
         onSubmit={values => {
-          // Handle form submission
           console.log('Login details:', values);
         }}>
         {({handleSubmit, handleChange, values, errors, touched}) => (
@@ -147,7 +148,7 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
           </View>
         )}
       </Formik>
-    </ScrollView>
+    </KeyboardWrapper>
   );
 };
 
@@ -159,8 +160,6 @@ const styles = StyleSheet.create({
   },
   bgContainer: {
     flex: 1,
-    // width: responsiveWidth(100),
-    // height: responsiveWidth(100),
     flexDirection: 'row',
   },
   bannerContainer: {
@@ -179,7 +178,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: responsiveFontSize(7),
     color: colors.white,
-    // fontWeight: 'bold',
     fontFamily: fonts.bai.semiBold,
   },
   subTitle: {
@@ -187,64 +185,46 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     color: colors.white,
     fontFamily: fonts.bai.semiBold,
-    // fontWeight: '700',
   },
   loginForm: {
     flex: 1,
     marginHorizontal: 25,
     marginVertical: 20,
-    // width:responsiveWidth(100),
-    // height: responsiveHeight(100),
   },
   codesMobileInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    // justifyContent: 'space-between',
-    // borderColor: colors.lightTextColor,
     borderBottomWidth: 1,
     borderBottomColor: colors.lightTextColor,
-    // borderRadius: 5,
     paddingVertical: 10,
-    // width: responsiveWidth(100),
   },
   mobileInputContainer: {
     flexDirection: 'row',
     flex: 1,
-    // justifyContent: 'space-around',
     alignItems: 'center',
     marginLeft: 10,
-    // gap:10,
-    // width: responsiveWidth(80),
-    // borderColor: colors.lightTextColor,
-    // borderRadius: 5,
-    // paddingVertical: 5,
-    // paddingHorizontal: 10
   },
   mobileInput: {
     flex: 1,
     fontFamily: fonts.montserrat.semiBold,
     fontSize: responsiveFontSize(2.5),
-    // fontWeight: '600',
   },
   passwordInputContainer: {},
   passwordInputTitle: {
     marginVertical: 15,
     fontFamily: fonts.montserrat.semiBold,
     fontSize: responsiveFontSize(2.2),
-    // fontWeight: '600',
     color: colors.black,
   },
   forgotPasscode: {
     fontFamily: fonts.montserrat.semiBold,
     fontSize: responsiveFontSize(2.2),
-    // fontWeight: '600',
     color: colors.red,
     alignSelf: 'flex-end',
     marginVertical: 15,
   },
   customerSellerContainer: {
     flexDirection: 'row',
-    // justifyContent: 'space-between',
     alignItems: 'center',
     gap: 20,
     marginVertical: 10,
@@ -256,7 +236,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   customerIconContainer: {
-    // backgroundColor: colors.red,
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
@@ -270,7 +249,6 @@ const styles = StyleSheet.create({
   customerText: {
     fontFamily: fonts.montserrat.semiBold,
     fontSize: responsiveFontSize(2.2),
-    // fontWeight: '600',
     color: colors.black,
   },
 
@@ -294,7 +272,6 @@ const styles = StyleSheet.create({
   },
   sellerIcon: {
     color: colors.white,
-    // fontSize: 18,
   },
   sellerText: {
     fontFamily: fonts.montserrat.semiBold,
@@ -308,7 +285,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    // height: 50,
     marginTop: 20,
     shadowColor: colors.red,
     shadowOffset: {width: 2, height: 2},
@@ -320,7 +296,6 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: responsiveFontSize(2.5),
     fontFamily: fonts.bai.semiBold,
-    // fontWeight:'700'
   },
   registerContainer: {
     flexDirection: 'row',
