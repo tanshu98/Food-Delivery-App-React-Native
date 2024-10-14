@@ -42,7 +42,7 @@ const validationSchema = Yup.object().shape({
   termsAgreement: Yup.boolean().oneOf([true], 'You must agree to the terms and conditions'),
 });
 
-const RegisterScreen = ({navigate}: any) => {
+const RegisterScreen = ({navigation}: any) => {
   const [selectedState, setSelectedState] = useState(null);
 
   return (
@@ -68,6 +68,7 @@ const RegisterScreen = ({navigate}: any) => {
           validationSchema={validationSchema}
           onSubmit={values => {
             console.log(values);
+            navigation.navigate('loginScreen');
           }}>
           {({
             handleChange,
@@ -79,7 +80,6 @@ const RegisterScreen = ({navigate}: any) => {
             setFieldValue,
           }) => (
             <View style={styles.registerForm}>
-              {/* Name Input */}
               <View style={styles.nameContainer}>
                 <View style={styles.inputWrapper}>
                   <TextInput
@@ -102,7 +102,6 @@ const RegisterScreen = ({navigate}: any) => {
                 )}
               </View>
 
-              {/* Mobile Number Input */}
               <View style={styles.codesMobileInputContainer}>
                 <CountryCodes />
                 <View style={styles.mobileInputContainer}>
@@ -126,7 +125,6 @@ const RegisterScreen = ({navigate}: any) => {
                 )}
               </View>
 
-              {/* Email Input */}
               <View style={styles.emailContainer}>
                 <View style={styles.inputWrapper}>
                   <TextInput
@@ -150,7 +148,6 @@ const RegisterScreen = ({navigate}: any) => {
                 )}
               </View>
 
-              {/* Passcode Input */}
               <View style={styles.passwordInputContainer}>
                 <Text style={styles.passwordInputTitle}>Passcode</Text>
                 <OtpInput
@@ -164,7 +161,6 @@ const RegisterScreen = ({navigate}: any) => {
                 )}
               </View>
 
-              {/* Confirm Passcode Input */}
               <View style={styles.passwordInputContainer}>
                 <Text style={styles.passwordInputTitle}>Confirm Passcode</Text>
                 <OtpInput
@@ -178,7 +174,6 @@ const RegisterScreen = ({navigate}: any) => {
                 )}
               </View>
 
-              {/* State Selection */}
               <View style={styles.stateDropdown}>
                 <RNPickerSelect
                   placeholder={{
@@ -202,7 +197,6 @@ const RegisterScreen = ({navigate}: any) => {
                 )}
               </View>
 
-              {/* Terms & Conditions Checkbox */}
               <View style={styles.termsConditionContainer}>
                 <BouncyCheckbox
                   isChecked={values.termsAgreement}
@@ -211,12 +205,9 @@ const RegisterScreen = ({navigate}: any) => {
                     setFieldValue('termsAgreement', !values.termsAgreement)
                   }
                   iconStyle={{
-                    // borderRadius: 45,
                     borderRadius: 0,
                     width:25,
                     height:25,
-                    // borderWidth:1,
-                    // borderColor: colors.black
                   }}
                   size={25}
                 />
@@ -228,7 +219,6 @@ const RegisterScreen = ({navigate}: any) => {
                 <Text style={styles.errorText}>{errors.termsAgreement}</Text>
               )}
 
-              {/* Submit Button */}
               <TouchableOpacity
                 style={styles.loginButton}
                 onPress={()=>handleSubmit()}>
@@ -250,10 +240,8 @@ const styles = StyleSheet.create({
   registerForm: {
     flex: 1,
     marginHorizontal: 25,
-    // marginVertical: 10,
   },
   nameContainer: {
-    // marginVertical: 15,
     marginVertical: Platform.OS === 'ios' ? 12 : 5
 
   },
@@ -284,7 +272,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     alignItems: 'center',
-    // marginBottom:20
   },
   iconStyle: {
     marginRight: 10,

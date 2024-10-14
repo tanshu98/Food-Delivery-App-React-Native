@@ -174,8 +174,6 @@ const styles = StyleSheet.create({
     height: responsiveHeight(45),
     justifyContent: 'center',
     alignItems: 'center',
-    // zIndex:999,
-    // borderWidth:1,
     position: 'absolute',
     bottom: 0,
   },

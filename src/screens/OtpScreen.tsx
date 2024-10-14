@@ -75,21 +75,6 @@ const OtpScreen = ({navigation}: {navigation: any}) => {
             <Text style={styles.sendOtpText}>Enter the OTP sent to</Text>
             <Text style={styles.sendOtpNumber}>+91 987654321</Text>
           </View>
-          {/* <OtpInput
-            numberOfDigits={4}
-            focusColor={colors.white}
-            // secureTextEntry={true}
-            focusStickBlinkingDuration={500}
-            onTextChange={handleOtpChange}
-            theme={{
-                containerStyle: styles.container,
-                pinCodeContainerStyle: styles.pinCodeContainer,
-                pinCodeTextStyle: styles.pinCodeText,
-              }}
-          /> */}
-          {/* <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={{flex: 1}}> */}
             <OtpInput
               numberOfDigits={4}
               focusColor={colors.black}
@@ -123,8 +108,6 @@ const OtpScreen = ({navigation}: {navigation: any}) => {
 const styles = StyleSheet.create({
   safeAreaContainer: {
     flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
   },
   OtpScreenBg: {
     width: responsiveWidth(100),
@@ -135,7 +118,6 @@ const styles = StyleSheet.create({
   OtpContainer: {
     flex: 1,
     marginVertical: 60,
-    // justifyContent: 'center',
     alignItems: 'center',
     gap: 25,
   },
@@ -178,9 +160,9 @@ const styles = StyleSheet.create({
     fontFamily: fonts.montserrat.semiBold,
   },
   otpInputContainer: {
-    width: '70%', // Adjust width for the OTP input container
-    flexDirection: 'row', // Arrange input boxes horizontally
-    justifyContent: 'space-between', // Even spacing between input boxes
+    width: '70%', 
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
   },
   otpInputBox: {
     borderWidth: 1,
@@ -202,8 +184,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    // height: 50,
-    // marginTop: 15,
     marginVertical: 190,
     shadowColor: colors.green,
     shadowOffset: {width: 2, height: 2},
@@ -215,7 +195,6 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: responsiveFontSize(2.5),
     fontFamily: fonts.bai.semiBold,
-    // fontWeight:'700'
   },
 });
 

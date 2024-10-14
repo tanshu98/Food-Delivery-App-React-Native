@@ -22,7 +22,7 @@ const StackNavigation = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='loginScreen'>
+      <Stack.Navigator initialRouteName='otpScreen'>
         {!isActive ? (
           <Stack.Screen
             options={{headerShown: false}}
