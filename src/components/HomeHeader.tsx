@@ -6,7 +6,7 @@ import NotificationIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { colors } from '../constants/Colors';
 import { fonts } from '../constants/Fonts';
-import { responsiveFontSize } from 'react-native-responsive-dimensions';
+import { responsiveFontSize, responsiveWidth } from 'react-native-responsive-dimensions';
 import { Badge } from 'react-native-paper';
 
 const HomeHeader = () => {
@@ -21,7 +21,7 @@ const HomeHeader = () => {
         </View>
       </View>
       <NotificationIcon name="notifications-none" size={35} color={colors.black} style={styles.notificationIcon} />
-      <Badge style={styles.badge} size={20}>3</Badge>
+      {/* <Badge style={styles.badge} size={20}>3</Badge> */}
     </View>
   );
 };
@@ -30,8 +30,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 15,
-    gap: 5,
+    justifyContent: 'space-between',
+paddingRight: 10,
   },
   headerTextContainer: {
     flexDirection: 'column',

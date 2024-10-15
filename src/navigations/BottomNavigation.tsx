@@ -9,11 +9,10 @@ import OfferScreen from '../screens/OfferScreen';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../constants/Colors';
 import BottomBarHome from 'react-native-vector-icons/Foundation';
-import BagIcon from 'react-native-vector-icons/Ionicons';
-import GridIcon from 'react-native-vector-icons/Entypo';
 import SearchIcon from 'react-native-vector-icons/AntDesign';
 import CartIcon from 'react-native-vector-icons/FontAwesome6';
 import OffersIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { responsiveWidth } from 'react-native-responsive-dimensions';
 
 
 
@@ -68,6 +67,7 @@ const BottomTabNavigation = () => {
       <Tab.Screen
         name="Cart"
         options={{
+
           tabBarLabel: '',
           tabBarIcon: ({ size, color, focused }) => (
             focused ? (
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.red,
     borderRadius: 50,
-    width: 120,
+    width: responsiveWidth(30),
     paddingHorizontal: 10,
     marginHorizontal: 10,
     height: 40,

@@ -21,7 +21,7 @@ const HomeScreen = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{flexGrow: 1}}>
         <HomeHeader />
-        {/* <HomeTopComponent /> */}
+        <HomeTopComponent />
         {/* <HomeCarousal /> */}
         {/* <BestChoises /> */}
         {/* <TodaySpecial /> */}
