@@ -80,10 +80,17 @@ const OnboardingScreen = ({navigation}: OnboardingScreenProps) => {
   const carouselRef = useRef<any>(null);
 
   const handleNextSlide = () => {
-    const nextIndex = activeIndex + 1 >= data.length ? 0 : activeIndex + 1;
-    setActiveIndex(nextIndex);
-    carouselRef.current?.snapToItem(nextIndex);
+    if (activeIndex === data.length - 1) {
+      // Navigate to the login screen if it's the last slide
+      navigation.navigate('loginScreen');
+    } else {
+      // Otherwise, move to the next slide
+      const nextIndex = activeIndex + 1;
+      setActiveIndex(nextIndex);
+      carouselRef.current?.snapToItem(nextIndex);
+    }
   };
+  
   const renderItem = ({item}: {item: CarouselItemData}) => {
     return (
       <View style={styles.carouselItem}>
@@ -145,8 +152,15 @@ const OnboardingScreen = ({navigation}: OnboardingScreenProps) => {
         sliderWidth={responsiveScreenWidth(100)}
         itemWidth={responsiveScreenWidth(100)}
         layout="default"
-        // autoplay
-        // autoplayInterval={3000}
+        autoplayInterval={3000}
+        loop={false}
+        autoplay={true}
+        onSnapToItem={index => {setActiveIndex(index)
+          if(index === data.length - 1){
+            carouselRef.current.stopAutoplay()
+            setTimeout(() => navigation.navigate('loginScreen'), 3000);
+          }
+        }}
       />
       <Pagination
         activeDotIndex={activeIndex}

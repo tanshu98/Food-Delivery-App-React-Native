@@ -10,6 +10,7 @@ import Toast from 'react-native-toast-message';
 import ForgetPasscodeScreen from '../screens/ForgetPasscodeScreen';
 import OtpVerificationScreen from '../screens/OtpVerificationScreen';
 import SetNewPasscodeScreen from '../screens/SetNewPasscodeScreen';
+import BottomNavigation from './BottomNavigation';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,7 +25,7 @@ const StackNavigation = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='setNewPasscodeScreen'>
+      <Stack.Navigator initialRouteName='bottomNavigation'>
         {!isActive ? (
           <Stack.Screen
             options={{headerShown: false}}
@@ -68,6 +69,12 @@ const StackNavigation = () => {
               name="setNewPasscodeScreen"
               component={SetNewPasscodeScreen}
             />
+             <Stack.Screen
+              options={{headerShown: false}}
+              name="bottomNavigation"
+              component={BottomNavigation}
+            />
+            
           </>
         )}
       </Stack.Navigator>
