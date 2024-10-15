@@ -29,7 +29,7 @@ import {Formik} from 'formik';
 import * as Yup from 'yup';
 import KeyboardWrapper from '../components/KeyboardWrapper';
 
-const LoginScreen = ({navigation}: {navigation: any}) => {
+const LoginScreen = ({navigation}: any) => {
   
   const [selectedUserType, setSelectedUserType] = useState('Customer');
 
@@ -50,6 +50,7 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
         validationSchema={validationSchema}
         onSubmit={values => {
           console.log('Login details:', values);
+          navigation.navigate('bottomNavigation');
         }}>
         {({handleSubmit, handleChange, values, errors, touched}) => (
           <View style={styles.loginContainer}>

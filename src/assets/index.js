@@ -17,6 +17,8 @@ export const ForgetPasscodeBanner = require('./images/ForgetPasscodeBanner.png')
 export const QuestionMark = require('./images/QuestionMark.png');
 export const OtpVerificationBg = require('./images/OtpVerificationBg.png');
 export const SetNewPasscodeBg = require('./images/SetNewPasscodeBg.png');
+export const ProfileIcon = require('./images/ProfileIcon.png');
+
 
 
 
