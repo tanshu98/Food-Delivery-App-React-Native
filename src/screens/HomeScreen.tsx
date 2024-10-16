@@ -7,10 +7,13 @@ import HomeCarousal from '../components/HomeCarousal';
 import BestChoises from '../components/BestChoises';
 import TodaySpecial from '../components/TodaySpecial';
 import { colors } from '../constants/Colors';
+import KeyboardWrapper from '../components/KeyboardWrapper';
+import RestaurantNearby from '../components/RestaurantNearby';
 
 
 const HomeScreen = () => {
   return (
+    // <KeyboardWrapper>
     <View style={styles.container}>
       <StatusBar
         backgroundColor={'rgba(0,0,0,0)'}
@@ -19,14 +22,17 @@ const HomeScreen = () => {
       />
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{flexGrow: 1}}>
+        // contentContainerStyle={{flexGrow: 1}}
+        >
         <HomeHeader />
         <HomeTopComponent />
-        {/* <HomeCarousal /> */}
-        {/* <BestChoises /> */}
+        <HomeCarousal />
+        <BestChoises />
         {/* <TodaySpecial /> */}
+        {/* <RestaurantNearby /> */}
       </ScrollView>
     </View>
+    // </KeyboardWrapper>
   );
 };
 
@@ -34,7 +40,6 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    height: responsiveHeight(100),
     backgroundColor: colors.white,
     paddingTop:
       Platform.OS === 'android' ? responsiveHeight(3) : responsiveHeight(6),
