@@ -115,7 +115,8 @@ const styles = StyleSheet.create({
     color: colors.black,
     fontFamily: fonts.bai.semiBold,
     fontSize: responsiveFontSize(2.5),
-    marginBottom:10
+    marginBottom:10,
+    marginHorizontal:15
   },
   card: {
     
@@ -124,6 +125,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
     alignItems: 'center',
     paddingVertical:responsiveHeight(5),
+    marginHorizontal: 10,
   },
   image:{
     position:'absolute',

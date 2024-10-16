@@ -11,7 +11,7 @@ import KeyboardWrapper from '../components/KeyboardWrapper';
 import RestaurantNearby from '../components/RestaurantNearby';
 
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}:any) => {
   return (
     // <KeyboardWrapper>
     <View style={styles.container}>
@@ -28,8 +28,8 @@ const HomeScreen = () => {
         <HomeTopComponent />
         <HomeCarousal />
         <BestChoises />
-        {/* <TodaySpecial /> */}
-        {/* <RestaurantNearby /> */}
+        <TodaySpecial navigation={navigation}/>
+        <RestaurantNearby navigation={navigation}/>
       </ScrollView>
     </View>
     // </KeyboardWrapper>
