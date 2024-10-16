@@ -24,6 +24,11 @@ export const HomeCarosel = require('./images/HomeCarosel.png');
 export const Burger = require('./images/Burger.png');
 export const Chicken = require('./images/Chicken.png');
 export const Pizza = require('./images/Pizza.png');
+export const VegDumBiryani = require('./images/VegDumBiryani.png');
+export const ChickenTikka = require('./images/ChickenTikka.png');
+export const PizzaSpecial = require('./images/PizzaSpecial.png');
+export const ChikckenBiryani = require('./images/ChikckenBiryani.png');
+
 
 
 
