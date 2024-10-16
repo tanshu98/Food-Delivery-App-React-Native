@@ -44,7 +44,7 @@ const HomeTopComponent = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
     },
     itemContainer: {
         alignItems: 'center',

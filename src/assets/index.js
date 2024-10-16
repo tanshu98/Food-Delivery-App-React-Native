@@ -18,8 +18,10 @@ export const QuestionMark = require('./images/QuestionMark.png');
 export const OtpVerificationBg = require('./images/OtpVerificationBg.png');
 export const SetNewPasscodeBg = require('./images/SetNewPasscodeBg.png');
 export const ProfileIcon = require('./images/ProfileIcon.png');
-export const BurgerHeader = require('./images/BurgerHeader1.png');
-export const PizzaHeader = require('./images/PizzaHeader1.png');
+export const BurgerHeader = require('./images/BurgerHeader.png');
+export const PizzaHeader = require('./images/PizzaHeader.png');
+export const HomeCarosel = require('./images/HomeCarosel.png');
+
 
 
 
