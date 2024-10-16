@@ -13,7 +13,7 @@ import RestaurantNearby from '../components/RestaurantNearby';
 
 const HomeScreen = () => {
   return (
-    <KeyboardWrapper>
+    // <KeyboardWrapper>
     <View style={styles.container}>
       <StatusBar
         backgroundColor={'rgba(0,0,0,0)'}
@@ -22,16 +22,17 @@ const HomeScreen = () => {
       />
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{flexGrow: 1}}>
+        // contentContainerStyle={{flexGrow: 1}}
+        >
         <HomeHeader />
         <HomeTopComponent />
         <HomeCarousal />
-        {/* <BestChoises /> */}
+        <BestChoises />
         {/* <TodaySpecial /> */}
         {/* <RestaurantNearby /> */}
       </ScrollView>
     </View>
-    </KeyboardWrapper>
+    // </KeyboardWrapper>
   );
 };
 
@@ -39,7 +40,6 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    height: responsiveHeight(100),
     backgroundColor: colors.white,
     paddingTop:
       Platform.OS === 'android' ? responsiveHeight(3) : responsiveHeight(6),
