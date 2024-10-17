@@ -90,7 +90,7 @@ const BestChoises = () => {
   
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>BestChoises</Text>
+      <Text style={styles.titleText}>Best Choises</Text>
       <FlatList
         renderItem={renderItem}
         data={data}

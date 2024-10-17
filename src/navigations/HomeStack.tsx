@@ -42,7 +42,7 @@ const HomeStack = () => {
         })}
       />
       <Home.Screen
-        name="nearByScreen"
+        name="restaurantNearbyScreen"
         component={RestaurantNearByScreen}
         options={({navigation}) => ({
           headerShown: true,
