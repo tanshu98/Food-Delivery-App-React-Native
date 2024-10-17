@@ -74,7 +74,7 @@ const BottomTabNavigation = () => {
             focused ? (
               <View style={styles.eachTabStyleFocused}>
                 <CartIcon name="cart-shopping" size={size} color={colors.white} />
-                <Text style={styles.eachTabHeaderFocused}>Category</Text>
+                <Text style={styles.eachTabHeaderFocused}>Cart</Text>
               </View>
             ) : (
               <CartIcon name="cart-shopping" size={size} color={color} />
