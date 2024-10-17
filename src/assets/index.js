@@ -28,6 +28,10 @@ export const VegDumBiryani = require('./images/VegDumBiryani.png');
 export const ChickenTikka = require('./images/ChickenTikka.png');
 export const PizzaSpecial = require('./images/PizzaSpecial.png');
 export const ChikckenBiryani = require('./images/ChikckenBiryani.png');
+export const GoldenFishRestaurant = require('./images/GoldenFishRestaurant.png');
+export const NandiniRestaurant = require('./images/NandiniRestaurant.png');
+export const KshatriyaRestaurant = require('./images/KshatriyaRestaurant.png');
+
 
 
 
