@@ -11,6 +11,11 @@ import ForgetPasscodeScreen from '../screens/ForgetPasscodeScreen';
 import OtpVerificationScreen from '../screens/OtpVerificationScreen';
 import SetNewPasscodeScreen from '../screens/SetNewPasscodeScreen';
 import BottomNavigation from './BottomNavigation';
+import CheckoutScreen from '../screens/CheckoutScreen';
+import { colors } from '../constants/Colors';
+import { fonts } from '../constants/Fonts';
+import { TouchableOpacity } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Stack = createNativeStackNavigator();
 
@@ -73,6 +78,53 @@ const StackNavigation = () => {
               options={{headerShown: false}}
               name="bottomNavigation"
               component={BottomNavigation}
+            />
+              {/* <Stack.Screen
+              options={navigation}{{headerShown: true,
+                title: 'Checkout',
+                headerTitleAlign: 'left',
+                headerTitleStyle: {fontSize: 18, fontFamily: fonts.bai.medium},
+                headerStyle: {
+                  backgroundColor: colors.white,
+                },
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Ionicons
+                      name="chevron-back-outline"
+                      size={25}
+                      color={colors.black}
+                      style={{fontWeight: '800', paddingRight: 15}}
+                    />
+                  </TouchableOpacity>
+                ),
+
+              }}
+              name="checkoutScreen"
+              component={CheckoutScreen}
+            /> */}
+
+<Stack.Screen
+              name="checkoutScreen"
+              component={CheckoutScreen}
+              options={({navigation}) => ({
+                headerShown: true,
+                title: 'Checkout',
+                headerTitleAlign: 'left',
+                headerTitleStyle: {fontSize: 18, fontFamily: fonts.bai.medium},
+                headerStyle: {
+                  backgroundColor: colors.white,
+                },
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Ionicons
+                      name="chevron-back-outline"
+                      size={25}
+                      color={colors.black}
+                      style={{fontWeight: '800', paddingRight: 15}}
+                    />
+                  </TouchableOpacity>
+                ),
+              })}
             />
             
           </>

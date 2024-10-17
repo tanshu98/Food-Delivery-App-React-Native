@@ -14,6 +14,7 @@ import CartIcon from 'react-native-vector-icons/FontAwesome6';
 import OffersIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { responsiveWidth } from 'react-native-responsive-dimensions';
 import HomeStack from './HomeStack';
+import { fonts } from '../constants/Fonts';
 
 
 
@@ -68,13 +69,14 @@ const BottomTabNavigation = () => {
       <Tab.Screen
         name="Cart"
         options={{
-
+        headerShown: true,
+        headerTitleAlign: 'left',
           tabBarLabel: '',
           tabBarIcon: ({ size, color, focused }) => (
             focused ? (
               <View style={styles.eachTabStyleFocused}>
                 <CartIcon name="cart-shopping" size={size} color={colors.white} />
-                <Text style={styles.eachTabHeaderFocused}>Category</Text>
+                <Text style={styles.eachTabHeaderFocused}>Cart</Text>
               </View>
             ) : (
               <CartIcon name="cart-shopping" size={size} color={color} />
@@ -120,7 +122,8 @@ const styles = StyleSheet.create({
   eachTabHeaderFocused: {
     color: colors.white,
     fontWeight: '600',
-    fontSize: 14,
+    fontSize: 18,
+    fontFamily: fonts.bai.medium
     // lineHeight: 17.7,
   },
   navigatorOptions: {
