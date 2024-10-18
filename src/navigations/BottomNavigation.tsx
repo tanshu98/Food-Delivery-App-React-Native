@@ -94,7 +94,7 @@ const BottomTabNavigation = () => {
             focused ? (
               <View style={styles.eachTabStyleFocused}>
                 <OffersIcon name="brightness-percent" size={size} color={colors.white} />
-                <Text style={styles.eachTabHeaderFocused}>Profile</Text>
+                <Text style={styles.eachTabHeaderFocused}>Offer</Text>
               </View>
             ) : (
               <OffersIcon name="brightness-percent" size={size} color={color} />

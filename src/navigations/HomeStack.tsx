@@ -23,7 +23,7 @@ const HomeStack = () => {
         component={NotificationScreen}
         options={({navigation}) => ({
           headerShown: true,
-          title: 'Notification',
+          title: 'Notifications',
           headerTitleAlign: 'left',
           headerTitleStyle: {fontSize: 18, fontFamily: fonts.bai.medium},
           headerStyle: {
