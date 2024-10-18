@@ -24,7 +24,7 @@ const HomeScreen = ({navigation}:any) => {
         showsVerticalScrollIndicator={false}
         // contentContainerStyle={{flexGrow: 1}}
         >
-        <HomeHeader />
+        <HomeHeader navigation={navigation} />
         <HomeTopComponent />
         <HomeCarousal />
         <BestChoises />

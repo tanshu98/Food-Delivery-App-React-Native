@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, Platform, StyleSheet, Text, View} from 'react-native';
+import {Image, Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {ProfileIcon} from '../assets';
 import LocationIcon from 'react-native-vector-icons/Entypo';
 import NotificationIcon from 'react-native-vector-icons/MaterialIcons';
@@ -9,10 +9,12 @@ import { fonts } from '../constants/Fonts';
 import { responsiveFontSize, responsiveWidth } from 'react-native-responsive-dimensions';
 import { Badge } from 'react-native-paper';
 
-const HomeHeader = () => {
+const HomeHeader = ({navigation}: {navigation: any}) => {
   return (
     <View style={styles.container}>
+        <TouchableOpacity onPress={() => navigation.navigate('profileScreen')}>
       <Image source={ProfileIcon} />
+      </TouchableOpacity>
       <View style={styles.headerTextContainer}>
         <Text style={styles.headerText}>Hi, Sachin</Text>
         <View style={styles.locationContainer}>
@@ -20,7 +22,9 @@ const HomeHeader = () => {
           <Text style={styles.locationText}>Nagpur, Maharashtra</Text>
         </View>
       </View>
+      <TouchableOpacity onPress={() => navigation.navigate('notificationScreen')}>
       <NotificationIcon name="notifications-none" size={35} color={colors.black} style={styles.notificationIcon} />
+      </TouchableOpacity>
       {/* <Badge style={styles.badge} size={20}>3</Badge> */}
     </View>
   );
