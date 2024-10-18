@@ -33,6 +33,9 @@ export const NandiniRestaurant = require('./images/NandiniRestaurant.png');
 export const KshatriyaRestaurant = require('./images/KshatriyaRestaurant.png');
 export const BurgerCheck = require('./images/BurgerCheck.png');
 export const CheckIcon = require('./images/CheckIcon.png');
+export const Bag = require('./images/Bag.png');
+export const PersonIcon = require('./images/PersonIcon.png');
+
 
 
 

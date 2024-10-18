@@ -13,7 +13,6 @@ import SearchIcon from 'react-native-vector-icons/AntDesign';
 import CartIcon from 'react-native-vector-icons/FontAwesome6';
 import OffersIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { responsiveWidth } from 'react-native-responsive-dimensions';
-import HomeStack from './HomeStack';
 import { fonts } from '../constants/Fonts';
 
 
@@ -31,7 +30,7 @@ const BottomTabNavigation = () => {
   return (
     <Tab.Navigator screenOptions={screenOptions}>
       <Tab.Screen
-        name="HomeStack"
+        name="Home"
         options={{
           tabBarLabel: '',
           tabBarIcon: ({ size, color, focused }) => (
@@ -45,7 +44,7 @@ const BottomTabNavigation = () => {
             )
           ),
         }}
-        component={HomeStack}
+        component={HomeScreen}
       />
 
       <Tab.Screen
@@ -56,7 +55,7 @@ const BottomTabNavigation = () => {
             focused ? (
               <View style={styles.eachTabStyleFocused}>
                 <SearchIcon name="search1" size={size} color={colors.white} />
-                <Text style={styles.eachTabHeaderFocused}>Cart</Text>
+                <Text style={styles.eachTabHeaderFocused}>Search</Text>
               </View>
             ) : (
               <SearchIcon name="search1" size={size} color={color} />

@@ -2,6 +2,7 @@ export const colors = {
     red: '#DF201F',
     lightRed:' #FE5656',
     darkRed: '#BD0201',
+    redPink: '#EF8382',
     lightYellow: '#FFC268',
     borderYellow:'#FFE3C2',
     UltraLightYellow: '#FFF3E5',
