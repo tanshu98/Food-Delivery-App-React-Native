@@ -16,6 +16,10 @@ import { colors } from '../constants/Colors';
 import { fonts } from '../constants/Fonts';
 import { TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import ProfileScreen from '../screens/ProfileScreen';
+import NotificationScreen from '../screens/NotificationScreen';
+import TodaySpecialScreen from '../screens/TodaySpecialScreen';
+import RestaurantNearByScreen from '../screens/RestaurantNearByScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -126,6 +130,100 @@ const StackNavigation = () => {
                 ),
               })}
             />
+
+<Stack.Screen
+        name="profileScreen"
+        component={ProfileScreen}
+        options={({navigation}) => ({
+          headerShown: true,
+          title: 'Profile',
+          headerTitleAlign: 'left',
+          headerTitleStyle: {fontSize: 20, fontFamily: fonts.bai.medium},
+          headerStyle: {
+            backgroundColor: colors.white,
+          },
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons
+                name="chevron-back-outline"
+                size={25}
+                color={colors.black}
+                style={{fontWeight: '800', paddingRight: 15}}
+              />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+
+<Stack.Screen
+        name="notificationScreen"
+        component={NotificationScreen}
+        options={({navigation}) => ({
+          headerShown: true,
+          title: 'Notifications',
+          headerTitleAlign: 'left',
+          headerTitleStyle: {fontSize: 18, fontFamily: fonts.bai.medium},
+          headerStyle: {
+            backgroundColor: colors.white,
+          },
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons
+                name="chevron-back-outline"
+                size={25}
+                color={colors.black}
+                style={{fontWeight: '800', paddingRight: 15}}
+              />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+        <Stack.Screen
+        name="todaySpecialScreen"
+        component={TodaySpecialScreen}
+        options={({navigation}) => ({
+          headerShown: true,
+          title: 'Today Special',
+          headerTitleAlign: 'left',
+          headerTitleStyle: {fontSize: 20, fontFamily: fonts.bai.medium},
+          headerStyle: {
+            backgroundColor: colors.white,
+          },
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons
+                name="chevron-back-outline"
+                size={25}
+                color={colors.black}
+                style={{fontWeight: '800', paddingRight: 15}}
+              />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+        <Stack.Screen
+        name="restaurantNearbyScreen"
+        component={RestaurantNearByScreen}
+        options={({navigation}) => ({
+          headerShown: true,
+          title: 'Restaurant Nearby',
+          headerTitleAlign: 'left',
+          headerTitleStyle: {fontSize: 20, fontFamily: fonts.bai.medium},
+          headerStyle: {
+            backgroundColor: colors.white,
+          },
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons
+                name="chevron-back-outline"
+                size={25}
+                color={colors.black}
+                style={{fontWeight: '800', paddingRight: 15}}
+              />
+            </TouchableOpacity>
+          ),
+        })}
+      />
             
           </>
         )}
