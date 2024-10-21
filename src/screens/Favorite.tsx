@@ -12,77 +12,56 @@ interface IProps {
 }
 
 
-interface TodaySpecialData {
+interface FavoriteData {
     id: string;
     image: ImageSourcePropType | undefined;
     title: string;
-    currentPrice: string;
-    oldPrice: string;
-    restaurantName: string;
+    price: string;
   }
 
-  const data: TodaySpecialData[] = [
+  const data: FavoriteData[] = [
     {
       id: '1',
       image: VegDumBiryani,
       title: 'Bset Veg Dum Biryani',
-      currentPrice: '₹100',
-      oldPrice: '₹200',
-      restaurantName: 'Golden Fish Restaurant',
+      price: '₹100',
     },
     {
       id: '2',
       image: ChickenTikka,
       title: 'Chicken Tikka',
-      currentPrice: '₹150',
-      oldPrice: '₹180',
-      restaurantName: 'Barbeque Nation',
+      price: '₹150',
     },
     {
       id: '3',
       image: PizzaSpecial,
       title: 'Pizza', 
-      currentPrice: '₹120',
-      oldPrice: '₹150',
-      restaurantName: 'Naivedhyam Restaurant',
+      price: '₹120',
     },
     {
       id: '4',
       image: ChikckenBiryani,
       title: 'Chicken Biryani',
-      currentPrice: '₹90',
-      oldPrice: '₹120',
-      restaurantName: 'Saoji Bhojnalaya',
+      price: '₹90',
     },
     {
       id: '5',
       image: VegDumBiryani,
       title: 'Bset Veg Dum Biryani',
-      currentPrice: '₹90',
-      oldPrice: '₹120',
-      restaurantName: 'Golden Fish Restaurant',
+      price: '₹90',
     },
   ]
 
 
-const TodaySpecialScreen = ({navigation}:IProps) => {
-
-    // const todaySpecialHandler = () => {
-    //     navigation.navigate('todaySpecialScreen')
-    // }
+const Favorite = ({navigation}:IProps) => {
    
-    const renderItem = ({item}: {item: TodaySpecialData}) => (
+    const renderItem = ({item}: {item: FavoriteData}) => (
         <View style={styles.itemContainer}>
             <Image source={item.image} style={styles.itemImage} />
             <View style={styles.itemDetailsContainer}>
                 <Text style={styles.itemTitle}>{item.title}</Text>
                 <View style={styles.priceContainer}>
-                    <Text style={styles.currentPrice}>{item.currentPrice}</Text>
-                    <Text style={styles.oldPrice}>{item.oldPrice}</Text>
-                </View>
-                <View style={styles.restaurantContainer}>
-                <BellIcon name="concierge-bell" size={20} color={colors.lightTextColor}  />
-                <Text style={styles.restaurantName}>{item.restaurantName}</Text>
+                    <Text style={styles.currentPrice}>{item.price}</Text>
                 </View>
             </View>
         </View>
@@ -93,8 +72,7 @@ const TodaySpecialScreen = ({navigation}:IProps) => {
         <FlatList
           data={data}
           renderItem={renderItem}
-          keyExtractor={(item: TodaySpecialData) => item.id}
-        //   horizontal
+          keyExtractor={(item: FavoriteData) => item.id}
           showsHorizontalScrollIndicator={false}
         />
       </View>
@@ -105,7 +83,6 @@ const TodaySpecialScreen = ({navigation}:IProps) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // backgroundColor: colors.pink
     },
     listContainer: {
         marginVertical:10,
@@ -151,23 +128,7 @@ const styles = StyleSheet.create({
         color: colors.red,
         fontSize: responsiveFontSize(2),
         fontFamily: fonts.bai.semiBold,
-    },
-    oldPrice: {
-        color: colors.red,
-        fontSize: responsiveFontSize(2),
-        fontFamily: fonts.montserrat.regular,
-        textDecorationLine: 'line-through'
-    },
-    restaurantContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 5
-    },
-    restaurantName: {
-        color: colors.lightTextColor,
-        fontSize: responsiveFontSize(2),
-        fontFamily: fonts.bai.semiBold,
     }
 })
 
-export default TodaySpecialScreen
+export default Favorite;
