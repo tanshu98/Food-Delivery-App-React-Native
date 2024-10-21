@@ -277,7 +277,6 @@ const styles = StyleSheet.create({
   sellerText: {
     fontFamily: fonts.montserrat.semiBold,
     fontSize: responsiveFontSize(2.2),
-    // fontWeight: '600',
     color: colors.black,
   },
   loginButton: {

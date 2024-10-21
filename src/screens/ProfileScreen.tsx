@@ -83,8 +83,8 @@ const ProfileScreen = ({navigation}: any) => {
     const [selectedButton, setSelectedButton] = useState<number | null>(null);
 
     const handleToggleBtn = (item: ProfileScreenData) => {
-        setSelectedButton(item.id); // Set the clicked button as the selected button
-    //   navigation.navigate(item.title)
+        setSelectedButton(item.id); 
+      navigation.navigate(item.title)
     }
   return (
     <ScrollView>
@@ -104,18 +104,18 @@ const ProfileScreen = ({navigation}: any) => {
           </View>
         </View>
         <View style={styles.orderEditProfile}>
-          <View style={styles.orderContainer}>
+          <TouchableOpacity style={styles.orderContainer} onPress={() => navigation.navigate('order')}>
             <Image source={Bag} style={styles.orderIcon} />
             <Text style={styles.orderText}>Order</Text>
-          </View>
-          <View style={styles.editContainer}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.editContainer} onPress={() => navigation.navigate('editProfile')}>
             <Image source={PersonIcon} style={styles.editIcon} />
             <Text style={styles.editText}>Edit Profile</Text>
-          </View>
-          <View style={styles.favoriteContainer}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.favoriteContainer} onPress={() => navigation.navigate('favorite')}>
             <HeartIcon name="heart" size={20} color={colors.red} />
             <Text style={styles.favoriteText}>Favorite</Text>
-          </View>
+          </TouchableOpacity>
         </View>
         <View style={styles.bottomContainer}>
           {DATA.map(item => (

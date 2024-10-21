@@ -20,6 +20,9 @@ import ProfileScreen from '../screens/ProfileScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import TodaySpecialScreen from '../screens/TodaySpecialScreen';
 import RestaurantNearByScreen from '../screens/RestaurantNearByScreen';
+import OrderScreen from '../screens/OrderScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
+import Favorite from '../screens/Favorite';
 
 const Stack = createNativeStackNavigator();
 
@@ -207,6 +210,76 @@ const StackNavigation = () => {
         options={({navigation}) => ({
           headerShown: true,
           title: 'Restaurant Nearby',
+          headerTitleAlign: 'left',
+          headerTitleStyle: {fontSize: 20, fontFamily: fonts.bai.medium},
+          headerStyle: {
+            backgroundColor: colors.white,
+          },
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons
+                name="chevron-back-outline"
+                size={25}
+                color={colors.black}
+                style={{fontWeight: '800', paddingRight: 15}}
+              />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+         <Stack.Screen
+        name="order"
+        component={OrderScreen}
+        options={({navigation}) => ({
+          headerShown: true,
+          title: 'Order',
+          headerTitleAlign: 'left',
+          headerTitleStyle: {fontSize: 20, fontFamily: fonts.bai.medium},
+          headerStyle: {
+            backgroundColor: colors.white,
+          },
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons
+                name="chevron-back-outline"
+                size={25}
+                color={colors.black}
+                style={{fontWeight: '800', paddingRight: 15}}
+              />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+
+<Stack.Screen
+        name="editProfile"
+        component={EditProfileScreen}
+        options={({navigation}) => ({
+          headerShown: true,
+          title: 'Edit Profile',
+          headerTitleAlign: 'left',
+          headerTitleStyle: {fontSize: 20, fontFamily: fonts.bai.medium},
+          headerStyle: {
+            backgroundColor: colors.white,
+          },
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons
+                name="chevron-back-outline"
+                size={25}
+                color={colors.black}
+                style={{fontWeight: '800', paddingRight: 15}}
+              />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="favorite"
+        component={Favorite}
+        options={({navigation}) => ({
+          headerShown: true,
+          title: 'Favorite',
           headerTitleAlign: 'left',
           headerTitleStyle: {fontSize: 20, fontFamily: fonts.bai.medium},
           headerStyle: {
