@@ -37,7 +37,7 @@ const StackNavigation = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='bottomNavigation'>
+      <Stack.Navigator initialRouteName='registerScreen'>
         {!isActive ? (
           <Stack.Screen
             options={{headerShown: false}}

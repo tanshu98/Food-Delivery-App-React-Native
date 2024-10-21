@@ -4,14 +4,16 @@ import { Alert } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { string } from 'yup';
 
-export interface IUser {
-  username: string;
-  phone: string;
+export interface User {
+  name: string;
+  mobile_no: string;
   email: string;
   password: string;
-  password_confirmation: string;
+  country_code: string;
+  // password_confirmation: string;
+  state: string;
   role: string;
-  referral_code: string;
+  // referral_code: string;
 }
 
 export interface ILoginUser {
@@ -125,30 +127,30 @@ export const registerUser = createAsyncThunk(
   'registerUser',
   async (
     {
-      username,
-      phone,
+      name,
+      mobile_no,
       email,
       password,
-      password_confirmation,
+      country_code,
+      state,
       role,
-      referral_code,
-    }: IUser,
+    }: User,
     {rejectWithValue},
   ) => {
     const data = {
       user: {
-        username,
-        phone,
+        name,
+        mobile_no,
         email,
         password,
-        password_confirmation,
+        country_code,
+        state,
         role,
-        referral_code: referral_code || '',
       },
     };
     // console.log('data---', data);
     try {
-      const response = await fetch('http://65.0.108.242/api/v1/users/', {
+      const response = await fetch('http://192.168.1.17:8089/user/signUp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -157,11 +159,12 @@ export const registerUser = createAsyncThunk(
       });
 
       if (!response.ok) {
+        console.log('!repsonse.ok----');
         return rejectWithValue('Something went wrong');
       }
 
       const result = await response.json();
-      // console.log('---result---response SIGNUP---', result);
+      console.log('---result---response SIGNUP---AUTH SLICE---', result);
       return result;
       // Token after signup
       // if(result.token) {

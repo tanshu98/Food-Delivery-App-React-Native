@@ -26,6 +26,24 @@ import {OtpInput} from 'react-native-otp-entry';
 import RNPickerSelect from 'react-native-picker-select';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import KeyboardWrapper from '../components/KeyboardWrapper';
+import { registerUser, User} from '../redux/slices/AuthSlice';
+import { AppDispatch } from '../redux/store/store';
+import { useDispatch } from 'react-redux';
+
+interface RegisterScreenProps {
+  navigation: any;
+  signupUser: (data: User)=> void;
+}
+
+interface Values {
+  state: string;
+  name: string;
+  mobile_no: string;
+  email: string;
+  password: string;
+  country_code: string;
+  role: string;
+}
 
 // Validation schema
 const validationSchema = Yup.object().shape({
@@ -44,6 +62,12 @@ const validationSchema = Yup.object().shape({
 
 const RegisterScreen = ({navigation}: any) => {
   const [selectedState, setSelectedState] = useState(null);
+
+  const handleSubmit = (values: any) => {
+    console.log('values------',values);
+    
+    // navigation.navigate('loginScreen');
+  };
 
   return (
     <KeyboardWrapper>
@@ -66,10 +90,11 @@ const RegisterScreen = ({navigation}: any) => {
             termsAgreement: false,
           }}
           validationSchema={validationSchema}
-          onSubmit={values => {
-            console.log(values);
-            navigation.navigate('loginScreen');
-          }}>
+          // onSubmit={values => {
+          //   console.log(values);
+          //   navigation.navigate('loginScreen');
+          // }}>
+          onSubmit={handleSubmit}>
           {({
             handleChange,
             handleBlur,
@@ -134,7 +159,7 @@ const RegisterScreen = ({navigation}: any) => {
                     keyboardType="email-address"
                     onChangeText={handleChange('email')}
                     onBlur={handleBlur('email')}
-                    value={values.email}
+                    value={values.email.toLowerCase()}
                   />
                   <EmailIcon
                     name="email"

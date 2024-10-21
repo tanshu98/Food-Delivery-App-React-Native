@@ -11,6 +11,7 @@ export const customerIconWhite = require('./images/CustomerWhiteBg.png');
 export const customerIconRed = require('./images/CustomerRedBg.png');
 export const sellerIconStore = require('./images/SellerIcon.png');
 export const registerBg = require('./images/RegisterBg.png');
+export const regBg = require('./images/RegBg.png');
 export const OtpIcon = require('./images/OtpIcon.png');
 export const otpBanner = require('./images/otpBanner.png');
 export const ForgetPasscodeBanner = require('./images/ForgetPasscodeBanner.png');
