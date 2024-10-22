@@ -12,14 +12,19 @@ import {fonts} from '../constants/Fonts';
 
 import { colors } from "../constants/Colors";
 
-const CountryCodes = () => {
+interface Props {
+  setCountryCode: any;
+}
+
+const CountryCodes = ({setCountryCode}: Props) => {
   const [show, setShow] = useState(false);
-  const [countryCode, setCountryCode] = useState("+91");
+  const [countryCode, setLocalCountryCode] = useState("+91");
   const [flag, setFlag] = useState("🇮🇳");
 
   useEffect(() => {
-    setCountryCode("+91");
+    setLocalCountryCode("+91");
     setFlag("🇮🇳");
+    setCountryCode("+91"); 
   }, []);
 
   return (
@@ -47,9 +52,10 @@ const CountryCodes = () => {
         <CountryPicker
           show={show}
           pickerButtonOnPress={(item) => {
-            setCountryCode(item.dial_code);
+            setLocalCountryCode(item.dial_code);
             setFlag(item.flag);
             setShow(false);
+            setCountryCode(item.dial_code); 
           }}
           popularCountries={["en", "ua", "pl"]}
           lang="en"

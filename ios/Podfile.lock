@@ -1503,6 +1503,11 @@ PODS:
     - React-Core
   - RNCPicker (2.8.1):
     - React-Core
+  - RNNotifee (9.1.2):
+    - React-Core
+    - RNNotifee/NotifeeCore (= 9.1.2)
+  - RNNotifee/NotifeeCore (9.1.2):
+    - React-Core
   - RNScreens (3.34.0):
     - DoubleConversion
     - glog
@@ -1616,6 +1621,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
+  - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -1754,6 +1760,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCPicker:
     :path: "../node_modules/@react-native-picker/picker"
+  RNNotifee:
+    :path: "../node_modules/@notifee/react-native"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNVectorIcons:
@@ -1826,6 +1834,7 @@ SPEC CHECKSUMS:
   ReactCommon: 6a952e50c2a4b694731d7682aaa6c79bc156e4ad
   RNCAsyncStorage: d35c79ffba52c1013013e16b1fc295aec2feabb6
   RNCPicker: 0b6860a6b208d4046227d2f626ad0722f99a969c
+  RNNotifee: bc20a5e3d581f629db988075944fdd944d363dfe
   RNScreens: 19719a9c326e925498ac3b2d35c4e50fe87afc06
   RNVectorIcons: 6382277afab3c54658e9d555ee0faa7a37827136
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d

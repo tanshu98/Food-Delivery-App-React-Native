@@ -23,53 +23,142 @@ import {fonts} from '../constants/Fonts';
 import {OtpInput} from 'react-native-otp-entry';
 import ReloadIcon from 'react-native-vector-icons/AntDesign';
 import Toast from 'react-native-toast-message';
+import {NavigationProp, ParamListBase} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../redux/store/store';
+import { handleSendOtp,handleVerifyOtp } from '../redux/slices/AuthSlice';
+import notifee, { AndroidImportance } from '@notifee/react-native';
 
+interface OtpData {
+  mobile_no: string;
+  country_code: string;
+}
 
-const OtpScreen = ({navigation}: {navigation: any}) => {
+interface OtpScreenProps {
+  navigation: NavigationProp<ParamListBase>;
+  route: {
+    params: {
+      userOtp: OtpData;
+    };
+  };
+}
+
+const OtpScreen = ({navigation, route}: OtpScreenProps) => {
+    const dispatch = useDispatch<AppDispatch>();
   const [userOtp, setUserOtp] = useState('');
   const [otp, setOtp] = useState('');
+  console.log("route", route);
+
+  const [details, setDetails] = useState({
+    mobile_no: '',
+    country_code: '',
+    otp: '',
+  });
+  
 
   const handleOtpChange = (otp: string) => {
-    setUserOtp(otp);
+    setDetails(prev => ({
+      ...prev,
+      otp: otp,
+    }))
   };
-  const generateOtp = (): string => {
-    const otp = Math.floor(1000 + Math.random() * 9000).toString();
-    console.log('otp', otp);
-    setOtp(otp);
-    return otp;
+  const generateOtp = () => {
+    sendOtpHandler();
   };
   useEffect(() => {
-    generateOtp();
+    sendOtpHandler();
   }, []);
 
-  const handleSubmit = () => {
-    if (userOtp.length === 0) {
+  async function onDisplayNotification(otp: string) {
+    // Request permissions (required for iOS)
+    await notifee.requestPermission()
+
+    // Create a channel (required for Android)
+    const channelId = await notifee.createChannel({
+      id: 'default',
+      name: 'Default Channel',
+      importance:AndroidImportance.HIGH
+    });
+
+    // Display a notification
+    await notifee.displayNotification({
+      title: 'Otp is generated successfully',
+      body: otp,
+      android: {
+        channelId,
+      importance:AndroidImportance.HIGH,
+        pressAction: {
+          id: 'default',
+        },
+      },
+    });
+  }
+
+
+
+  const sendOtpHandler =async ()=> {
+
+    //  Get Otp Info from Async storage, This has 2 fields - mobile_no and country_code
+    //  Store it in a variable named otpDetails
+    // set this variable as the value of details.
+    // So aapn otp che je values hote te aapn details madhe store krru ..now otp filed is currently empty
+
+    // When u run the handleSendOtp function, this will generate the otp from backened..and we will pass the otp to handleSendOtp.
+
+    const otpInfo = (await AsyncStorage.getItem('otpInfo')) ?? undefined;
+    const otpDetails = otpInfo && JSON.parse(otpInfo);
+    console.log("otpDetails", otpDetails);
+    // onDisplayNotification(otpDetails.otp);
+
+    setDetails(prev => ({
+      ...prev,
+      mobile_no: otpDetails?.mobile_no,
+      country_code: otpDetails?.country_code,
+    }))
+    
+
+    const registerOtp = await dispatch(handleSendOtp(otpDetails));
+    console.log("registerOtp", registerOtp);
+    
+    // @ts-ignore
+    if(registerOtp?.error?.message != 'Rejected') {
+        console.log('Inside registerOtp?.error?.message');
+        onDisplayNotification(registerOtp?.payload?.data?.otp);
+    } else {
         Toast.show({
-          type: 'error',
-          text1: 'Please enter the OTP 🙂',
-        });
-      } else if (userOtp === otp) {
+            type: 'error',
+            text1: 'Something went wrong. Please try again 😕',
+          });
+    }
+
+  }
+
+  const handleSubmit =async () => {
+    const verifyOtpData = await dispatch(handleVerifyOtp(details));
+    // @ts-ignore
+    if(verifyOtpData?.error?.message != 'Rejected') {
         Toast.show({
-          type: 'success',
-          text1: 'Congratulations🤩 You have successfully Signed up🥰 ',
-        });
+            type: 'success',
+            text1: 'otp is verified Successfully🤩🥳.',
+          });
         navigation.navigate('loginScreen');
-      } else {
+    } else {
         Toast.show({
-          type: 'error',
-          text1: 'Invalid OTP. Please try again 😕',
-        });
-      }
+            type: 'error',
+            text1: 'Something went wrong. Please try again 😕',
+          });
+    }
   };
   return (
     <ScrollView
       style={styles.safeAreaContainer}
       keyboardShouldPersistTaps="handled">
-          <StatusBar
-              backgroundColor={'rgba(0,0,0,0)'}
-              translucent={true}
-              barStyle={'light-content'}
-            />
+      <StatusBar
+        backgroundColor={'rgba(0,0,0,0)'}
+        translucent={true}
+        barStyle={'light-content'}
+      />
       <ImageBackground
         source={otpBanner}
         resizeMode="cover"
@@ -81,18 +170,18 @@ const OtpScreen = ({navigation}: {navigation: any}) => {
             <Text style={styles.sendOtpText}>Enter the OTP sent to</Text>
             <Text style={styles.sendOtpNumber}>+91 987654321</Text>
           </View>
-            <OtpInput
-              numberOfDigits={4}
-              focusColor={colors.black}
-              focusStickBlinkingDuration={500}
-              onTextChange={handleOtpChange}
-              autoFocus={true}
-              theme={{
-                containerStyle: styles.otpInputContainer,
-                pinCodeContainerStyle: styles.otpInputBox, 
-                pinCodeTextStyle: styles.otpTextStyle,
-              }}
-            />
+          <OtpInput
+            numberOfDigits={4}
+            focusColor={colors.black}
+            focusStickBlinkingDuration={500}
+            onTextChange={handleOtpChange}
+            autoFocus={true}
+            theme={{
+              containerStyle: styles.otpInputContainer,
+              pinCodeContainerStyle: styles.otpInputBox,
+              pinCodeTextStyle: styles.otpTextStyle,
+            }}
+          />
           {/* </KeyboardAvoidingView> */}
           <View style={styles.resendOtp}>
             <Text style={styles.resendOtpText}>Resend OTP</Text>
@@ -166,9 +255,9 @@ const styles = StyleSheet.create({
     fontFamily: fonts.montserrat.semiBold,
   },
   otpInputContainer: {
-    width: '70%', 
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
+    width: '70%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   otpInputBox: {
     borderWidth: 1,
