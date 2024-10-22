@@ -32,6 +32,8 @@ import KeyboardWrapper from '../components/KeyboardWrapper';
 const LoginScreen = ({navigation}: any) => {
   
   const [selectedUserType, setSelectedUserType] = useState('Customer');
+  const [countryCode, setCountryCode] = useState('+91');
+
 
   const validationSchema = Yup.object().shape({
     mobileNumber: Yup.string()
@@ -69,7 +71,7 @@ const LoginScreen = ({navigation}: any) => {
 
             <View style={styles.loginForm}>
               <View style={styles.codesMobileInputContainer}>
-                <CountryCodes />
+                <CountryCodes setCountryCode={setCountryCode}/>
                 <View style={styles.mobileInputContainer}>
                   <TextInput
                     placeholder="Mobile No"

@@ -10,10 +10,19 @@ export interface User {
   email: string;
   password: string;
   country_code: string;
-  // password_confirmation: string;
   state: string;
   role: string;
-  // referral_code: string;
+}
+
+export interface sendOtp {
+  mobile_no: string;
+  country_code: string;
+}
+
+export interface verifyOtp {
+  mobile_no: string;
+  country_code: string;
+  otp: string;
 }
 
 export interface ILoginUser {
@@ -138,7 +147,6 @@ export const registerUser = createAsyncThunk(
     {rejectWithValue},
   ) => {
     const data = {
-      user: {
         name,
         mobile_no,
         email,
@@ -146,40 +154,23 @@ export const registerUser = createAsyncThunk(
         country_code,
         state,
         role,
-      },
     };
-    // console.log('data---', data);
     try {
-      const response = await fetch('http://192.168.1.17:8089/user/signUp', {
+      const response = await fetch('http://192.168.1.14:8089/user/signUp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data),      
       });
 
       if (!response.ok) {
-        console.log('!repsonse.ok----');
         return rejectWithValue('Something went wrong');
       }
 
       const result = await response.json();
       console.log('---result---response SIGNUP---AUTH SLICE---', result);
       return result;
-      // Token after signup
-      // if(result.token) {
-      //   await AsyncStorage.setItem('token', result.token);
-      //   Toast.show({
-      //     type: 'success',
-      //     text1: 'Congratulations🤩 You have successfully Signed up🥰 ',
-      //   });
-      //   return result;
-      // } else {
-      //   Toast.show({
-      //     type: 'error',
-      //     text1: 'Login failed! Please check your credentials.',
-      //   });
-      // }
     } catch (error: unknown) {
       if (error instanceof Error) {
         return rejectWithValue(error.message);
@@ -187,6 +178,92 @@ export const registerUser = createAsyncThunk(
       return rejectWithValue('An unknown error occured!');
     }
   },
+);
+
+export const handleSendOtp = createAsyncThunk(
+  'sendOtp',
+  async (
+    {
+      mobile_no,
+      country_code
+    }: sendOtp,
+    {rejectWithValue}
+  ) => {
+    const data = {
+      mobile_no,
+      country_code
+    };
+
+    try {
+      const response = await fetch(
+        'http://192.168.1.14:8089/user/sendOtp', 
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) {
+        return rejectWithValue('Something went wrong');
+      }
+
+      const result = await response.json();
+      console.log('SEND OTP AUTH SLICE----', result);
+      return result;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue('An unknown error occurred!');
+    }
+  }
+);
+
+export const handleVerifyOtp = createAsyncThunk(
+  'verifyOtp',
+  async (
+    {
+      mobile_no,
+      country_code,
+      otp
+    }: verifyOtp,
+    {rejectWithValue}
+  ) => {
+    const data = {
+      mobile_no,
+      country_code,
+      otp
+    };
+
+    try {
+      const response = await fetch(
+        'http://192.168.1.14:8089/user/verifyOtp', 
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) {
+        return rejectWithValue('Something went wrong');
+      }
+
+      const result = await response.json();
+      console.log('SEND OTP AUTH SLICE----VERIFYOTP', result);
+      return result;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue('An unknown error occurred!');
+    }
+  }
 );
 
 export const forgotPassword = createAsyncThunk(
@@ -278,16 +355,6 @@ const authSlice = createSlice({
     setToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
     },
-    // logout: state => {
-    //   state.token = null;
-    //   state.phoneOrEmail = '';
-    //   state.isOtpVerified = false;
-    //   state.isCompleted = false;
-    //   AsyncStorage.removeItem('token');
-    // },
-    // clearMessage: state => {
-    //   state.message = null;
-    // },
     getPhoneOrEmail: (state, action) => {
       state.phoneOrEmail = action.payload;
     },
@@ -322,7 +389,11 @@ const authSlice = createSlice({
         state.loadingLogin = false;
         state.message = action.payload.message as string;
         // state.token = action.payload.token
-        state.phone = action.payload.phone
+        state.phone = action.payload.phone;
+        Toast.show({
+          type: 'success', 
+          text1: 'Signup Successful🤩🥳.',
+        });
       })
       .addCase(registerUser.rejected, state => {
         state.loadingLogin = false;
@@ -330,6 +401,50 @@ const authSlice = createSlice({
         Toast.show({
           type: 'error',
           text1: 'Signup failed! Please try again.',
+        });
+      })
+      .addCase(handleSendOtp.pending, state => {
+        state.loadingLogin = true;
+        state.message = null;
+      })
+      .addCase(handleSendOtp.fulfilled, (state, action) => {
+        state.loadingLogin = false;
+        state.message = action.payload.message as string;
+        // state.token = action.payload.token
+        // state.phone = action.payload.phone;
+        Toast.show({
+          type: 'success', 
+          text1: 'Signup Successful🤩🥳.',
+        });
+      })
+      .addCase(handleSendOtp.rejected, state => {
+        state.loadingLogin = false;
+        state.message = 'Please try again!!';
+        Toast.show({
+          type: 'error',
+          text1: 'Signup failed! Please try again.',
+        });
+      })
+
+      .addCase(handleVerifyOtp.pending, state => {
+        state.loadingLogin = true;
+        state.message = null;
+      })
+      .addCase(handleVerifyOtp.fulfilled, (state, action) => {
+        state.loadingLogin = false;
+        state.isOtpVerified = true;
+        state.message = action.payload.message as string;
+        Toast.show({
+          type: 'success',
+          text1: 'OTP Verified Successfully!',
+        });
+      })
+      .addCase(handleVerifyOtp.rejected, (state, action) => {
+        state.loadingLogin = false;
+        state.message = action.payload as string;
+        Toast.show({
+          type: 'error',
+          text1: 'OTP Verification Failed!',
         });
       })
 

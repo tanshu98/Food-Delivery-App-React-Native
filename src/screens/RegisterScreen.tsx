@@ -12,7 +12,6 @@ import {
 import {registerBg} from '../assets';
 import {
   responsiveFontSize,
-  responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -26,13 +25,16 @@ import {OtpInput} from 'react-native-otp-entry';
 import RNPickerSelect from 'react-native-picker-select';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import KeyboardWrapper from '../components/KeyboardWrapper';
-import { registerUser, User} from '../redux/slices/AuthSlice';
-import { AppDispatch } from '../redux/store/store';
-import { useDispatch } from 'react-redux';
+import {registerUser, User} from '../redux/slices/AuthSlice';
+import {AppDispatch} from '../redux/store/store';
+import {useDispatch} from 'react-redux';
+import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 
 interface RegisterScreenProps {
-  navigation: any;
-  signupUser: (data: User)=> void;
+  navigation: NavigationProp<ParamListBase>;
+  // signupUser: (data: User) => void;
 }
 
 interface Values {
@@ -52,21 +54,63 @@ const validationSchema = Yup.object().shape({
     .required('Mobile number is required')
     .matches(/^[0-9]{10}$/, 'Mobile number is not valid'),
   email: Yup.string().email('Invalid email').required('Email is required'),
-  passcode: Yup.string().required('Passcode is required').min(6, 'Passcode must be at least 6 digits'),
+  passcode: Yup.string()
+    .required('Passcode is required')
+    .min(6, 'Passcode must be at least 6 digits'),
   confirmPasscode: Yup.string()
     .oneOf([Yup.ref('passcode')], 'Passcodes must match')
     .required('Confirm passcode is required'),
   state: Yup.string().required('State is required'),
-  termsAgreement: Yup.boolean().oneOf([true], 'You must agree to the terms and conditions'),
+  termsAgreement: Yup.boolean().oneOf(
+    [true],
+    'You must agree to the terms and conditions',
+  ),
 });
 
-const RegisterScreen = ({navigation}: any) => {
+const RegisterScreen = ({navigation}: RegisterScreenProps) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [selectedState, setSelectedState] = useState(null);
+  const [countryCode, setCountryCode] = useState('+91');
 
-  const handleSubmit = (values: any) => {
-    console.log('values------',values);
-    
-    // navigation.navigate('loginScreen');
+  const handleSubmit = async (values: any) => {
+    console.log('values------', values);
+
+    const userData = {
+      name: values.name,
+      mobile_no: values.mobileNumber,
+      email: values.email,
+      password: values.passcode,
+      country_code: countryCode,
+      state: values.state,
+      role: 'CUSTOMER',
+    };
+    const signupUser = await dispatch(registerUser(userData));
+    console.log('signupUser----', signupUser);
+
+    // Check for error
+    // @ts-ignore
+    if (signupUser?.error?.message != 'Rejected') {
+      const otpData = {
+        mobile_no: userData.mobile_no,
+        country_code: userData.country_code,
+      };
+
+      await AsyncStorage.setItem('otpInfo', JSON.stringify(otpData));
+
+      Toast.show({
+        type: 'success',
+        text1: 'Signup Successful🤩🥳.',
+      });
+
+      
+      navigation.navigate('otpScreen',{otpData})
+    } else {
+      Toast.show({
+        type: 'success',
+        text1: 'Signup failed! Please try again.',
+        text2: signupUser?.payload
+      });
+    }
   };
 
   return (
@@ -90,10 +134,6 @@ const RegisterScreen = ({navigation}: any) => {
             termsAgreement: false,
           }}
           validationSchema={validationSchema}
-          // onSubmit={values => {
-          //   console.log(values);
-          //   navigation.navigate('loginScreen');
-          // }}>
           onSubmit={handleSubmit}>
           {({
             handleChange,
@@ -128,7 +168,7 @@ const RegisterScreen = ({navigation}: any) => {
               </View>
 
               <View style={styles.codesMobileInputContainer}>
-                <CountryCodes />
+                <CountryCodes setCountryCode={setCountryCode} />
                 <View style={styles.mobileInputContainer}>
                   <TextInput
                     placeholder="Mobile No"
@@ -138,6 +178,7 @@ const RegisterScreen = ({navigation}: any) => {
                     onChangeText={handleChange('mobileNumber')}
                     onBlur={handleBlur('mobileNumber')}
                     value={values.mobileNumber}
+                    maxLength={10}
                   />
                   <PhoneIcon
                     name="phone"
@@ -231,13 +272,15 @@ const RegisterScreen = ({navigation}: any) => {
                   }
                   iconStyle={{
                     borderRadius: 0,
-                    width:25,
-                    height:25,
+                    width: 25,
+                    height: 25,
                   }}
                   size={25}
                 />
                 <TouchableOpacity>
-                  <Text style={styles.termsText}>Agree to Terms & Conditions</Text>
+                  <Text style={styles.termsText}>
+                    Agree to Terms & Conditions
+                  </Text>
                 </TouchableOpacity>
               </View>
               {touched.termsAgreement && errors.termsAgreement && (
@@ -246,7 +289,7 @@ const RegisterScreen = ({navigation}: any) => {
 
               <TouchableOpacity
                 style={styles.loginButton}
-                onPress={()=>handleSubmit()}>
+                onPress={() => handleSubmit()}>
                 <Text style={styles.loginButtonText}>REGISTER NOW</Text>
               </TouchableOpacity>
             </View>
@@ -267,8 +310,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 25,
   },
   nameContainer: {
-    marginVertical: Platform.OS === 'ios' ? 12 : 5
-
+    marginVertical: Platform.OS === 'ios' ? 12 : 5,
   },
   emailContainer: {
     marginBottom: 20,
@@ -278,7 +320,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: colors.lightTextColor,
-    paddingVertical: Platform.OS === 'ios' ? 20 : 15
+    paddingVertical: Platform.OS === 'ios' ? 20 : 15,
   },
   input: {
     flex: 1,
