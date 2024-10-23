@@ -13,7 +13,6 @@ import RestaurantNearby from '../components/RestaurantNearby';
 
 const HomeScreen = ({navigation}:any) => {
   return (
-    // <KeyboardWrapper>
     <View style={styles.container}>
       <StatusBar
         backgroundColor={'rgba(0,0,0,0)'}
@@ -22,7 +21,6 @@ const HomeScreen = ({navigation}:any) => {
       />
       <ScrollView
         showsVerticalScrollIndicator={false}
-        // contentContainerStyle={{flexGrow: 1}}
         >
         <HomeHeader navigation={navigation} />
         <HomeTopComponent />
@@ -32,7 +30,6 @@ const HomeScreen = ({navigation}:any) => {
         <RestaurantNearby navigation={navigation}/>
       </ScrollView>
     </View>
-    // </KeyboardWrapper>
   );
 };
 

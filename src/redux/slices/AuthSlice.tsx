@@ -1,8 +1,8 @@
 import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert } from 'react-native';
+import {Alert} from 'react-native';
 import Toast from 'react-native-toast-message';
-import { string } from 'yup';
+import {string} from 'yup';
 
 export interface User {
   name: string;
@@ -25,34 +25,31 @@ export interface verifyOtp {
   otp: string;
 }
 
-export interface ILoginUser {
-  login: string;
+export interface LoginUser {
+  mobile_no: string;
   password: string;
-  fcm_token: string;
+  role: string;
+  country_code: string;
 }
 
 export interface IForgotPassword {
-  password:string;
-  confirm_password:string;
+  password: string;
+  confirm_password: string;
   username: string;
 }
-
-
 
 export interface AuthDataType {
   message: string | null;
   loading: boolean;
   loadingLogin: boolean;
   token: null | string;
-  phone: string; 
+  phone: string;
   phoneOrEmail: string;
   isOtpVerified: boolean;
   isCompleted: boolean;
   otp: string;
   termsAndConditionData: any[];
 }
-
-
 
 const initialState: AuthDataType = {
   message: null,
@@ -64,65 +61,45 @@ const initialState: AuthDataType = {
   isOtpVerified: false,
   isCompleted: false,
   otp: '',
-  termsAndConditionData: []
+  termsAndConditionData: [],
 };
-
 
 export const loginUser = createAsyncThunk(
   'loginUser',
   async (
-    {
-      login,
-      password,
-      fcm_token,
-    }: ILoginUser,
+    {mobile_no, password, role, country_code}: LoginUser,
     {rejectWithValue},
   ) => {
     const data = {
-      user: {
-        login,
-        password,
-        fcm_token,
-      },
+      mobile_no,
+      password,
+      role,
+      country_code,
     };
 
-    console.log('LoginUserData', data);
+    console.log('LoginUserData----', data);
 
     try {
-      const response = await fetch('http://65.0.108.242/api/v1/users/sign_in', {
+      const response = await fetch('http://192.168.1.14:8089/user/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
       });
-console.log('sing in')
+      console.log('login---response---', response);
       if (!response.ok) {
         console.log('!repsonse.ok----');
-        
+
         return rejectWithValue('Something went wrong');
       }
 
       const result = await response.json();
       console.log('result LOGIN--- ', result);
-      
-      if (result.token) {
-        await AsyncStorage.setItem('token', result.token);
-        console.log('inside result.token--LOGIN---');
-        
-        Toast.show({
-          type: 'success',
-          text1: 'Login successful!',
-        });
-        return result;
-      } else {
-        Toast.show({
-          type: 'error',
-          text1: 'Login failed! Please check your credentials.',
-        });
-        return rejectWithValue('Invalid login credentials');
-      }
-      // console.log('---result---response--LOGIN----', result);
+      return {
+        token: result.data.jwtToken,
+        data: result.data.user,
+      };
     } catch (error: unknown) {
       if (error instanceof Error) {
         return rejectWithValue(error.message);
@@ -135,7 +112,10 @@ console.log('sing in')
 export const registerUser = createAsyncThunk(
   'registerUser',
   async (
-    {
+    {name, mobile_no, email, password, country_code, state, role}: User,
+    {rejectWithValue},
+  ) => {
+    const data = {
       name,
       mobile_no,
       email,
@@ -143,17 +123,6 @@ export const registerUser = createAsyncThunk(
       country_code,
       state,
       role,
-    }: User,
-    {rejectWithValue},
-  ) => {
-    const data = {
-        name,
-        mobile_no,
-        email,
-        password,
-        country_code,
-        state,
-        role,
     };
     try {
       const response = await fetch('http://192.168.1.14:8089/user/signUp', {
@@ -161,7 +130,7 @@ export const registerUser = createAsyncThunk(
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),      
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {
@@ -182,29 +151,20 @@ export const registerUser = createAsyncThunk(
 
 export const handleSendOtp = createAsyncThunk(
   'sendOtp',
-  async (
-    {
-      mobile_no,
-      country_code
-    }: sendOtp,
-    {rejectWithValue}
-  ) => {
+  async ({mobile_no, country_code}: sendOtp, {rejectWithValue}) => {
     const data = {
       mobile_no,
-      country_code
+      country_code,
     };
 
     try {
-      const response = await fetch(
-        'http://192.168.1.14:8089/user/sendOtp', 
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch('http://192.168.1.14:8089/user/sendOtp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
       if (!response.ok) {
         return rejectWithValue('Something went wrong');
@@ -219,36 +179,26 @@ export const handleSendOtp = createAsyncThunk(
       }
       return rejectWithValue('An unknown error occurred!');
     }
-  }
+  },
 );
 
 export const handleVerifyOtp = createAsyncThunk(
   'verifyOtp',
-  async (
-    {
-      mobile_no,
-      country_code,
-      otp
-    }: verifyOtp,
-    {rejectWithValue}
-  ) => {
+  async ({mobile_no, country_code, otp}: verifyOtp, {rejectWithValue}) => {
     const data = {
       mobile_no,
       country_code,
-      otp
+      otp,
     };
 
     try {
-      const response = await fetch(
-        'http://192.168.1.14:8089/user/verifyOtp', 
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch('http://192.168.1.14:8089/user/verifyOtp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
       if (!response.ok) {
         return rejectWithValue('Something went wrong');
@@ -263,14 +213,14 @@ export const handleVerifyOtp = createAsyncThunk(
       }
       return rejectWithValue('An unknown error occurred!');
     }
-  }
+  },
 );
 
 export const forgotPassword = createAsyncThunk(
   'forgotPassword',
   async (
     {password, confirm_password, username}: IForgotPassword,
-    {rejectWithValue}
+    {rejectWithValue},
   ) => {
     const data = {
       user: {
@@ -282,14 +232,14 @@ export const forgotPassword = createAsyncThunk(
 
     try {
       const response = await fetch(
-        'http://65.0.108.242/api/v1/users/password', 
+        'http://65.0.108.242/api/v1/users/password',
         {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(data),
-        }
+        },
       );
 
       if (!response.ok) {
@@ -306,26 +256,21 @@ export const forgotPassword = createAsyncThunk(
       }
       return rejectWithValue('An unknown error occurred!');
     }
-  }
+  },
 );
 
 export const termsAndCondition = createAsyncThunk(
   'termsAndCondition',
-  async (
-    _,
-    {rejectWithValue}
-  ) => {
-
+  async (_, {rejectWithValue}) => {
     try {
       const response = await fetch(
-        'http://65.0.108.242/api/v1/terms_and_conditions', 
+        'http://65.0.108.242/api/v1/terms_and_conditions',
         {
           method: 'GET',
-        }
+        },
       );
 
       // console.log('responseAPI ---- termsAndCondition------------------------',response);
-      
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -337,16 +282,14 @@ export const termsAndCondition = createAsyncThunk(
       return result.terms_and_conditions;
     } catch (error: unknown) {
       // console.log('Inside error auth---TERMS AND CONDITION-----');
-      
+
       if (error instanceof Error) {
         return rejectWithValue(error.message);
       }
       return rejectWithValue('An unknown error occurred!');
     }
-  }
+  },
 );
-
-
 
 const authSlice = createSlice({
   name: 'auth',
@@ -369,8 +312,8 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loadingLogin = false;
-        state.token = action.payload.token;
-        state.message = action.payload.message;
+        // state.token = action.payload.token;
+        // state.message = action.payload.message;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loadingLogin = false;
@@ -391,7 +334,7 @@ const authSlice = createSlice({
         // state.token = action.payload.token
         state.phone = action.payload.phone;
         Toast.show({
-          type: 'success', 
+          type: 'success',
           text1: 'Signup Successful🤩🥳.',
         });
       })
@@ -413,7 +356,7 @@ const authSlice = createSlice({
         // state.token = action.payload.token
         // state.phone = action.payload.phone;
         Toast.show({
-          type: 'success', 
+          type: 'success',
           text1: 'Signup Successful🤩🥳.',
         });
       })
@@ -450,12 +393,12 @@ const authSlice = createSlice({
 
       .addCase(forgotPassword.pending, state => {
         state.loadingLogin = true;
-        state.message = null
+        state.message = null;
       })
-      .addCase(forgotPassword.fulfilled, (state,action)=> {
+      .addCase(forgotPassword.fulfilled, (state, action) => {
         state.loadingLogin = false;
-        state.message = action.payload.message
-        state.phone = action.payload.phone
+        state.message = action.payload.message;
+        state.phone = action.payload.phone;
       })
       .addCase(forgotPassword.rejected, state => {
         state.loadingLogin = false;
@@ -463,20 +406,19 @@ const authSlice = createSlice({
       })
       .addCase(termsAndCondition.pending, state => {
         state.loadingLogin = true;
-        state.message = null
+        state.message = null;
       })
-      .addCase(termsAndCondition.fulfilled, (state,action)=> {
+      .addCase(termsAndCondition.fulfilled, (state, action) => {
         state.loadingLogin = false;
-        state.termsAndConditionData = action.payload
-        state.message = action.payload.message
+        state.termsAndConditionData = action.payload;
+        state.message = action.payload.message;
       })
       .addCase(termsAndCondition.rejected, state => {
         state.loadingLogin = false;
         state.message = 'Please try again!!';
-      })
+      });
   },
 });
 
-export const {setToken, getPhoneOrEmail, getOtp} =
-  authSlice.actions;
+export const {setToken, getPhoneOrEmail, getOtp} = authSlice.actions;
 export default authSlice.reducer;

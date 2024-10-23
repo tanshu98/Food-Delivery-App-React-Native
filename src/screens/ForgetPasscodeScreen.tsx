@@ -39,7 +39,7 @@ const ForgetPasscodeScreen = ({navigation}: any) => {
       />
       <View style={styles.forgetPasscodeContainer}>
         <ImageBackground source={ForgetPasscodeBanner} style={styles.topView}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <LeftArrowIcon name="left" size={24} color={colors.white} />
           </TouchableOpacity>
           <Text style={styles.forgetPasscodeText}>Forget Passcode</Text>
@@ -52,7 +52,6 @@ const ForgetPasscodeScreen = ({navigation}: any) => {
         validationSchema={validationSchema}
         onSubmit={values => {
           console.log('Form values', values);
-          //   navigation.navigate('');
         }}>
         {({
           handleChange,

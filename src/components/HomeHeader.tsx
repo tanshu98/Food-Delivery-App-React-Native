@@ -9,7 +9,11 @@ import { fonts } from '../constants/Fonts';
 import { responsiveFontSize, responsiveWidth } from 'react-native-responsive-dimensions';
 import { Badge } from 'react-native-paper';
 
-const HomeHeader = ({navigation}: {navigation: any}) => {
+interface HomeHeaderProps {
+    navigation: any;
+}   
+
+const HomeHeader = ({navigation}: any) => {
   return (
     <View style={styles.container}>
         <TouchableOpacity onPress={() => navigation.navigate('profileScreen')}>
@@ -25,7 +29,6 @@ const HomeHeader = ({navigation}: {navigation: any}) => {
       <TouchableOpacity onPress={() => navigation.navigate('notificationScreen')}>
       <NotificationIcon name="notifications-none" size={35} color={colors.black} style={styles.notificationIcon} />
       </TouchableOpacity>
-      {/* <Badge style={styles.badge} size={20}>3</Badge> */}
     </View>
   );
 };

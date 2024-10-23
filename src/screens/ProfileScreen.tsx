@@ -24,6 +24,12 @@ import OffersIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import DocsIcon from 'react-native-vector-icons/Ionicons';
 import MessageAlertIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LogoutIcon from 'react-native-vector-icons/MaterialIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+interface ProfileScreenProps {
+  navigation: any;
+  AuthCheck: ()=> void;
+}
 
 interface ProfileScreenData {
   id: number;
@@ -79,13 +85,32 @@ const getIconComponent = (iconName: string, color: string, size: number) => {
   }
 };
 
-const ProfileScreen = ({navigation}: any) => {
+const ProfileScreen = ({navigation, AuthCheck}: ProfileScreenProps) => {
     const [selectedButton, setSelectedButton] = useState<number | null>(null);
 
-    const handleToggleBtn = (item: ProfileScreenData) => {
-        setSelectedButton(item.id); 
-      navigation.navigate(item.title)
-    }
+    const handleToggleBtn = async (item: ProfileScreenData) => {
+        try {
+          setSelectedButton(item.id);
+      
+          if (item.title === 'Logout') {
+            await AsyncStorage.removeItem('loginToken');
+            
+            const token = await AsyncStorage.getItem('loginToken');
+            if (!token) {
+              console.log('Token successfully removed');
+            AuthCheck();
+            } else {
+              console.log('Token removal failed');
+            }
+            return;
+          }
+      
+          navigation.navigate(item.title);
+        } catch (error) {
+          console.error('Error during logout:', error);
+        }
+      };
+      
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -142,9 +167,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
 
     height: responsiveHeight(100),
-    // paddingRight: 10,
-    // gap:10
-    // alignItems: 'center',
   },
   profileHeaderContainer: {
     flexDirection: 'row',
@@ -202,7 +224,6 @@ const styles = StyleSheet.create({
     borderRightColor: colors.lightTextColor,
     gap: 5,
     marginLeft: 7,
-    // borderWidth: 1,
   },
   orderIcon: {
     width: 26,
@@ -252,20 +273,12 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     flexDirection: 'row',
-    // marginHorizontal: 10,
     padding: 18,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    // marginVertical: 10,
     borderBottomWidth: 0.4,
     borderBottomColor: colors.textColor,
     gap: 15,
-    // borderRadius: 20,
-    // shadowOffset: {width: 2, height: 2},
-    // shadowOpacity: 0.5,
-    // shadowRadius: 15,
-    // elevation: 10,
-    // shadowColor: colors.lightYellow,
   },
   itemText: {
     color: colors.black,
@@ -273,13 +286,12 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(2.5),
   },
   iconContainer: {
-    width: 40, // increase width and height for better visibility
+    width: 40, 
     height: 40, 
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.redPink, // your desired background color
-    borderRadius: 20, // make it circular
-    // color: colors.redPink
+    backgroundColor: colors.redPink,
+    borderRadius: 20, 
   },
 });
 
