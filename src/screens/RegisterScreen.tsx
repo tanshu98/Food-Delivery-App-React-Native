@@ -121,8 +121,9 @@ const RegisterScreen = ({navigation}: RegisterScreenProps) => {
           translucent={true}
           barStyle={'light-content'}
         />
+        <TouchableOpacity onPress={()=> navigation.goBack()}>
         <Image source={registerBg} style={styles.bgContainer} />
-
+        </TouchableOpacity>
         <Formik
           initialValues={{
             name: '',

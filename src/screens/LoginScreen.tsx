@@ -28,8 +28,19 @@ import {OtpInput} from 'react-native-otp-entry';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import KeyboardWrapper from '../components/KeyboardWrapper';
+import { loginUser } from '../redux/slices/AuthSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AppDispatch} from '../redux/store/store';
+import {useDispatch} from 'react-redux';
+import Toast from 'react-native-toast-message';
 
-const LoginScreen = ({navigation}: any) => {
+interface LoginScreenProps {
+  navigation: any;
+  AuthCheck: () => void;
+}
+
+const LoginScreen = ({navigation,AuthCheck}: LoginScreenProps) => {
+  const dispatch = useDispatch<AppDispatch>();
   
   const [selectedUserType, setSelectedUserType] = useState('Customer');
   const [countryCode, setCountryCode] = useState('+91');
@@ -44,16 +55,46 @@ const LoginScreen = ({navigation}: any) => {
       .length(6, 'Must be exactly 6 digits'),
   });
 
+  const handleLoginSubmit = async(values:any)=> {
+    console.log("values----", values);
+    const userData = {
+      mobile_no: values.mobileNumber,
+      country_code: countryCode,
+      password: values.passcode,
+      role: selectedUserType === 'Customer' ? 'CUSTOMER' : 'SELLER',
+    };
+    const loginUserData = await dispatch(loginUser(userData));
+    console.log("loginUser----LOGIN SCREEN", loginUserData);
+
+    // @ts-ignore   
+    if (loginUserData?.error?.message != 'Rejected') {
+      await AsyncStorage.setItem('loginToken', loginUserData?.payload?.token);
+      await AsyncStorage.setItem('loginUserData',JSON.stringify( loginUserData?.payload?.data));
+
+      Toast.show({
+        type: 'success',
+        text1: 'Login Successful🤩🥳.',
+        text2: `${loginUserData?.payload}`,
+      });
+
+      AuthCheck();
+
+  } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Login failed! Please try again.',
+      });
+    }
+  };
+
+
   return (
     
     <KeyboardWrapper>
       <Formik
         initialValues={{mobileNumber: '', passcode: ''}}
         validationSchema={validationSchema}
-        onSubmit={values => {
-          console.log('Login details:', values);
-          navigation.navigate('bottomNavigation');
-        }}>
+          onSubmit={handleLoginSubmit}>
         {({handleSubmit, handleChange, values, errors, touched}) => (
           <View style={styles.loginContainer}>
             <StatusBar
@@ -80,6 +121,7 @@ const LoginScreen = ({navigation}: any) => {
                     keyboardType="number-pad"
                     onChangeText={handleChange('mobileNumber')}
                     value={values.mobileNumber}
+                    maxLength={10}
                   />
                   <PhoneIcon
                     name="phone"
@@ -98,12 +140,13 @@ const LoginScreen = ({navigation}: any) => {
                   numberOfDigits={6}
                   focusColor="green"
                   onTextChange={handleChange('passcode')}
-                  onFilled={text => console.log(`OTP is ${text}`)}
                 />
                 {touched.passcode && errors.passcode && (
                   <Text style={styles.errorText}>{errors.passcode}</Text>
                 )}
+                <TouchableOpacity      onPress={() => navigation.navigate('forgetPasscodeScreen')}>
                 <Text style={styles.forgotPasscode}>Forgot Passcode?</Text>
+                </TouchableOpacity>
               </View>
 
               <View style={styles.customerSellerContainer}>
