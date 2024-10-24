@@ -106,9 +106,9 @@ const RegisterScreen = ({navigation}: RegisterScreenProps) => {
       navigation.navigate('otpScreen',{otpData})
     } else {
       Toast.show({
-        type: 'success',
+        type: 'error',
         text1: 'Signup failed! Please try again.',
-        text2: signupUser?.payload
+        text2: signupUser?.payload 
       });
     }
   };

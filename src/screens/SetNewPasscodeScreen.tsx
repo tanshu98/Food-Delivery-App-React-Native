@@ -19,6 +19,23 @@ import { OtpInput } from 'react-native-otp-entry';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import KeyboardWrapper from '../components/KeyboardWrapper';
+import { handleUpdatePassword } from '../redux/slices/AuthSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../redux/store/store';
+
+
+interface UserData {
+    mobile_no: string;
+    country_code: string;
+    otp: string;
+}
+
+interface SetNewPasscodeScreenProps {
+    navigation: any;
+    route: {
+        params: UserData;
+    }
+}
 
 // Validation Schema using Yup
 const validationSchema = Yup.object().shape({
@@ -30,11 +47,49 @@ const validationSchema = Yup.object().shape({
     .required('Confirm Passcode is required')
 });
 
-const SetNewPasscodeScreen = ({ navigation }: { navigation: any }) => {
+const SetNewPasscodeScreen = ({ navigation, route }: SetNewPasscodeScreenProps) => {
+
+    console.log('route.params----SET NEW PASSWORD', route.params);
+    // const [updateNewPassword, setUpdateNewPassword] = useState({
+    //     mobile_no: route.params.mobile_no,
+    //     country_code: route.params.country_code,
+    //     // otp: route.params.otp,
+    //     newPassword: '',
+    //     confirmPassword: '',
+    // })
+
+    const dispatch = useDispatch<AppDispatch>()
+
+ 
+        // setUpdateNewPassword(prev => ({
+        //     ...prev,
+        //     newPassword: valesnewPasscode,
+        //     confirmPassword: confirmPasscode
+        // }))
     
-  const handleSubmit = (values: { newPasscode: string; confirmPasscode: string }) => {
-    console.log('Passcode set successfully:', values);
-    navigation.navigate('loginScreen');
+  const handleSubmit =async (values: { newPasscode: string; confirmPasscode: string }) => {
+    // console.log('Passcode set successfully:', values);
+    const passcodeData = {
+        mobile_no: route.params.mobile_no,
+        country_code: route.params.country_code,
+        newPassword: values.newPasscode,
+        confirmPassword: values.confirmPasscode
+    }
+    
+   
+        const updatePasswordData = await dispatch(handleUpdatePassword(passcodeData));
+        // @ts-ignore
+        if (updatePasswordData?.error?.message != 'Rejected') {
+            console.log('Inside updatePasswordData', updatePasswordData);
+            
+            
+            navigation.navigate('loginScreen');
+        } else {
+            // console.log('updatePasswordData----', updatePasswordData);
+            console.log('Hello World!!!!!');
+            
+        }
+   
   };
 
   return (
@@ -47,7 +102,7 @@ const SetNewPasscodeScreen = ({ navigation }: { navigation: any }) => {
       />
       <View style={styles.setNewPasscodeScreen}>
         <ImageBackground source={SetNewPasscodeBg} style={styles.topView}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <LeftArrowIcon name="left" size={24} color={colors.white} />
           </TouchableOpacity>
           <Text style={styles.setNewPasscodeText}>Set New Passcode</Text>

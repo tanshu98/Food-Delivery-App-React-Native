@@ -32,6 +32,13 @@ export interface LoginUser {
   country_code: string;
 }
 
+export interface updatePassword {
+  country_code: string;
+  mobile_no: string;
+  newPassword: string;
+  confirmPassword: string;
+} 
+
 export interface IForgotPassword {
   password: string;
   confirm_password: string;
@@ -80,26 +87,30 @@ export const loginUser = createAsyncThunk(
     console.log('LoginUserData----', data);
 
     try {
-      const response = await fetch('http://192.168.1.14:8089/user/login', {
+      const response = await fetch('http://192.168.1.15:8089/user/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
       });
-      console.log('login---response---', response);
-      if (!response.ok) {
-        console.log('!repsonse.ok----');
 
-        return rejectWithValue('Something went wrong');
-      }
+      // if(response.ok)
 
       const result = await response.json();
-      console.log('result LOGIN--- ', result);
-      return {
-        token: result.data.jwtToken,
-        data: result.data.user,
-      };
+      if (response.ok) {
+        return {
+          token: result.data.jwtToken,
+          data: result.data.user,
+        };
+      } else {
+        return rejectWithValue(result.error.error);
+      }
+      // console.log('result LOGIN--- ', result);
+      // return {
+      //   token: result.data.jwtToken,
+      //   data: result.data.user,
+      // };
     } catch (error: unknown) {
       if (error instanceof Error) {
         return rejectWithValue(error.message);
@@ -125,7 +136,7 @@ export const registerUser = createAsyncThunk(
       role,
     };
     try {
-      const response = await fetch('http://192.168.1.14:8089/user/signUp', {
+      const response = await fetch('http://192.168.1.15:8089/user/signUp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -133,13 +144,12 @@ export const registerUser = createAsyncThunk(
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) {
-        return rejectWithValue('Something went wrong');
-      }
-
       const result = await response.json();
-      console.log('---result---response SIGNUP---AUTH SLICE---', result);
-      return result;
+      if (response.ok) {
+        return result;
+      } else {
+        return rejectWithValue(result.error.error);
+      }
     } catch (error: unknown) {
       if (error instanceof Error) {
         return rejectWithValue(error.message);
@@ -158,7 +168,7 @@ export const handleSendOtp = createAsyncThunk(
     };
 
     try {
-      const response = await fetch('http://192.168.1.14:8089/user/sendOtp', {
+      const response = await fetch('http://192.168.1.15:8089/user/sendOtp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -166,13 +176,12 @@ export const handleSendOtp = createAsyncThunk(
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) {
-        return rejectWithValue('Something went wrong');
-      }
-
       const result = await response.json();
-      console.log('SEND OTP AUTH SLICE----', result);
-      return result;
+      if (response.ok) {
+        return result;
+      } else {
+        return rejectWithValue(result.error.error);
+      }
     } catch (error: unknown) {
       if (error instanceof Error) {
         return rejectWithValue(error.message);
@@ -192,7 +201,7 @@ export const handleVerifyOtp = createAsyncThunk(
     };
 
     try {
-      const response = await fetch('http://192.168.1.14:8089/user/verifyOtp', {
+      const response = await fetch('http://192.168.1.15:8089/user/verifyOtp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -206,6 +215,41 @@ export const handleVerifyOtp = createAsyncThunk(
 
       const result = await response.json();
       console.log('SEND OTP AUTH SLICE----VERIFYOTP', result);
+      return result;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue('An unknown error occurred!');
+    }
+  },
+);
+
+export const handleUpdatePassword = createAsyncThunk(
+  'updatePassword',
+  async ({mobile_no, country_code, newPassword,confirmPassword}: updatePassword, {rejectWithValue}) => {
+    const data = {
+      mobile_no,
+      country_code,
+      newPassword,
+      confirmPassword
+    };
+
+    try {
+      const response = await fetch('http://192.168.1.15:8089/user/updatePassword', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        return rejectWithValue('Something went wrong');
+      }
+
+      const result = await response.json();
+      console.log('UPDATE PASSWORD AUTH SLICE----VERIFYOTP', result);
       return result;
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -318,10 +362,10 @@ const authSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.loadingLogin = false;
         state.message = action.payload as string;
-        Toast.show({
-          type: 'error',
-          text1: 'Login failed! Please try again.',
-        });
+        // Toast.show({
+        //   type: 'error',
+        //   text1: 'Login failed! Please try again.',
+        // });
       })
 
       .addCase(registerUser.pending, state => {
@@ -333,18 +377,18 @@ const authSlice = createSlice({
         state.message = action.payload.message as string;
         // state.token = action.payload.token
         state.phone = action.payload.phone;
-        Toast.show({
-          type: 'success',
-          text1: 'Signup Successful🤩🥳.',
-        });
+        // Toast.show({
+        //   type: 'success',
+        //   text1: 'Signup Successful🤩🥳.',
+        // });
       })
       .addCase(registerUser.rejected, state => {
         state.loadingLogin = false;
         state.message = 'Please try again!!';
-        Toast.show({
-          type: 'error',
-          text1: 'Signup failed! Please try again.',
-        });
+        // Toast.show({
+        //   type: 'error',
+        //   text1: 'Signup failed! Please try again.',
+        // });
       })
       .addCase(handleSendOtp.pending, state => {
         state.loadingLogin = true;
@@ -357,15 +401,18 @@ const authSlice = createSlice({
         // state.phone = action.payload.phone;
         Toast.show({
           type: 'success',
-          text1: 'Signup Successful🤩🥳.',
+          // text1: 'Signup Successful🤩🥳.',
+          // text1:`${ action.payload}`,
+          text1: action.payload.data.message || 'OTP Verified Successfully!',
         });
       })
-      .addCase(handleSendOtp.rejected, state => {
+      .addCase(handleSendOtp.rejected, (state, action) => {
         state.loadingLogin = false;
         state.message = 'Please try again!!';
         Toast.show({
           type: 'error',
-          text1: 'Signup failed! Please try again.',
+          // text1: 'Signup failed! Please try again.',
+          text1: (action.payload as string) || 'OTP Verification Failed!',
         });
       })
 
@@ -388,6 +435,28 @@ const authSlice = createSlice({
         Toast.show({
           type: 'error',
           text1: 'OTP Verification Failed!',
+        });
+      })
+
+      .addCase(handleUpdatePassword.pending, state => {
+        state.loadingLogin = true;
+        state.message = null;
+      })
+      .addCase(handleUpdatePassword.fulfilled, (state, action) => {
+        state.loadingLogin = false;
+        state.isOtpVerified = true;
+        state.message = action.payload.message as string;
+        Toast.show({
+          type: 'success',
+          text1: 'Password Updated Successfully 🤩🥳.'
+        });
+      })
+      .addCase(handleUpdatePassword.rejected, (state, action) => {
+        state.loadingLogin = false;
+        state.message = action.payload as string;
+        Toast.show({
+          type: 'error',
+          text1: 'Password Update Failed! Please try again 😕.',
         });
       })
 

@@ -74,7 +74,7 @@ const LoginScreen = ({navigation,AuthCheck}: LoginScreenProps) => {
       Toast.show({
         type: 'success',
         text1: 'Login Successful🤩🥳.',
-        text2: `${loginUserData?.payload}`,
+        text2: `Welcome Back, ${loginUserData?.payload.data.full_name }🤩🥳`,
       });
 
       AuthCheck();
@@ -83,6 +83,8 @@ const LoginScreen = ({navigation,AuthCheck}: LoginScreenProps) => {
       Toast.show({
         type: 'error',
         text1: 'Login failed! Please try again.',
+        text2: loginUserData?.payload  as string
+
       });
     }
   };

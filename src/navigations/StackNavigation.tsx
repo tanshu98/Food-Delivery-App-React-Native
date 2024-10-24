@@ -300,6 +300,7 @@ const StackNavigation = () => {
           />
         </Stack.Navigator>
       )}
+            <Toast />
     </NavigationContainer>
   );
 };
