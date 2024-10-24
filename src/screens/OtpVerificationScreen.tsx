@@ -20,43 +20,120 @@ import {fonts} from '../constants/Fonts';
 import {OtpInput} from 'react-native-otp-entry';
 import Toast from 'react-native-toast-message';
 import ReloadIcon from 'react-native-vector-icons/AntDesign';
+import {handleSendOtp, handleVerifyOtp} from '../redux/slices/AuthSlice';
+import {useDispatch} from 'react-redux';
+import {AppDispatch} from '../redux/store/store';
+import notifee, {AndroidImportance} from '@notifee/react-native';
 
-const OtpVerificationScreen = ({navigation}: any) => {
+interface UserData {
+  mobile_no: string;
+  country_code: string;
+  otp: string;
+}
+interface OtpVerificationScreenProps {
+  navigation: any;
+  route: {
+    params: UserData;
+  };
+}
+
+const OtpVerificationScreen = ({
+  navigation,
+  route,
+}: OtpVerificationScreenProps) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [userOtp, setUserOtp] = useState('');
-  const [otp, setOtp] = useState('');
+  const [otp, setOtp] = useState(route.params.otp);
+  console.log('route', route.params);
 
   const handleOtpChange = (otp: string) => {
     setUserOtp(otp);
   };
-  const generateOtp = (): string => {
-    const otp = Math.floor(1000 + Math.random() * 9000).toString();
-    console.log('otp', otp);
-    setOtp(otp);
-    return otp;
-  };
-  useEffect(() => {
-    generateOtp();
-  }, []);
 
-  const handleSubmit = () => {
-    if (userOtp.length === 0) {
-      Toast.show({
-        type: 'error',
-        text1: 'Please enter the OTP 🙂',
-      });
-    } else if (userOtp === otp) {
+  const generateOtp = async () => {
+    const userDetails = {
+      mobile_no: route.params.mobile_no,
+      country_code: route.params.country_code,
+    };
+    const resendOtp = await dispatch(handleSendOtp(userDetails));
+
+    // @ts-ignore
+    if (resendOtp?.error?.message != 'Rejected') {
+      // onDisplayNotification(resendOtp?.payload?.data?.otp);
+      console.log(
+        'resendOtp?.payload?.data?.otp',
+        resendOtp?.payload?.data?.otp,
+      );
+      onDisplayNotification(resendOtp?.payload?.data?.otp);
+      const newOtp = resendOtp?.payload?.data?.otp; // Extract the new OTP
+      setOtp(newOtp); // Update the OTP in state
       Toast.show({
         type: 'success',
-        text1: 'Congratulations🤩 You have successfully Signed up🥰 ',
+        text1: 'Otp sent successfully. Please check your inbox.',
       });
-      navigation.navigate('setNewPasscodeScreen');
     } else {
       Toast.show({
         type: 'error',
-        text1: 'Invalid OTP. Please try again 😕',
+        text1: 'Something went wrong. Please try again 😕',
       });
     }
   };
+
+  const handleSubmit = async () => {
+    const otpVerification = await dispatch(
+      handleVerifyOtp({
+        ...route.params,
+        otp: userOtp,
+      }),
+    );
+    console.log(
+      'otpVerification----OTPVERIFICATIONSCREEN ---INSIDE HANDLE SUBMIT FUNCTION',
+      otpVerification,
+    );
+
+    // @ts-ignore
+    if (otpVerification?.error?.message != 'Rejected') {
+      Toast.show({
+        type: 'success',
+        text1: 'Otp is verified Successfully🤩🥳.',
+      });
+      navigation.navigate('setNewPasscodeScreen', {...route.params});
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Something went wrong. Please try again 😕',
+      });
+    }
+  };
+
+  async function onDisplayNotification(otp: string) {
+    // Request permissions (required for iOS)
+    await notifee.requestPermission()
+
+    // Create a channel (required for Android)
+    const channelId = await notifee.createChannel({
+      id: 'default',
+      name: 'Default Channel',
+      importance:AndroidImportance.HIGH
+    });
+
+    // Display a notification
+    await notifee.displayNotification({
+      title: 'Otp is generated successfully',
+      body: otp,
+      android: {
+        channelId,
+      importance:AndroidImportance.HIGH,
+        pressAction: {
+          id: 'default',
+        },
+      },
+    });
+  }
+
+  useEffect(() => {
+      onDisplayNotification(otp);
+  },[])
   return (
     <View style={styles.container}>
       <StatusBar
@@ -66,7 +143,7 @@ const OtpVerificationScreen = ({navigation}: any) => {
       />
       <ImageBackground source={OtpVerificationBg} style={styles.topView}>
         <View style={styles.otpHeaderContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <LeftArrowIcon name="left" size={24} color={colors.white} />
           </TouchableOpacity>
           <Text style={styles.otpVerificationText}>OTP Verification</Text>
@@ -75,7 +152,7 @@ const OtpVerificationScreen = ({navigation}: any) => {
           <Image source={OtpIcon} style={styles.otpIcon} />
           <View style={styles.otpTextContainer}>
             <Text style={styles.sendOtpText}>Enter the OTP sent to</Text>
-            <Text style={styles.sendOtpNumber}>+91 987654321</Text>
+            <Text style={styles.sendOtpNumber}>{route.params.mobile_no}</Text>
           </View>
         </View>
         <View style={styles.otpInputContainerMain}>

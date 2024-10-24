@@ -21,6 +21,17 @@ import LeftArrowIcon from 'react-native-vector-icons/AntDesign';
 import {colors} from '../constants/Colors';
 import {fonts} from '../constants/Fonts';
 import PhoneIcon from 'react-native-vector-icons/MaterialIcons';
+import { handleSendOtp,handleVerifyOtp } from '../redux/slices/AuthSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../redux/store/store';
+import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import notifee, { AndroidImportance } from '@notifee/react-native';
+
+
+interface ForgetPasscodeScreenProps {
+  navigation: any;
+}
 
 // Yup validation schema
 const validationSchema = Yup.object().shape({
@@ -29,7 +40,30 @@ const validationSchema = Yup.object().shape({
     .required('Mobile number is required'),
 });
 
-const ForgetPasscodeScreen = ({navigation}: any) => {
+const ForgetPasscodeScreen = ({navigation}: ForgetPasscodeScreenProps) => {
+
+    const dispatch = useDispatch<AppDispatch>();
+
+    const submitHandler =async (values: any) => {
+      const userData = {
+        mobile_no: values.mobileNumber,
+        country_code: '+91',
+      }
+
+      const forgetPasscode = await dispatch(handleSendOtp(userData));
+      console.log('forgetPasscode', forgetPasscode);
+
+      // @ts-ignore
+      if (forgetPasscode?.error?.message != 'Rejected') {
+        // console.log('forgetPasscode', forgetPasscode?.payload?.data?.otp);
+        
+    //   await AsyncStorage.setItem('forgetPasscodeToken', JSON.stringify(forgetPasscode));
+      navigation.navigate('otpVerificationScreen', {...userData,otp:forgetPasscode?.payload?.data?.otp})
+      }
+    }
+
+ 
+    
   return (
     <View style={styles.container}>
       <StatusBar
@@ -50,9 +84,10 @@ const ForgetPasscodeScreen = ({navigation}: any) => {
       <Formik
         initialValues={{mobileNumber: ''}}
         validationSchema={validationSchema}
-        onSubmit={values => {
-          console.log('Form values', values);
-        }}>
+        // onSubmit={values => {
+        //   console.log('Form values', values);
+        // }}>
+        onSubmit={submitHandler}>
         {({
           handleChange,
           handleBlur,
@@ -71,6 +106,7 @@ const ForgetPasscodeScreen = ({navigation}: any) => {
                 onBlur={handleBlur('mobileNumber')}
                 value={values.mobileNumber}
                 keyboardType="numeric"
+                maxLength={10}
               />
               <PhoneIcon name="phone" size={20} color={colors.lightTextColor} />
             </View>
@@ -133,8 +169,8 @@ const styles = StyleSheet.create({
     width: responsiveWidth(80),
   },
   mobileInput: {
-    color: colors.textColor,
-    fontFamily: fonts.montserrat.regular,
+    color: colors.lightTextColor,
+    fontFamily: fonts.montserrat.semiBold,
     fontSize: responsiveFontSize(1.7),
     width: responsiveWidth(70),
     margin: Platform.OS === 'ios' ? -4 : -2,
