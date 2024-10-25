@@ -9,13 +9,15 @@ import {
   View,
 } from 'react-native';
 import {Chicken, Burger, Pizza} from '../assets';
-import { responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
-import { colors } from '../constants/Colors';
-import { fonts } from '../constants/Fonts';
+import {
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveWidth,
+} from 'react-native-responsive-dimensions';
+import {colors} from '../constants/Colors';
+import {fonts} from '../constants/Fonts';
 import BellIcon from 'react-native-vector-icons/FontAwesome5';
 import PlusIcon from 'react-native-vector-icons/AntDesign';
-
-
 
 interface BestChoisesData {
   id: string;
@@ -33,7 +35,7 @@ const data: BestChoisesData[] = [
     title: 'Burger',
     price: '₹90',
     restaurantName: 'Barbeque Nation',
-    bgColor:''
+    bgColor: '',
   },
   {
     id: '2',
@@ -41,7 +43,7 @@ const data: BestChoisesData[] = [
     title: 'Pizza',
     price: '₹150',
     restaurantName: 'Naivedhyam Restaurant',
-    bgColor:colors.green
+    bgColor: colors.green,
   },
   {
     id: '3',
@@ -49,7 +51,7 @@ const data: BestChoisesData[] = [
     title: 'Chicken',
     price: '₹120',
     restaurantName: 'Golden Fish Restaurant',
-    bgColor:''
+    bgColor: '',
   },
   {
     id: '4',
@@ -57,37 +59,41 @@ const data: BestChoisesData[] = [
     title: 'Burger',
     price: '₹90',
     restaurantName: 'Barbeque Nation',
-    bgColor:''
+    bgColor: '',
   },
 ];
 
 const BestChoises = () => {
-  const renderItem = ({item, index}: {item: BestChoisesData, index: number}) => {
-
+  const renderItem = ({
+    item,
+    index,
+  }: {
+    item: BestChoisesData;
+    index: number;
+  }) => {
     const isEven = (index + 1) % 2 === 0;
     const backgroundColor = isEven ? colors.pink : colors.UltraLightYellow;
-    
-    const shadowColor = isEven ? colors.pink : colors.UltraLightYellow;
-    
+
+    // const shadowColor = isEven ? colors.pink : colors.UltraLightYellow;
+    const shadowColor = colors.redPink;
+
+
     return (
-    <View style={[styles.card, {backgroundColor}]}>
-      <Image source={item.image} style={styles.image} />
-      <View style={styles.itemContainer}>
-      <Text style={styles.itemTitle}>{item.title}</Text>
-      <Text style={styles.itemPrice}>{item.price}</Text>
-      <BellIcon name="concierge-bell" size={20} color={colors.black}  />
-      <Text>{item.restaurantName}</Text>
+      <View style={[styles.card, {backgroundColor}]}>
+        <Image source={item.image} style={styles.image} />
+        <View style={styles.itemContainer}>
+          <Text style={styles.itemTitle}>{item.title}</Text>
+          <Text style={styles.itemPrice}>{item.price}</Text>
+          <BellIcon name="concierge-bell" size={20} color={colors.black} />
+          <Text style={styles.itemRestaurantName}>{item.restaurantName}</Text>
+        </View>
+        <View style={[styles.plusIcon, {shadowColor}]}>
+          <PlusIcon name="plus" size={20} color={colors.black} />
+        </View>
       </View>
-      <View style={[styles.plusIcon,{shadowColor}]} >
-      <PlusIcon name="plus" size={20} color={colors.black}  />
-      </View>
+    );
+  };
 
-    </View>
-  );
-};
-
-
-  
   return (
     <View style={styles.container}>
       <Text style={styles.titleText}>Best Choises</Text>
@@ -107,58 +113,67 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  flatListContainer:{
+  flatListContainer: {
     marginVertical: 35,
-   marginHorizontal:10
+    marginHorizontal: 10,
   },
-  titleText:{
+  titleText: {
     color: colors.black,
     fontFamily: fonts.bai.semiBold,
     fontSize: responsiveFontSize(2.5),
-    marginBottom:10,
-    marginHorizontal:15
+    marginBottom: 10,
+    marginHorizontal: 15,
   },
   card: {
-    
-    padding: 10,
     borderRadius: 20,
     marginRight: 15,
     alignItems: 'center',
-    paddingVertical:responsiveHeight(5),
+    paddingVertical: responsiveHeight(2),
     marginHorizontal: 10,
+    width: responsiveWidth(40),
+    justifyContent: 'center',
   },
-  image:{
-    position:'absolute',
-    top:-40,
+  image: {
+    position: 'absolute',
+    top: -40,
   },
-  itemContainer:{
-    position:'relative',
-    alignItems:'center',
-    justifyContent:'center',
-    gap:responsiveHeight(2)
+  itemContainer: {
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: responsiveHeight(1.3),
   },
-  itemTitle:{
-    marginTop:50,
+  itemTitle: {
+    marginTop: 50,
     fontFamily: fonts.bai.semiBold,
     fontSize: responsiveFontSize(2.5),
     color: colors.black,
   },
-  itemPrice:{
+  itemPrice: {
     fontFamily: fonts.montserrat.semiBold,
     fontSize: responsiveFontSize(2.2),
-    color: colors.red
+    color: colors.red,
   },
-  plusIcon:{
-    backgroundColor:colors.white,
-    position:'absolute',
-    bottom:-18,
-    padding:10,
-    borderRadius:20,
+  itemRestaurantName: {
+    fontFamily: fonts.montserrat.semiBold,
+    fontSize: responsiveFontSize(1.8),
+    color: colors.black,
+    textAlign: 'center',
+    marginBottom:20,
+    width: responsiveWidth(30),
+    lineHeight: 20
+  },
+  plusIcon: {
+    backgroundColor: colors.white,
+    position: 'absolute',
+    bottom: -18,
+    padding: 10,
+    borderRadius: 20,
     shadowOffset: {width: 2, height: 2},
     shadowOpacity: 0.5,
     shadowRadius: 15,
     elevation: 10,
-  }
+  },
 });
 
 export default BestChoises;

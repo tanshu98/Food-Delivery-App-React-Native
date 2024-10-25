@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {Image, Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {ProfileIcon} from '../assets';
 import LocationIcon from 'react-native-vector-icons/Entypo';
@@ -8,19 +8,53 @@ import { colors } from '../constants/Colors';
 import { fonts } from '../constants/Fonts';
 import { responsiveFontSize, responsiveWidth } from 'react-native-responsive-dimensions';
 import { Badge } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface HomeHeaderProps {
     navigation: any;
 }   
 
 const HomeHeader = ({navigation}: any) => {
+
+    const [token, setToken] = useState<string | null>(null); 
+    const [userName, setUserName] = useState<string>('');
+
+    const loginToken = async () => {
+        try {
+            const storedToken = await AsyncStorage.getItem('loginUserData');
+            console.log('token', storedToken);
+            setToken(storedToken);
+        } catch (error) {
+            console.error('Error retrieving token:', error);
+        }
+   
+    }
+
+    useEffect(()=> {
+        loginToken();
+    })
+
+    useEffect(() => {
+        if (token) {
+            try {
+                const user = JSON.parse(token);
+                if (user && user.full_name) {
+                    setUserName(`${user.full_name.charAt(0).toUpperCase()}${user.full_name.slice(1)}`);
+                } else {
+                    setUserName(''); 
+                }
+            } catch (error) {
+                console.error('Error parsing token:', error);
+            }
+        }
+    }, [token]); 
   return (
     <View style={styles.container}>
         <TouchableOpacity onPress={() => navigation.navigate('profileScreen')}>
       <Image source={ProfileIcon} />
       </TouchableOpacity>
       <View style={styles.headerTextContainer}>
-        <Text style={styles.headerText}>Hi, Sachin</Text>
+        <Text style={styles.headerText}>Hi, {userName}</Text>
         <View style={styles.locationContainer}>
           <LocationIcon name="location-pin" size={20} color={colors.lightTextColor} />
           <Text style={styles.locationText}>Nagpur, Maharashtra</Text>

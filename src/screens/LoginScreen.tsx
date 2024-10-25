@@ -74,7 +74,7 @@ const LoginScreen = ({navigation,AuthCheck}: LoginScreenProps) => {
       Toast.show({
         type: 'success',
         text1: 'Login Successful🤩🥳.',
-        text2: `Welcome Back, ${loginUserData?.payload.data.full_name }🤩🥳`,
+        text2: `Welcome Back, ${loginUserData?.payload?.data?.full_name }🤩🥳`,
       });
 
       AuthCheck();
@@ -92,7 +92,7 @@ const LoginScreen = ({navigation,AuthCheck}: LoginScreenProps) => {
 
   return (
     
-    <KeyboardWrapper>
+    <ScrollView>
       <Formik
         initialValues={{mobileNumber: '', passcode: ''}}
         validationSchema={validationSchema}
@@ -196,7 +196,7 @@ const LoginScreen = ({navigation,AuthCheck}: LoginScreenProps) => {
           </View>
         )}
       </Formik>
-    </KeyboardWrapper>
+    </ScrollView>
   );
 };
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FlatList, Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { colors } from '../constants/Colors'
 import { responsiveFontSize, responsiveWidth } from 'react-native-responsive-dimensions'
@@ -6,6 +6,10 @@ import { fonts } from '../constants/Fonts'
 import RightArrowIcon from 'react-native-vector-icons/AntDesign';
 import { ChickenTikka,PizzaSpecial,VegDumBiryani,ChikckenBiryani } from '../assets'
 import BellIcon from 'react-native-vector-icons/FontAwesome5';
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState,AppDispatch } from '../redux/store/store'
+import { HomeSlice,Product,getTodaySpecial } from '../redux/slices/HomeSlice'
+
 
 interface IProps {
     navigation: any;
@@ -67,22 +71,28 @@ interface TodaySpecialData {
 
 const TodaySpecialScreen = ({navigation}:IProps) => {
 
-    // const todaySpecialHandler = () => {
-    //     navigation.navigate('todaySpecialScreen')
-    // }
+   const dispatch = useDispatch<AppDispatch>();
+   const {products, error, loading} = useSelector((state:RootState)=> state.HomeSlice);
+
+   useEffect(()=> {
+    dispatch(getTodaySpecial());
+   },[dispatch])
+
+//    console.log("products----TODAYSPECIALCOMPONENTSCREEN-----", products);
+
    
-    const renderItem = ({item}: {item: TodaySpecialData}) => (
+    const renderItem = ({item}: {item: Product}) => (
         <View style={styles.itemContainer}>
-            <Image source={item.image} style={styles.itemImage} />
+            <Image source={PizzaSpecial} style={styles.itemImage} />
             <View style={styles.itemDetailsContainer}>
-                <Text style={styles.itemTitle}>{item.title}</Text>
+                <Text style={styles.itemTitle}>{item.name}</Text>
                 <View style={styles.priceContainer}>
-                    <Text style={styles.currentPrice}>{item.currentPrice}</Text>
-                    <Text style={styles.oldPrice}>{item.oldPrice}</Text>
+                    <Text style={styles.currentPrice}>{item.discountPrice}</Text>
+                    <Text style={styles.oldPrice}>{item.price}</Text>
                 </View>
                 <View style={styles.restaurantContainer}>
                 <BellIcon name="concierge-bell" size={20} color={colors.lightTextColor}  />
-                <Text style={styles.restaurantName}>{item.restaurantName}</Text>
+                <Text style={styles.restaurantName}>{item.category}</Text>
                 </View>
             </View>
         </View>
@@ -91,10 +101,9 @@ const TodaySpecialScreen = ({navigation}:IProps) => {
     <View style={styles.container}>
       <View style={styles.listContainer}>
         <FlatList
-          data={data}
+          data={products}
           renderItem={renderItem}
-          keyExtractor={(item: TodaySpecialData) => item.id}
-        //   horizontal
+          keyExtractor={(item) => item._id}
           showsHorizontalScrollIndicator={false}
         />
       </View>
@@ -105,7 +114,6 @@ const TodaySpecialScreen = ({navigation}:IProps) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // backgroundColor: colors.pink
     },
     listContainer: {
         marginVertical:10,
@@ -130,12 +138,10 @@ const styles = StyleSheet.create({
     itemImage: {
         width: responsiveWidth(25),
         height: responsiveWidth(25),
-        // borderRadius: 10
     },
     itemDetailsContainer: {
         flexDirection: 'column',
         gap: 4,
-        // backgroundColor: colors.green
     },
     itemTitle: {
         color: colors.black,

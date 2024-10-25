@@ -1,8 +1,5 @@
 import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Alert} from 'react-native';
 import Toast from 'react-native-toast-message';
-import {string} from 'yup';
 
 export interface User {
   name: string;
