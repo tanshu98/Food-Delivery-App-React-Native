@@ -27,7 +27,6 @@ import {customerIconWhite, customerIconRed} from '../assets';
 import {OtpInput} from 'react-native-otp-entry';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import KeyboardWrapper from '../components/KeyboardWrapper';
 import { loginUser } from '../redux/slices/AuthSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AppDispatch} from '../redux/store/store';

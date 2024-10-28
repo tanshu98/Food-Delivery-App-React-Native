@@ -84,7 +84,7 @@ export const loginUser = createAsyncThunk(
     console.log('LoginUserData----', data);
 
     try {
-      const response = await fetch('http://192.168.1.15:8089/user/login', {
+      const response = await fetch('http://192.168.1.22:8089/user/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -133,7 +133,7 @@ export const registerUser = createAsyncThunk(
       role,
     };
     try {
-      const response = await fetch('http://192.168.1.15:8089/user/signUp', {
+      const response = await fetch('http://192.168.1.22:8089/user/signUp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -165,7 +165,7 @@ export const handleSendOtp = createAsyncThunk(
     };
 
     try {
-      const response = await fetch('http://192.168.1.15:8089/user/sendOtp', {
+      const response = await fetch('http://192.168.1.22:8089/user/sendOtp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -198,7 +198,7 @@ export const handleVerifyOtp = createAsyncThunk(
     };
 
     try {
-      const response = await fetch('http://192.168.1.15:8089/user/verifyOtp', {
+      const response = await fetch('http://192.168.1.22:8089/user/verifyOtp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -233,7 +233,7 @@ export const handleUpdatePassword = createAsyncThunk(
     };
 
     try {
-      const response = await fetch('http://192.168.1.15:8089/user/updatePassword', {
+      const response = await fetch('http://192.168.1.22:8089/user/updatePassword', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -289,7 +289,7 @@ export const forgotPassword = createAsyncThunk(
       }
 
       const result = await response.json();
-      console.log('ForgotPassword result:', result);
+      // console.log('ForgotPassword result:', result);
       return result;
     } catch (error: unknown) {
       if (error instanceof Error) {
