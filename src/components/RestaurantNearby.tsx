@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FlatList, Image, ImageSourcePropType, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Text } from 'react-native-paper'
 import { KshatriyaRestaurant, NandiniRestaurant, GoldenFishRestaurant } from '../assets'
@@ -9,7 +9,9 @@ import RightArrowIcon from 'react-native-vector-icons/AntDesign';
 import LocationIcon from 'react-native-vector-icons/Entypo';
 import StarIcon from 'react-native-vector-icons/Entypo';
 import StarOutlinedIcon from 'react-native-vector-icons/Entypo';
-
+import { getRestaurantNearby, RestaurantNearbyProduct } from '../redux/slices/HomeSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState,AppDispatch } from '../redux/store/store'
 
 
 
@@ -17,71 +19,31 @@ interface IProps {
   navigation:any
 }
 
-interface RestaurantNearbyData {
-    id: string;
-    image: ImageSourcePropType | undefined;
-    title: string;
-    distance: string;
-    address: string;
-  }
-
-  const data: RestaurantNearbyData[] = [
-    {
-      id: '1',
-      image: GoldenFishRestaurant,
-      title: 'Golden Fish Restaurant',
-      distance: '2.5 km',
-      address: 'Manish Nagar, Ingole Nagar, Sonegaon, Nagpur',
-    },
-    {
-      id: '2',
-      image: KshatriyaRestaurant,
-      title: 'Kshatriya restaurant',
-      distance: '2.4 km',
-      address: 'Manish Nagar, Ingole Nagar, Sonegaon, Nagpur',
-    },
-    {
-      id: '3',
-      image: NandiniRestaurant,
-      title: 'Nandini Restaurant', 
-      distance: '1.2 km',
-      address: 'Manish Nagar, Ingole Nagar, Sonegaon, Nagpur',
-    },
-    {
-      id: '4',
-      image: GoldenFishRestaurant,
-      title: 'Golden Fish Restaurant',
-      distance: '1.5 km',
-      address: 'Manish Nagar, Ingole Nagar, Sonegaon, Nagpur',
-    },
-    {
-      id: '5',
-      image: KshatriyaRestaurant,
-      title: 'Kshatriya restaurant',
-      distance: '2.4 km',
-      address: 'Manish Nagar, Ingole Nagar, Sonegaon, Nagpur',
-    },
-  ]
-
-
 const RestaurantNearby = ({navigation}:IProps) => {
 
-    const renderItem = ({item}: {item: RestaurantNearbyData}) => (
+    const dispatch = useDispatch<AppDispatch>();
+    const {RestaurantNearbyProducts, error,loading} = useSelector((state:RootState)=> state.HomeSlice)
+
+    useEffect(()=> {
+        dispatch(getRestaurantNearby());
+    },[dispatch])
+
+    const renderItem = ({item}: {item: RestaurantNearbyProduct}) => (
         <View style={styles.itemContainer}>
-            <Image source={item.image} style={styles.itemImage} />
+            <Image source={GoldenFishRestaurant} style={styles.itemImage} />
             <View style={styles.itemDetailsContainer}>
-                <Text style={styles.itemTitle}>{item.title}</Text>
+                <Text style={styles.itemTitle}>{item.businessName}</Text>
                 <View style={styles.distanceRatingContainer}>
                     <View style={styles.distanceContainer}>
                     <LocationIcon name="location-pin" size={20} color={colors.red} />
-                    <Text style={styles.distanceText}>{item.distance}</Text>
+                    <Text style={styles.distanceText}>{item.distance.toFixed(1)} km</Text>
                     </View>
                     <View style={styles.ratingContainer}>
                   <StarIcon name="star" size={20} color={colors.lightYellow} />
                     </View>
                 </View>
                 <View style={styles.addressContainer}>
-                    <Text style={styles.addressText}>{item.address}</Text>
+                    <Text style={styles.addressText}>{item.businessName}</Text>
                 </View>
             </View>
         </View>
@@ -97,9 +59,9 @@ const RestaurantNearby = ({navigation}:IProps) => {
     </View>
     <View style={styles.listContainer}>
       <FlatList
-        data={data}
+        data={RestaurantNearbyProducts.slice(0,4)}
         renderItem={renderItem}
-        keyExtractor={(item: RestaurantNearbyData) => item.id}
+        keyExtractor={(item: RestaurantNearbyProduct) => item._id}
         horizontal
         showsHorizontalScrollIndicator={false}
       />
@@ -116,14 +78,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        // flex: 1,
-        // backgroundColor: colors.white
     },
     restaurantNearbyText: {
         color: colors.black,
         fontSize: responsiveFontSize(2.5),
         fontFamily: fonts.bai.semiBold,
-        // textAlign: 'center'
         marginHorizontal: 10
     },
     viewAllContainer:{
@@ -144,10 +103,7 @@ const styles = StyleSheet.create({
     itemContainer: {
         flexDirection: 'column',
         alignItems: 'center',
-        // gap: 10,
         marginHorizontal: 10,
-        // marginVertical:8,
-        // padding:10,
         backgroundColor: colors.white,
         borderRadius:20,
         shadowOffset: {width: 2, height: 2},
@@ -163,13 +119,12 @@ const styles = StyleSheet.create({
         borderRadius:20,
     },
     itemDetailsContainer: {
-        // flex: 1,
         gap: 5
     },
     itemTitle: {
         color: colors.black,
         fontSize: responsiveFontSize(2.5),
-        fontFamily: fonts.bai.semiBold,
+        fontFamily: fonts.bai.black,
     },
     distanceRatingContainer:{
         flexDirection: 'row',

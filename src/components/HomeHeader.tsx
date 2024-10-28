@@ -22,7 +22,7 @@ const HomeHeader = ({navigation}: any) => {
     const loginToken = async () => {
         try {
             const storedToken = await AsyncStorage.getItem('loginUserData');
-            console.log('token', storedToken);
+            // console.log('token', storedToken);
             setToken(storedToken);
         } catch (error) {
             console.error('Error retrieving token:', error);
