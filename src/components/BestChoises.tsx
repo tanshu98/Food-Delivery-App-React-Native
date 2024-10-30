@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   titleText: {
     color: colors.black,
     fontFamily: fonts.bai.semiBold,
-    fontSize: responsiveFontSize(2.5),
+    fontSize: responsiveFontSize(3),
     marginBottom: 10,
     marginHorizontal: 15,
   },
@@ -132,6 +132,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     width: responsiveWidth(40),
     justifyContent: 'center',
+    marginTop:10,
+    marginVertical:20
   },
   image: {
     position: 'absolute',

@@ -24,6 +24,7 @@ import OrderScreen from '../screens/OrderScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import Favorite from '../screens/Favorite';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NearbyRestaurantScreen from '../screens/NearbyRestaurantScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -114,8 +115,9 @@ const StackNavigation = () => {
                   />
                 </TouchableOpacity>
               ),
-            })}
-          >{props=> <ProfileScreen {...props} AuthCheck={AuthCheck} />}</Stack.Screen>
+            })}>
+            {props => <ProfileScreen {...props} AuthCheck={AuthCheck} />}
+          </Stack.Screen>
           <Stack.Screen
             name="notificationScreen"
             component={NotificationScreen}
@@ -170,6 +172,30 @@ const StackNavigation = () => {
             options={({navigation}) => ({
               headerShown: true,
               title: 'Restaurant Nearby',
+              headerTitleAlign: 'left',
+              headerTitleStyle: {fontSize: 20, fontFamily: fonts.bai.medium},
+              headerStyle: {
+                backgroundColor: colors.white,
+              },
+              headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Ionicons
+                    name="chevron-back-outline"
+                    size={25}
+                    color={colors.black}
+                    style={{fontWeight: '800', paddingRight: 15}}
+                  />
+                </TouchableOpacity>
+              ),
+            })}
+          />
+
+          <Stack.Screen
+            name="nearbyRestaurantScreen"
+            component={NearbyRestaurantScreen}
+            options={({navigation}) => ({
+              headerShown: true,
+              title: 'Nearby Restaurant',
               headerTitleAlign: 'left',
               headerTitleStyle: {fontSize: 20, fontFamily: fonts.bai.medium},
               headerStyle: {
@@ -262,17 +288,14 @@ const StackNavigation = () => {
         </Stack.Navigator>
       ) : (
         <Stack.Navigator initialRouteName="loginScreen">
-
           <Stack.Screen
             options={{headerShown: false}}
             name="onboardingScreen"
             component={OnboardingScreen}
           />
-          <Stack.Screen
-            options={{headerShown: false}}
-            name="loginScreen"
-          
-          >{props=> <LoginScreen {...props} AuthCheck={AuthCheck} />}</Stack.Screen>
+          <Stack.Screen options={{headerShown: false}} name="loginScreen">
+            {props => <LoginScreen {...props} AuthCheck={AuthCheck} />}
+          </Stack.Screen>
           <Stack.Screen
             options={{headerShown: false}}
             name="registerScreen"
@@ -300,7 +323,7 @@ const StackNavigation = () => {
           />
         </Stack.Navigator>
       )}
-            <Toast />
+      <Toast />
     </NavigationContainer>
   );
 };

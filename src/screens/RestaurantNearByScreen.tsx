@@ -45,7 +45,8 @@ const RestaurantNearByScreen = ({navigation}: IProps) => {
   },[dispatch]);
 
   const renderItem = ({item}: {item: RestaurantNearbyProduct}) => (
-    <View style={styles.itemContainer}>
+    <View style={styles.itemContainer} >
+        <TouchableOpacity onPress={()=> navigation.navigate('nearbyRestaurantScreen', {buisnessId: item._id})}>
       <Image source={GoldenFishRestaurant} style={styles.itemImage} />
       <View style={styles.itemDetailsContainer}>
         <Text style={styles.itemTitle}>{item.businessName}</Text>
@@ -62,6 +63,8 @@ const RestaurantNearByScreen = ({navigation}: IProps) => {
           <Text style={styles.addressText}>{item.businessName}</Text>
         </View>
       </View>
+      </TouchableOpacity>
+
     </View>
   );
   return (
