@@ -9,10 +9,15 @@ import BellIcon from 'react-native-vector-icons/FontAwesome5';
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState,AppDispatch } from '../redux/store/store'
 import { HomeSlice,Product,getTodaySpecial } from '../redux/slices/HomeSlice'
+import TodaySpecial from '../components/TodaySpecial'
 
 
 interface IProps {
     navigation: any;
+    route: {
+      params: {
+        data: TodaySpecialData[];
+    }}
 }
 
 
@@ -25,88 +30,12 @@ interface TodaySpecialData {
     restaurantName: string;
   }
 
-  const data: TodaySpecialData[] = [
-    {
-      id: '1',
-      image: VegDumBiryani,
-      title: 'Bset Veg Dum Biryani',
-      currentPrice: '₹100',
-      oldPrice: '₹200',
-      restaurantName: 'Golden Fish Restaurant',
-    },
-    {
-      id: '2',
-      image: ChickenTikka,
-      title: 'Chicken Tikka',
-      currentPrice: '₹150',
-      oldPrice: '₹180',
-      restaurantName: 'Barbeque Nation',
-    },
-    {
-      id: '3',
-      image: PizzaSpecial,
-      title: 'Pizza', 
-      currentPrice: '₹120',
-      oldPrice: '₹150',
-      restaurantName: 'Naivedhyam Restaurant',
-    },
-    {
-      id: '4',
-      image: ChikckenBiryani,
-      title: 'Chicken Biryani',
-      currentPrice: '₹90',
-      oldPrice: '₹120',
-      restaurantName: 'Saoji Bhojnalaya',
-    },
-    {
-      id: '5',
-      image: VegDumBiryani,
-      title: 'Bset Veg Dum Biryani',
-      currentPrice: '₹90',
-      oldPrice: '₹120',
-      restaurantName: 'Golden Fish Restaurant',
-    },
-  ]
-
-
-const TodaySpecialScreen = ({navigation}:IProps) => {
-
-   const dispatch = useDispatch<AppDispatch>();
-   const {products, error, loading} = useSelector((state:RootState)=> state.HomeSlice);
-
-   useEffect(()=> {
-    dispatch(getTodaySpecial());
-   },[dispatch])
-
-//    console.log("products----TODAYSPECIALCOMPONENTSCREEN-----", products);
-
+const TodaySpecialScreen = ({navigation,route}:IProps) => {
+    console.log("route.params.data----",route.params.data);
    
-    const renderItem = ({item}: {item: Product}) => (
-        <View style={styles.itemContainer}>
-            <Image source={PizzaSpecial} style={styles.itemImage} />
-            <View style={styles.itemDetailsContainer}>
-                <Text style={styles.itemTitle}>{item.name}</Text>
-                <View style={styles.priceContainer}>
-                    <Text style={styles.currentPrice}>{item.discountPrice}</Text>
-                    <Text style={styles.oldPrice}>{item.price}</Text>
-                </View>
-                <View style={styles.restaurantContainer}>
-                <BellIcon name="concierge-bell" size={20} color={colors.lightTextColor}  />
-                <Text style={styles.restaurantName}>{item.category}</Text>
-                </View>
-            </View>
-        </View>
-    )
   return (
     <View style={styles.container}>
-      <View style={styles.listContainer}>
-        <FlatList
-          data={products}
-          renderItem={renderItem}
-          keyExtractor={(item) => item._id}
-          showsHorizontalScrollIndicator={false}
-        />
-      </View>
+        <TodaySpecial disableText={true} data={route.params.data} />
     </View>
   )
 }

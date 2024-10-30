@@ -10,7 +10,10 @@ import { HomeSlice,Product,getTodaySpecial } from '../redux/slices/HomeSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../redux/store/store'
 interface IProps {
-    navigation: any;
+    navigation?: any;
+    data:any,
+    handleNavigate?: ()=> void;
+    disableText?: boolean
 }
 
 interface TodaySpecialData {
@@ -66,15 +69,19 @@ interface TodaySpecialData {
   ]
 
 
-const TodaySpecial = ({navigation}:IProps) => {
+export const TodaySpecial = ({navigation,data ,handleNavigate, disableText}:IProps) => {
 
-   const dispatch = useDispatch<AppDispatch>();
 
-    const {products, error,loading} = useSelector((state: RootState)=> state.HomeSlice)
+    // console.log("data TodaySpecialData----",data);
+    
 
-    useEffect(()=> {
-        dispatch(getTodaySpecial());
-    },[dispatch])
+//    const dispatch = useDispatch<AppDispatch>();
+
+//     const {products, error,loading} = useSelector((state: RootState)=> state.HomeSlice)
+
+    // useEffect(()=> {
+    //     dispatch(getTodaySpecial());
+    // },[dispatch])
 
     const renderItem = ({item}: {item:Product}) => {
         return (
@@ -96,18 +103,19 @@ const TodaySpecial = ({navigation}:IProps) => {
     }
   return (
     <>
-    {products.length > 0 && (
+    {data.length > 0 && (
         <View style={styles.container}>
-        <View style={styles.todaysSpecialContainer}>
+            {!disableText &&   <View style={styles.todaysSpecialContainer}>
           <Text style={styles.todaysSpecialText}> Today's Special</Text>
-          <TouchableOpacity style={styles.viewAllContainer} onPress={()=>navigation.navigate('todaySpecialScreen')}>
+          <TouchableOpacity style={styles.viewAllContainer} onPress={handleNavigate}>
               <Text style={styles.viewAllText}>View All</Text>
               <RightArrowIcon name="arrowright" size={20} color={colors.green}  /> 
           </TouchableOpacity>
-        </View>
+        </View> }
+      
         <View style={styles.listContainer}>
           <FlatList
-            data={products.slice(0,5)}
+            data={data.slice(0,5)}
             renderItem={renderItem}
             keyExtractor={(item) => item._id}
             showsHorizontalScrollIndicator={false}
