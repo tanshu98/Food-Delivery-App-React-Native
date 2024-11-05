@@ -6,9 +6,7 @@ import { fonts } from '../constants/Fonts'
 import RightArrowIcon from 'react-native-vector-icons/AntDesign';
 import { ChickenTikka,PizzaSpecial,VegDumBiryani,ChikckenBiryani } from '../assets'
 import BellIcon from 'react-native-vector-icons/FontAwesome5';
-import { HomeSlice,Product,getTodaySpecial } from '../redux/slices/HomeSlice'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../redux/store/store'
+import { TodaySpecials } from '../redux/slices/HomeSlice'
 interface IProps {
     navigation?: any;
     data:any,
@@ -69,21 +67,9 @@ interface TodaySpecialData {
   ]
 
 
-export const TodaySpecial = ({navigation,data ,handleNavigate, disableText}:IProps) => {
+export const TodaySpecial = ({data ,handleNavigate, disableText}:IProps) => {
 
-
-    // console.log("data TodaySpecialData----",data);
-    
-
-//    const dispatch = useDispatch<AppDispatch>();
-
-//     const {products, error,loading} = useSelector((state: RootState)=> state.HomeSlice)
-
-    // useEffect(()=> {
-    //     dispatch(getTodaySpecial());
-    // },[dispatch])
-
-    const renderItem = ({item}: {item:Product}) => {
+    const renderItem = ({item}: {item:TodaySpecials}) => {
         return (
         <View style={styles.itemContainer}>
             <Image source={VegDumBiryani} style={styles.itemImage} />

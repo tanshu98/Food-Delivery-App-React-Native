@@ -36,12 +36,9 @@ const StackNavigation = () => {
     const token = await AsyncStorage.getItem('loginToken');
     if (token) {
       setIsLogin(true);
-      console.log('TOKENNNNN----', token);
     } else {
       setIsLogin(false);
     }
-
-    console.log('isLogin----', isLogin);
   };
 
   useEffect(() => {
@@ -57,7 +54,6 @@ const StackNavigation = () => {
 
   return (
     <NavigationContainer>
-      {/* <Stack.Navigator initialRouteName="loginScreen"> */}
       {!isActive ? (
         <Stack.Screen
           options={{headerShown: false}}
@@ -70,7 +66,6 @@ const StackNavigation = () => {
             options={{headerShown: false}}
             name="bottomNavigation"
             component={BottomNavigation}
-            // AuthCheck={AuthCheck}
           />
           <Stack.Screen
             name="checkoutScreen"
@@ -287,7 +282,7 @@ const StackNavigation = () => {
           />
         </Stack.Navigator>
       ) : (
-        <Stack.Navigator initialRouteName="loginScreen">
+        <Stack.Navigator>
           <Stack.Screen
             options={{headerShown: false}}
             name="onboardingScreen"

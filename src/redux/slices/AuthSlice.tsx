@@ -81,10 +81,9 @@ export const loginUser = createAsyncThunk(
       country_code,
     };
 
-    console.log('LoginUserData----', data);
 
     try {
-      const response = await fetch('http://192.168.1.45:8089/user/login', {
+      const response = await fetch('http://192.168.1.13:8089/user/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -92,7 +91,6 @@ export const loginUser = createAsyncThunk(
         body: JSON.stringify(data),
       });
 
-      // if(response.ok)
 
       const result = await response.json();
       if (response.ok) {
@@ -103,11 +101,6 @@ export const loginUser = createAsyncThunk(
       } else {
         return rejectWithValue(result.error.error);
       }
-      // console.log('result LOGIN--- ', result);
-      // return {
-      //   token: result.data.jwtToken,
-      //   data: result.data.user,
-      // };
     } catch (error: unknown) {
       if (error instanceof Error) {
         return rejectWithValue(error.message);
@@ -133,7 +126,7 @@ export const registerUser = createAsyncThunk(
       role,
     };
     try {
-      const response = await fetch('http://192.168.1.45:8089/user/signUp', {
+      const response = await fetch('http://192.168.1.13:8089/user/signUp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -165,7 +158,7 @@ export const handleSendOtp = createAsyncThunk(
     };
 
     try {
-      const response = await fetch('http://192.168.1.45:8089/user/sendOtp', {
+      const response = await fetch('http://192.168.1.13:8089/user/sendOtp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -198,7 +191,7 @@ export const handleVerifyOtp = createAsyncThunk(
     };
 
     try {
-      const response = await fetch('http://192.168.1.45:8089/user/verifyOtp', {
+      const response = await fetch('http://192.168.1.13:8089/user/verifyOtp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -211,7 +204,6 @@ export const handleVerifyOtp = createAsyncThunk(
       }
 
       const result = await response.json();
-      console.log('SEND OTP AUTH SLICE----VERIFYOTP', result);
       return result;
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -233,7 +225,7 @@ export const handleUpdatePassword = createAsyncThunk(
     };
 
     try {
-      const response = await fetch('http://192.168.1.45:8089/user/updatePassword', {
+      const response = await fetch('http://192.168.1.13:8089/user/updatePassword', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -246,7 +238,6 @@ export const handleUpdatePassword = createAsyncThunk(
       }
 
       const result = await response.json();
-      console.log('UPDATE PASSWORD AUTH SLICE----VERIFYOTP', result);
       return result;
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -284,12 +275,10 @@ export const forgotPassword = createAsyncThunk(
       );
 
       if (!response.ok) {
-        // console.log('something went wrong');
         return rejectWithValue('Something went wrong');
       }
 
       const result = await response.json();
-      // console.log('ForgotPassword result:', result);
       return result;
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -311,19 +300,14 @@ export const termsAndCondition = createAsyncThunk(
         },
       );
 
-      // console.log('responseAPI ---- termsAndCondition------------------------',response);
-
       if (!response.ok) {
         const errorData = await response.json();
         return rejectWithValue(errorData.message || 'Something went wrong');
       }
 
       const result = await response.json();
-      // console.log('termsAndCondition result---:', result.terms_and_conditions);
       return result.terms_and_conditions;
     } catch (error: unknown) {
-      // console.log('Inside error auth---TERMS AND CONDITION-----');
-
       if (error instanceof Error) {
         return rejectWithValue(error.message);
       }
@@ -353,16 +337,10 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loadingLogin = false;
-        // state.token = action.payload.token;
-        // state.message = action.payload.message;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loadingLogin = false;
         state.message = action.payload as string;
-        // Toast.show({
-        //   type: 'error',
-        //   text1: 'Login failed! Please try again.',
-        // });
       })
 
       .addCase(registerUser.pending, state => {
@@ -372,20 +350,11 @@ const authSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loadingLogin = false;
         state.message = action.payload.message as string;
-        // state.token = action.payload.token
         state.phone = action.payload.phone;
-        // Toast.show({
-        //   type: 'success',
-        //   text1: 'Signup Successful🤩🥳.',
-        // });
       })
       .addCase(registerUser.rejected, state => {
         state.loadingLogin = false;
         state.message = 'Please try again!!';
-        // Toast.show({
-        //   type: 'error',
-        //   text1: 'Signup failed! Please try again.',
-        // });
       })
       .addCase(handleSendOtp.pending, state => {
         state.loadingLogin = true;
@@ -394,12 +363,8 @@ const authSlice = createSlice({
       .addCase(handleSendOtp.fulfilled, (state, action) => {
         state.loadingLogin = false;
         state.message = action.payload.message as string;
-        // state.token = action.payload.token
-        // state.phone = action.payload.phone;
         Toast.show({
           type: 'success',
-          // text1: 'Signup Successful🤩🥳.',
-          // text1:`${ action.payload}`,
           text1: action.payload.data.message || 'OTP Verified Successfully!',
         });
       })
@@ -408,7 +373,6 @@ const authSlice = createSlice({
         state.message = 'Please try again!!';
         Toast.show({
           type: 'error',
-          // text1: 'Signup failed! Please try again.',
           text1: (action.payload as string) || 'OTP Verification Failed!',
         });
       })

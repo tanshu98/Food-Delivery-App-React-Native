@@ -3,12 +3,11 @@ import {
   FlatList,
   Image,
   ImageSourcePropType,
-  Platform,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import {Chicken, Burger, Pizza} from '../assets';
+import { Pizza} from '../assets';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -18,6 +17,11 @@ import {colors} from '../constants/Colors';
 import {fonts} from '../constants/Fonts';
 import BellIcon from 'react-native-vector-icons/FontAwesome5';
 import PlusIcon from 'react-native-vector-icons/AntDesign';
+import { HandleSingleRestaurantBestChoice } from '../redux/slices/HomeSlice';
+
+interface IBestChoisesProp {
+    data: HandleSingleRestaurantBestChoice[];
+}
 
 interface BestChoisesData {
   id: string;
@@ -28,64 +32,29 @@ interface BestChoisesData {
   bgColor: string;
 }
 
-const data: BestChoisesData[] = [
-  {
-    id: '1',
-    image: Burger,
-    title: 'Burger',
-    price: '₹90',
-    restaurantName: 'Barbeque Nation',
-    bgColor: '',
-  },
-  {
-    id: '2',
-    image: Pizza,
-    title: 'Pizza',
-    price: '₹150',
-    restaurantName: 'Naivedhyam Restaurant',
-    bgColor: colors.green,
-  },
-  {
-    id: '3',
-    image: Chicken,
-    title: 'Chicken',
-    price: '₹120',
-    restaurantName: 'Golden Fish Restaurant',
-    bgColor: '',
-  },
-  {
-    id: '4',
-    image: Burger,
-    title: 'Burger',
-    price: '₹90',
-    restaurantName: 'Barbeque Nation',
-    bgColor: '',
-  },
-];
 
-const BestChoises = () => {
+const BestChoises: React.FC<IBestChoisesProp> = ({data}) => {
   const renderItem = ({
-    item,
+    item: { name, price, category},
     index,
   }: {
-    item: BestChoisesData;
+    item: HandleSingleRestaurantBestChoice,
     index: number;
   }) => {
     const isEven = (index + 1) % 2 === 0;
     const backgroundColor = isEven ? colors.pink : colors.UltraLightYellow;
 
-    // const shadowColor = isEven ? colors.pink : colors.UltraLightYellow;
     const shadowColor = colors.redPink;
 
-
+    
     return (
       <View style={[styles.card, {backgroundColor}]}>
-        <Image source={item.image} style={styles.image} />
+        <Image source={Pizza} style={styles.image} />
         <View style={styles.itemContainer}>
-          <Text style={styles.itemTitle}>{item.title}</Text>
-          <Text style={styles.itemPrice}>{item.price}</Text>
+          <Text style={styles.itemTitle}>{name}</Text>
+          <Text style={styles.itemPrice}>{price}</Text>
           <BellIcon name="concierge-bell" size={20} color={colors.black} />
-          <Text style={styles.itemRestaurantName}>{item.restaurantName}</Text>
+          <Text style={styles.itemRestaurantName}>{category}</Text>
         </View>
         <View style={[styles.plusIcon, {shadowColor}]}>
           <PlusIcon name="plus" size={20} color={colors.black} />
@@ -95,13 +64,14 @@ const BestChoises = () => {
   };
 
   return (
+    
     <View style={styles.container}>
       <Text style={styles.titleText}>Best Choises</Text>
       <FlatList
         renderItem={renderItem}
         data={data}
         horizontal={true}
-        keyExtractor={(item: BestChoisesData) => item.id}
+        keyExtractor={(item) => item._id}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.flatListContainer}
       />

@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
 import Toast from 'react-native-toast-message';
 
-export interface Product {
+export interface TodaySpecials {
   _id: string;
   name: string;
   description: string;
@@ -25,6 +25,30 @@ export interface Product {
   updatedAt: string | Date;
 }
 
+export interface SingleRestaurantTodaySpecial {
+  _id: string;
+  name: string;
+  description: string;
+  category: string;
+  categoryId: string;
+  images: string[];
+  subCategory?: string;
+  price: number;
+  quantity: number;
+  units: string;
+  businessId: string;
+  discountPrice?: number;
+  weight: number;
+  isActive: boolean;
+  packingCharge: number;
+  sizes: string[];
+  isTodaySpecial: boolean;
+  specialDayDate: string;
+  isBestChoice: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface RestaurantNearbyProduct {
   _id: string;
   ownerId: string;
@@ -39,6 +63,48 @@ export interface RestaurantNearbyProduct {
   createdAt: string;
   updatedAt: string;
   distance: number;
+}
+
+export interface BestChoice {
+  _id: string;
+  name: string;
+  description: string;
+  category: string;
+  categoryId: {
+    _id: string;
+    name: string;
+    description: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  images: string[];
+  subCategory: string;
+  price: number;
+  quantity: number;
+  units: string;
+  businessId: {
+    location: {
+      type: 'Point';
+      coordinates: number[];
+    };
+    _id: string;
+    ownerId: string;
+    businessName: string;
+    ownerName: string;
+    email: string;
+    accountCompleted: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
+  discountPrice: number;
+  weight: number;
+  isActive: boolean;
+  packingCharge: number;
+  isTodaySpecial: boolean;
+  specialDayDate?: string | null;
+  isBestChoice: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface HandleSingleRestaurant {
@@ -56,17 +122,46 @@ export interface HandleSingleRestaurant {
   updatedAt: string;
 }
 
+export interface HandleSingleRestaurantBestChoice {
+  _id: string;
+  name: string;
+  description: string;
+  category: string;
+  categoryId: string;
+  images: string[];
+  subCategory?: string;
+  price: number;
+  quantity: number;
+  units: string;
+  businessId: string;
+  discountPrice?: number;
+  weight: number;
+  isActive: boolean;
+  packingCharge: number;
+  sizes: string[];
+  isTodaySpecial: boolean;
+  specialDayDate: string | null;
+  isBestChoice: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface InitialState {
-  products: Product[];
+  todaySpecials: TodaySpecials[];
+  singleRestaurantTodaySpecials: SingleRestaurantTodaySpecial[];
   RestaurantNearbyProducts: RestaurantNearbyProduct[];
+  HandleSingleRestaurantBestChoices: HandleSingleRestaurantBestChoice[];
   HandleSingleRestaurant: HandleSingleRestaurant;
+  BestChoices: BestChoice[];
   loading: boolean;
   error: string;
 }
 
 const initialState: InitialState = {
-  products: [],
+  todaySpecials: [],
+  singleRestaurantTodaySpecials: [],
   RestaurantNearbyProducts: [],
+  HandleSingleRestaurantBestChoices: [],
   HandleSingleRestaurant: {
     location: {
       type: '',
@@ -81,6 +176,7 @@ const initialState: InitialState = {
     createdAt: '',
     updatedAt: '',
   },
+  BestChoices: [],
   loading: false,
   error: '',
 };
@@ -90,11 +186,10 @@ export const getTodaySpecial = createAsyncThunk(
   async (_, {rejectWithValue}) => {
     try {
       const token = await AsyncStorage.getItem('loginToken');
-      console.log('token--getTodaySpecial----', token);
       if (!token) {
         return rejectWithValue('Token not found');
       }
-      const response = await fetch('http://192.168.1.45:8089/todayspecials', {
+      const response = await fetch('http://192.168.1.13:8089/todayspecials', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -123,20 +218,15 @@ export const getRestaurantNearby = createAsyncThunk(
   async (_, {rejectWithValue}) => {
     try {
       const token = await AsyncStorage.getItem('loginToken');
-      // console.log('inside token-----');
-      console.log('token---- getRestaurantNearby', token);
 
       if (!token) {
-        console.log('Token is NOTTTTT found!!!----');
-
         return rejectWithValue('Token not found');
       }
-      console.log('Token is found!!!----');
 
       const lat = 17.448294;
       const long = 78.394587;
       const response = await fetch(
-        `http://192.168.1.45:8089/business/nearby?lat=${lat}&long=${long}`,
+        `http://192.168.1.13:8089/business/nearby?lat=${lat}&long=${long}`,
         {
           method: 'GET',
           headers: {
@@ -146,13 +236,9 @@ export const getRestaurantNearby = createAsyncThunk(
         },
       );
       const result = await response.json();
-      // console.log("first",`http://192.168.1.45:8089/business/nearby?lat=${lat}long=${long}`)
-      // console.log('result ---- getRestaurantNearby', result);
       return result;
     } catch (error: unknown) {
       if (error instanceof Error) {
-        // console.log('error---RESTUARANT');
-
         return rejectWithValue(error.message);
       }
       return rejectWithValue('An unknown error occurred!');
@@ -169,7 +255,7 @@ export const handleSingleRestaurant = createAsyncThunk(
     }
     try {
       const response = await fetch(
-        `http://192.168.1.45:8089/business/${buseinessId}`,
+        `http://192.168.1.13:8089/business/${buseinessId}`,
         {
           method: 'GET',
           headers: {
@@ -178,21 +264,128 @@ export const handleSingleRestaurant = createAsyncThunk(
           },
         },
       );
-      console.log('inside try--------------------------------');
 
       const result = await response.json();
-      console.log('result---handleSingleRestaurant', result);
       if (response.ok) {
         return result;
+      } else {
+        return rejectWithValue(result.error.error);
       }
-      return rejectWithValue(result.error.error);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.log('inside error', error);
-
         return rejectWithValue(error.message);
       }
-      return rejectWithValue('An unknown error occurred!');
+      return rejectWithValue(
+        'An unknown error occurred! handleSingleRestaurant',
+      );
+    }
+  },
+);
+
+export const handleSingleRestaurantTodaySpecial = createAsyncThunk(
+  'handleSingleRestaurantTodaySpecial',
+  async (buseinessId: string, {rejectWithValue}) => {
+    const token = await AsyncStorage.getItem('loginToken');
+    if (!token) {
+      return rejectWithValue('Token not found');
+    }
+    try {
+      const response = await fetch(
+        `http://192.168.1.13:8089/todayspecials/business/${buseinessId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: token,
+          },
+        },
+      );
+      const result = await response.json();
+      if (response.ok) {
+        return result.data.product;
+      } else {
+        return rejectWithValue(result.error.error);
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue(
+        'An unknown error occurred! handleSingleRestaurantTodaySpecial',
+      );
+    }
+  },
+);
+
+export const handleBestChoice = createAsyncThunk(
+  'getBestChoice',
+  async (_, {rejectWithValue}) => {
+    const token = await AsyncStorage.getItem('loginToken');
+    if (!token) {
+      return rejectWithValue('Token not found!');
+    }
+    try {
+      const response = await fetch(
+        `http://192.168.1.13:8089/bestchoice/best-choice}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: token,
+          },
+        },
+      );
+
+      const result = await response.json();
+      if (response.ok) {
+        return result;
+      } else {
+        return rejectWithValue(result.error.error);
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue(
+        'An unknown error occurred! handleSingleRestaurantTodaySpecial',
+      );
+    }
+  },
+);
+
+export const handleSingleRestaurantBestChoice = createAsyncThunk(
+  'singleRestaurantBestChoice',
+  async (buseinessId: string, {rejectWithValue}) => {
+    try {
+      const token = await AsyncStorage.getItem('loginToken');
+      if (!token) {
+        return rejectWithValue('Token is not found!');
+      }
+      const response = await fetch(
+        `http://192.168.1.13:8089/bestchoice/business/${buseinessId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: token,
+          },
+        },
+      );
+
+      const result = await response.json();
+
+      if (response.ok) {
+        return result.data.bestChoice;
+      } else {
+        return rejectWithValue(result.error.error);
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue(
+        'An unknown error occurred! handleSingleRestaurantBestChoice',
+      );
     }
   },
 );
@@ -206,13 +399,10 @@ export const HomeSlice = createSlice({
       .addCase(getTodaySpecial.pending, state => {
         state.loading = true;
       })
-      .addCase(
-        getTodaySpecial.fulfilled,
-        (state, action: PayloadAction<Product[]>) => {
-          state.loading = false;
-          state.products = action.payload;
-        },
-      )
+      .addCase(getTodaySpecial.fulfilled, (state, action) => {
+        state.loading = false;
+        state.todaySpecials = action.payload;
+      })
       .addCase(getTodaySpecial.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
@@ -228,7 +418,6 @@ export const HomeSlice = createSlice({
       })
       .addCase(getRestaurantNearby.fulfilled, (state, action) => {
         state.loading = false;
-        //   console.log(action.payload);
 
         state.RestaurantNearbyProducts = action.payload;
       })
@@ -246,18 +435,44 @@ export const HomeSlice = createSlice({
       })
       .addCase(handleSingleRestaurant.fulfilled, (state, action) => {
         state.loading = false;
-        console.log(action.payload);
 
         state.HandleSingleRestaurant = action.payload;
       })
       .addCase(handleSingleRestaurant.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
-        Toast.show({
-          type: 'error',
-          text1: 'Something went wrong',
-          text2: action.payload as string,
-        });
+      })
+      .addCase(handleSingleRestaurantTodaySpecial.pending, state => {
+        state.loading = true;
+      })
+      .addCase(
+        handleSingleRestaurantTodaySpecial.fulfilled,
+        (state, action) => {
+          state.loading = false;
+          state.singleRestaurantTodaySpecials = action.payload;
+        },
+      )
+      .addCase(handleSingleRestaurantTodaySpecial.rejected, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(handleSingleRestaurantBestChoice.pending, state => {
+        state.loading = true;
+      })
+      .addCase(handleSingleRestaurantBestChoice.fulfilled, (state, action) => {
+        state.loading = false;
+        state.HandleSingleRestaurantBestChoices = action.payload;
+      })
+      .addCase(handleSingleRestaurantBestChoice.rejected, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(handleBestChoice.pending, state => {
+        state.loading = true;
+      })
+      .addCase(handleBestChoice.fulfilled, (state, action) => {
+        state.loading = false;
+        state.BestChoices = action.payload;
+      })
+      .addCase(handleBestChoice.rejected, state => {
+        state.loading = false;
       });
   },
 });
