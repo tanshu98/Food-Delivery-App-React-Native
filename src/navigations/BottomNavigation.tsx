@@ -6,7 +6,7 @@ import HomeScreen from '../screens/HomeScreen';
 import CartScreen from '../screens/CartScreen';
 import SearchScreen from '../screens/SearchScreen';
 import OfferScreen from '../screens/OfferScreen';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { colors } from '../constants/Colors';
 import BottomBarHome from 'react-native-vector-icons/Foundation';
 import SearchIcon from 'react-native-vector-icons/AntDesign';
@@ -14,6 +14,8 @@ import CartIcon from 'react-native-vector-icons/FontAwesome6';
 import OffersIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { responsiveWidth } from 'react-native-responsive-dimensions';
 import { fonts } from '../constants/Fonts';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 
 
 
@@ -86,8 +88,15 @@ const BottomTabNavigation = () => {
       />
 
       <Tab.Screen
-        name="Offers"
+        name="offers"
         options={{
+            headerShown: true,
+            title: 'Best Offers',
+            headerTitleAlign: 'left',
+              headerTitleStyle: {fontSize: 20, fontFamily: fonts.bai.medium},
+              headerStyle: {
+                backgroundColor: colors.white,
+              },
           tabBarLabel: '',
           tabBarIcon: ({ size, color, focused }) => (
             focused ? (

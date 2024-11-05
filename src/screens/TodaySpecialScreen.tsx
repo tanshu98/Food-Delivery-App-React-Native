@@ -8,7 +8,7 @@ import { ChickenTikka,PizzaSpecial,VegDumBiryani,ChikckenBiryani } from '../asse
 import BellIcon from 'react-native-vector-icons/FontAwesome5';
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState,AppDispatch } from '../redux/store/store'
-import { HomeSlice,Product,getTodaySpecial } from '../redux/slices/HomeSlice'
+import { HomeSlice,TodaySpecials,getTodaySpecial } from '../redux/slices/HomeSlice'
 import TodaySpecial from '../components/TodaySpecial'
 
 

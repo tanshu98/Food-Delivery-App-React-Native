@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
   FlatList,
   ScrollView,
@@ -21,17 +21,22 @@ import PlusIcon from 'react-native-vector-icons/AntDesign';
 import HomeTopComponent from '../components/HomeTopComponent';
 import BestChoises from '../components/BestChoises';
 import TodaySpecial from '../components/TodaySpecial';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../redux/store/store';
-import { HandleSingleRestaurant, HomeSlice,Product,handleSingleRestaurant } from '../redux/slices/HomeSlice'
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from '../redux/store/store';
+import {
+  handleSingleRestaurant,
+  handleSingleRestaurantBestChoice,
+  handleSingleRestaurantTodaySpecial,
+} from '../redux/slices/HomeSlice';
+import RestaurantNearby from '../components/RestaurantNearby';
 
 interface NearbyRestaurantScreenProps {
-    navigation:any;
-    route: {
-        params: {
-          buisnessId: string;
-        },
-    }
+  navigation: any;
+  route: {
+    params: {
+      buisnessId: string;
+    };
+  };
 }
 
 interface SampleData {
@@ -50,40 +55,58 @@ const data: SampleData[] = [
   },
 ];
 
-const NearbyRestaurantScreen = ({navigation,route}: NearbyRestaurantScreenProps) => {
+const NearbyRestaurantScreen = ({
+  navigation,
+  route,
+}: NearbyRestaurantScreenProps) => {
+  const {buisnessId} = route.params;
+  const singleRestaurant = useSelector(
+    (state: RootState) => state.HomeSlice.HandleSingleRestaurant,
+  );
+  const dispatch = useDispatch<AppDispatch>();
 
-    const {buisnessId} = route.params;
-    console.log("buisnessId---", buisnessId);
-    const singleRestaurant = useSelector((state: RootState) => state.HomeSlice.HandleSingleRestaurant);
-    console.log("singleRestaurant---", singleRestaurant);
-    const dispatch = useDispatch<AppDispatch>();
+  const handleSingleRestaurantTodaySpecialData = useSelector(
+    (state: RootState) => state.HomeSlice.singleRestaurantTodaySpecials,
+  );
 
-    useEffect(() => {
-      dispatch(handleSingleRestaurant(buisnessId))
-    },[dispatch,buisnessId])
-    
+  const {HandleSingleRestaurantBestChoices} = useSelector(
+    (state: RootState) => state.HomeSlice,
+  );
+
+  const handleNavigate = () => {
+    navigation.navigate('todaySpecialScreen', {
+      data: handleSingleRestaurantTodaySpecialData,
+    });
+  };
+
+  useEffect(() => {
+    dispatch(handleSingleRestaurant(buisnessId));
+    dispatch(handleSingleRestaurantTodaySpecial(buisnessId));
+    dispatch(handleSingleRestaurantBestChoice(buisnessId));
+  }, [dispatch, buisnessId]);
+
   return (
     <ScrollView style={styles.container}>
       <HomeCarousal />
-       <View style={styles.itemContainer}>
-      <View style={styles.itemDetailsContainer}>
-        <Text style={styles.itemTitle}>{singleRestaurant.businessName}</Text>
-        <View style={styles.distanceRatingContainer}>
-          <View style={styles.distanceContainer}>
-            <LocationIcon name="location-pin" size={20} color={colors.red} />
-            <Text style={styles.distanceText}>
-              2.5 km
+      <View style={styles.itemContainer}>
+        <View style={styles.itemDetailsContainer}>
+          <Text style={styles.itemTitle}>{singleRestaurant.businessName}</Text>
+          <View style={styles.distanceRatingContainer}>
+            <View style={styles.distanceContainer}>
+              <LocationIcon name="location-pin" size={20} color={colors.red} />
+              <Text style={styles.distanceText}>2.5 km</Text>
+            </View>
+            <View style={styles.ratingContainer}>
+              <StarIcon name="star" size={20} color={colors.lightYellow} />
+            </View>
+          </View>
+          <View style={styles.addressContainer}>
+            <Text style={styles.addressText}>
+              {singleRestaurant.businessName}
             </Text>
           </View>
-          <View style={styles.ratingContainer}>
-            <StarIcon name="star" size={20} color={colors.lightYellow} />
-          </View>
-        </View>
-        <View style={styles.addressContainer}>
-          <Text style={styles.addressText}>{singleRestaurant.businessName}</Text>
         </View>
       </View>
-    </View>
       <View style={styles.favoriteReviews}>
         <TouchableOpacity style={styles.favoriteContainer}>
           <Text style={styles.favoriteText}>Favorite</Text>
@@ -100,18 +123,20 @@ const NearbyRestaurantScreen = ({navigation,route}: NearbyRestaurantScreenProps)
       </View>
       <View>
         <Text style={styles.categoryText}>Category</Text>
-      <HomeTopComponent />
-      <BestChoises />
+        <HomeTopComponent />
+        <BestChoises data={HandleSingleRestaurantBestChoices} />
       </View>
-      <TodaySpecial data={data} navigation={navigation}  />
+      <TodaySpecial
+        data={handleSingleRestaurantTodaySpecialData}
+        navigation={navigation}
+        handleNavigate={handleNavigate}
+      />
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    // flex:1
-  },
+  container: {},
   itemContainer: {
     flexDirection: 'row',
     marginHorizontal: 10,
@@ -181,7 +206,6 @@ const styles = StyleSheet.create({
   plusIcon: {
     marginLeft: 5,
     fontFamily: fonts.bai.semiBold,
-    // borderWidth:1
   },
   reviewsContainer: {
     backgroundColor: colors.green,
@@ -201,15 +225,14 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(2.5),
     fontFamily: fonts.bai.semiBold,
   },
-  categoryText:{
+  categoryText: {
     color: colors.black,
     fontSize: responsiveFontSize(3),
     fontFamily: fonts.bai.semiBold,
     marginVertical: 5,
-    // marginBottom: responsiveHeight(2),
     marginLeft: 10,
-    alignSelf: 'flex-start'
-  }
+    alignSelf: 'flex-start',
+  },
 });
 
 export default NearbyRestaurantScreen;

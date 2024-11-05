@@ -36,6 +36,10 @@ export const BurgerCheck = require('./images/BurgerCheck.png');
 export const CheckIcon = require('./images/CheckIcon.png');
 export const Bag = require('./images/Bag.png');
 export const PersonIcon = require('./images/PersonIcon.png');
+export const OfferOne = require('./images/OfferOne.png');
+export const OfferTwo = require('./images/OfferTwo.png');
+export const OfferThree = require('./images/OfferThree.png');
+
 
 
 

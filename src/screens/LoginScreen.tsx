@@ -27,7 +27,7 @@ import {customerIconWhite, customerIconRed} from '../assets';
 import {OtpInput} from 'react-native-otp-entry';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import { loginUser } from '../redux/slices/AuthSlice';
+import {loginUser} from '../redux/slices/AuthSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AppDispatch} from '../redux/store/store';
 import {useDispatch} from 'react-redux';
@@ -38,12 +38,11 @@ interface LoginScreenProps {
   AuthCheck: () => void;
 }
 
-const LoginScreen = ({navigation,AuthCheck}: LoginScreenProps) => {
+const LoginScreen = ({navigation, AuthCheck}: LoginScreenProps) => {
   const dispatch = useDispatch<AppDispatch>();
-  
+
   const [selectedUserType, setSelectedUserType] = useState('Customer');
   const [countryCode, setCountryCode] = useState('+91');
-
 
   const validationSchema = Yup.object().shape({
     mobileNumber: Yup.string()
@@ -54,8 +53,7 @@ const LoginScreen = ({navigation,AuthCheck}: LoginScreenProps) => {
       .length(6, 'Must be exactly 6 digits'),
   });
 
-  const handleLoginSubmit = async(values:any)=> {
-    console.log("values----", values);
+  const handleLoginSubmit = async (values: any) => {
     const userData = {
       mobile_no: values.mobileNumber,
       country_code: countryCode,
@@ -63,39 +61,37 @@ const LoginScreen = ({navigation,AuthCheck}: LoginScreenProps) => {
       role: selectedUserType === 'Customer' ? 'CUSTOMER' : 'SELLER',
     };
     const loginUserData = await dispatch(loginUser(userData));
-    console.log("loginUser----LOGIN SCREEN", loginUserData);
 
-    // @ts-ignore   
+    // @ts-ignore
     if (loginUserData?.error?.message != 'Rejected') {
       await AsyncStorage.setItem('loginToken', loginUserData?.payload?.token);
-      await AsyncStorage.setItem('loginUserData',JSON.stringify( loginUserData?.payload?.data));
+      await AsyncStorage.setItem(
+        'loginUserData',
+        JSON.stringify(loginUserData?.payload?.data),
+      );
 
       Toast.show({
         type: 'success',
         text1: 'Login Successful🤩🥳.',
-        text2: `Welcome Back, ${loginUserData?.payload?.data?.full_name }🤩🥳`,
+        text2: `Welcome Back, ${loginUserData?.payload?.data?.full_name}🤩🥳`,
       });
 
       AuthCheck();
-
-  } else {
+    } else {
       Toast.show({
         type: 'error',
         text1: 'Login failed! Please try again.',
-        text2: loginUserData?.payload  as string
-
+        text2: loginUserData?.payload as string,
       });
     }
   };
 
-
   return (
-    
     <ScrollView>
       <Formik
         initialValues={{mobileNumber: '', passcode: ''}}
         validationSchema={validationSchema}
-          onSubmit={handleLoginSubmit}>
+        onSubmit={handleLoginSubmit}>
         {({handleSubmit, handleChange, values, errors, touched}) => (
           <View style={styles.loginContainer}>
             <StatusBar
@@ -113,7 +109,7 @@ const LoginScreen = ({navigation,AuthCheck}: LoginScreenProps) => {
 
             <View style={styles.loginForm}>
               <View style={styles.codesMobileInputContainer}>
-                <CountryCodes setCountryCode={setCountryCode}/>
+                <CountryCodes setCountryCode={setCountryCode} />
                 <View style={styles.mobileInputContainer}>
                   <TextInput
                     placeholder="Mobile No"
@@ -145,8 +141,9 @@ const LoginScreen = ({navigation,AuthCheck}: LoginScreenProps) => {
                 {touched.passcode && errors.passcode && (
                   <Text style={styles.errorText}>{errors.passcode}</Text>
                 )}
-                <TouchableOpacity      onPress={() => navigation.navigate('forgetPasscodeScreen')}>
-                <Text style={styles.forgotPasscode}>Forgot Passcode?</Text>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('forgetPasscodeScreen')}>
+                  <Text style={styles.forgotPasscode}>Forgot Passcode?</Text>
                 </TouchableOpacity>
               </View>
 
