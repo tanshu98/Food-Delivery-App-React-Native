@@ -55,11 +55,13 @@ const StackNavigation = () => {
   return (
     <NavigationContainer>
       {!isActive ? (
+        <Stack.Navigator >
         <Stack.Screen
           options={{headerShown: false}}
           name="splashScreen"
           component={SplashScreen}
         />
+        </Stack.Navigator>
       ) : isLogin ? (
         <Stack.Navigator initialRouteName="bottomNavigation">
           <Stack.Screen
@@ -283,6 +285,7 @@ const StackNavigation = () => {
         </Stack.Navigator>
       ) : (
         <Stack.Navigator>
+                  
           <Stack.Screen
             options={{headerShown: false}}
             name="onboardingScreen"

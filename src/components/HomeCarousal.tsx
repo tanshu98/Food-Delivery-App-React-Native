@@ -1,33 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { Image, ImageSourcePropType, Platform, StatusBar, StyleSheet, Text, View } from 'react-native';
-import { HomeCarosel } from '../assets';
-import { responsiveHeight, responsiveScreenWidth, responsiveWidth } from 'react-native-responsive-dimensions';
+import { Image,  StyleSheet, View } from 'react-native';
+import {  responsiveScreenWidth, responsiveWidth } from 'react-native-responsive-dimensions';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { colors } from '../constants/Colors';
+import { carouselData, CarouselItemData } from '../config/HomeCarouselData';
 
-interface CarouselItemData {
-  id: string;
-  image: ImageSourcePropType | undefined;
-}
-
-const data: CarouselItemData[] = [
-  {
-    id: '1',
-    image: HomeCarosel,
-  },
-  {
-    id: '2',
-    image: HomeCarosel,
-  },
-  {
-    id: '3',
-    image: HomeCarosel,
-  },
-  {
-    id: '4',
-    image: HomeCarosel,
-  },
-];
 
 const HomeCarousal = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -49,18 +26,24 @@ const HomeCarousal = () => {
     <View style={styles.carouselContainer}>
       <Carousel
         ref={carouselRef}
-        data={data}
+        data={carouselData}
         //@ts-ignore
         renderItem={renderItem}
-        sliderWidth={responsiveScreenWidth(100)}
+        sliderWidth={responsiveScreenWidth(100)} 
         itemWidth={responsiveScreenWidth(100)}
-        // layout="default"
         autoplayInterval={3000}
         autoplay={true}
+        onSnapToItem={index => {setActiveIndex(index)
+          if(index === carouselData.length - 1){
+            carouselRef.current.stopAutoplay()
+          }
+        }}
+        inactiveSlideScale={1}
+        inactiveSlideOpacity={1}
       />
         <Pagination
         activeDotIndex={activeIndex}
-        dotsLength={data.length}
+        dotsLength={carouselData.length}
         dotStyle={styles.activeDot}
         inactiveDotStyle={styles.inactiveDot}
         containerStyle={styles.paginationContainer}
@@ -76,8 +59,8 @@ const styles = StyleSheet.create({
 
   },
   carouselItem: {
-    marginHorizontal: 10,
-    width: responsiveWidth(95),
+    marginHorizontal: 7,
+    width: responsiveWidth(88),
   },
   carouselBg: {
     width: '100%',

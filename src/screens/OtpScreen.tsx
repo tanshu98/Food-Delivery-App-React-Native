@@ -2,8 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {
   Image,
   ImageBackground,
-  KeyboardAvoidingView,
-  Platform,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -48,7 +46,6 @@ const OtpScreen = ({navigation, route}: OtpScreenProps) => {
     const dispatch = useDispatch<AppDispatch>();
   const [userOtp, setUserOtp] = useState('');
   const [otp, setOtp] = useState('');
-  console.log("route", route);
 
   const [details, setDetails] = useState({
     mobile_no: '',
@@ -71,17 +68,14 @@ const OtpScreen = ({navigation, route}: OtpScreenProps) => {
   }, []);
 
   async function onDisplayNotification(otp: string) {
-    // Request permissions (required for iOS)
     await notifee.requestPermission()
 
-    // Create a channel (required for Android)
     const channelId = await notifee.createChannel({
       id: 'default',
       name: 'Default Channel',
       importance:AndroidImportance.HIGH
     });
 
-    // Display a notification
     await notifee.displayNotification({
       title: 'Otp is generated successfully',
       body: otp,
@@ -108,8 +102,6 @@ const OtpScreen = ({navigation, route}: OtpScreenProps) => {
 
     const otpInfo = (await AsyncStorage.getItem('otpInfo')) ?? undefined;
     const otpDetails = otpInfo && JSON.parse(otpInfo);
-    console.log("otpDetails", otpDetails);
-    // onDisplayNotification(otpDetails.otp);
 
     setDetails(prev => ({
       ...prev,
@@ -119,11 +111,9 @@ const OtpScreen = ({navigation, route}: OtpScreenProps) => {
     
 
     const registerOtp = await dispatch(handleSendOtp(otpDetails));
-    console.log("registerOtp", registerOtp);
     
     // @ts-ignore
     if(registerOtp?.error?.message != 'Rejected') {
-        console.log('Inside registerOtp?.error?.message');
         onDisplayNotification(registerOtp?.payload?.data?.otp);
     } else {
         Toast.show({
@@ -168,7 +158,7 @@ const OtpScreen = ({navigation, route}: OtpScreenProps) => {
           <Image source={OtpIcon} />
           <View style={styles.otpTextContainer}>
             <Text style={styles.sendOtpText}>Enter the OTP sent to</Text>
-            <Text style={styles.sendOtpNumber}>+91 987654321</Text>
+            <Text style={styles.sendOtpNumber}>{details?.mobile_no}</Text>
           </View>
           <OtpInput
             numberOfDigits={4}
@@ -182,7 +172,6 @@ const OtpScreen = ({navigation, route}: OtpScreenProps) => {
               pinCodeTextStyle: styles.otpTextStyle,
             }}
           />
-          {/* </KeyboardAvoidingView> */}
           <View style={styles.resendOtp}>
             <Text style={styles.resendOtpText}>Resend OTP</Text>
             <TouchableOpacity style={styles.reloadIcon} onPress={generateOtp}>

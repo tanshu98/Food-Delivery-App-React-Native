@@ -4,6 +4,8 @@ import {
   Image,
   ImageBackground,
   ImageSourcePropType,
+  Platform,
+  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -24,7 +26,6 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import {fonts} from '../constants/Fonts';
-import TodaySpecial from '../components/TodaySpecial';
 import BellIcon from 'react-native-vector-icons/FontAwesome5';
 
 interface OfferScreenData {
@@ -141,6 +142,7 @@ const OfferScreen = () => {
     );
   };
   return (
+    <ScrollView>
     <View style={styles.container}>
       <FlatList
         data={OfferScreenData}
@@ -148,6 +150,7 @@ const OfferScreen = () => {
         keyExtractor={(item, index) => index.toString()}
       />
       <View style={styles.nearbyRestaurantOffers}>
+        <Text style={styles.NearbyRestaurantText}>Nearby Restaurant Offers</Text>
         <FlatList
           data={data.slice(0, 5)}
           renderItem={renderRestaurantOffers}
@@ -156,40 +159,30 @@ const OfferScreen = () => {
         />
       </View>
     </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // marginHorizontal:20,
     width: responsiveWidth(100),
-    // backgroundColor: colors.white,
   },
   offersBannerContainer: {
-    // gap:20,
-    // flexDirection:'column',
     marginVertical: 10,
     marginHorizontal: 20,
-    // height:responsiveHeight(10)
   },
   offerOne: {
-    // flex: 1,
-    // padding:10,
-    height: responsiveHeight(15),
+    height: responsiveHeight(14),
     borderRadius: 20,
     gap: 10,
     justifyContent: 'center',
-    // marginLeft:10
-    // borderWidth: 1,
-    // width:responsiveWidth(90)
   },
   offerTitle: {
     color: colors.white,
     fontSize: responsiveFontSize(2.5),
     fontFamily: fonts.montserrat.medium,
     marginLeft: 20,
-    // zIndex:10
   },
   imageStyle: {
     borderRadius: 20,
@@ -200,18 +193,24 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bai.semiBold,
     marginLeft: 20,
     width: responsiveWidth(40),
-    // zIndex:10
   },
   nearbyRestaurantOffers: {
-    flex: 1,
+    flex: 15,
+  },
+  NearbyRestaurantText:{
+    color: colors.black,
+    fontSize: responsiveFontSize(2.8),
+    fontFamily: fonts.montserrat.semiBold,
+    marginLeft: 20,
+    marginVertical:10
+    
   },
   itemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 15,
     marginHorizontal: 10,
     marginVertical: 8,
-    padding: 10,
     backgroundColor: colors.white,
     borderRadius: 20,
     shadowOffset: {width: 2, height: 2},
@@ -223,10 +222,11 @@ const styles = StyleSheet.create({
   itemImage: {
     width: responsiveWidth(25),
     height: responsiveWidth(25),
+
   },
   itemDetailsContainer: {
-    flexDirection: 'column',
-    gap: 4,
+    gap: Platform.OS === 'android' ? 5 : 12,
+    padding:Platform.OS === 'android' ? 1 :0
   },
   itemTitle: {
     color: colors.black,
