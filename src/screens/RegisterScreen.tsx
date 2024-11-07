@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {
   Image,
   Platform,
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -24,7 +25,6 @@ import EmailIcon from 'react-native-vector-icons/MaterialIcons';
 import {OtpInput} from 'react-native-otp-entry';
 import RNPickerSelect from 'react-native-picker-select';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
-import KeyboardWrapper from '../components/KeyboardWrapper';
 import {registerUser, User} from '../redux/slices/AuthSlice';
 import {AppDispatch} from '../redux/store/store';
 import {useDispatch} from 'react-redux';
@@ -34,7 +34,6 @@ import { NavigationProp, ParamListBase } from '@react-navigation/native';
 
 interface RegisterScreenProps {
   navigation: NavigationProp<ParamListBase>;
-  // signupUser: (data: User) => void;
 }
 
 interface Values {
@@ -47,7 +46,6 @@ interface Values {
   role: string;
 }
 
-// Validation schema
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
   mobileNumber: Yup.string()
@@ -73,7 +71,6 @@ const RegisterScreen = ({navigation}: RegisterScreenProps) => {
   const [countryCode, setCountryCode] = useState('+91');
 
   const handleSubmit = async (values: any) => {
-    console.log('values------', values);
 
     const userData = {
       name: values.name,
@@ -85,9 +82,7 @@ const RegisterScreen = ({navigation}: RegisterScreenProps) => {
       role: 'CUSTOMER',
     };
     const signupUser = await dispatch(registerUser(userData));
-    console.log('signupUser----', signupUser);
 
-    // Check for error
     // @ts-ignore
     if (signupUser?.error?.message != 'Rejected') {
       const otpData = {
@@ -114,7 +109,7 @@ const RegisterScreen = ({navigation}: RegisterScreenProps) => {
   };
 
   return (
-    <KeyboardWrapper>
+    <ScrollView bounces={false} overScrollMode='never'>
       <View style={styles.registerContainer}>
         <StatusBar
           backgroundColor={'rgba(0,0,0,0)'}
@@ -222,6 +217,7 @@ const RegisterScreen = ({navigation}: RegisterScreenProps) => {
                   focusColor="green"
                   onTextChange={handleChange('passcode')}
                   onFilled={text => setFieldValue('passcode', text)}
+                  secureTextEntry={true}
                 />
                 {touched.passcode && errors.passcode && (
                   <Text style={styles.errorText}>{errors.passcode}</Text>
@@ -235,6 +231,7 @@ const RegisterScreen = ({navigation}: RegisterScreenProps) => {
                   focusColor="green"
                   onTextChange={handleChange('confirmPasscode')}
                   onFilled={text => setFieldValue('confirmPasscode', text)}
+                  secureTextEntry={true}
                 />
                 {touched.confirmPasscode && errors.confirmPasscode && (
                   <Text style={styles.errorText}>{errors.confirmPasscode}</Text>
@@ -244,20 +241,31 @@ const RegisterScreen = ({navigation}: RegisterScreenProps) => {
               <View style={styles.stateDropdown}>
                 <RNPickerSelect
                   placeholder={{
-                    label: 'Select State',
+                    label: 'State',
                     value: null,
-                    color: colors.black,
+                    // color: colors.black,
                   }}
                   onValueChange={value => {
                     setFieldValue('state', value);
                     setSelectedState(value);
                   }}
                   items={[
-                    {label: 'State 1', value: 'state1'},
-                    {label: 'State 2', value: 'state2'},
-                    {label: 'State 3', value: 'state3'},
+                    {label: 'Maharashtra', value: 'Maharashtra'},
+                    {label: 'Telangana', value: 'Telangana'},
+                    {label: 'Gujarat', value: 'Gujarat'},
                   ]}
                   value={values.state}
+                  style={{
+                    inputIOS: {
+                      color: colors.black, 
+                    },
+                    inputAndroid: {
+                      color: colors.black,
+                    },
+                    placeholder: {
+                      color: colors.black,
+                    },
+                  }}
                 />
                 {touched.state && errors.state && (
                   <Text style={styles.errorText}>{errors.state}</Text>
@@ -297,7 +305,7 @@ const RegisterScreen = ({navigation}: RegisterScreenProps) => {
           )}
         </Formik>
       </View>
-    </KeyboardWrapper>
+    </ScrollView>
   );
 };
 

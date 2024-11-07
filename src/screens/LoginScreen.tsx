@@ -20,7 +20,6 @@ import {colors} from '../constants/Colors';
 import {fonts} from '../constants/Fonts';
 import CountryCodes from '../components/CountryCodes';
 import PhoneIcon from 'react-native-vector-icons/MaterialIcons';
-import CustomerIcon from 'react-native-vector-icons/MaterialIcons';
 import {loginStoreIcon} from '../assets';
 import {customerIconWhite, customerIconRed} from '../assets';
 
@@ -87,7 +86,7 @@ const LoginScreen = ({navigation, AuthCheck}: LoginScreenProps) => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView bounces={false} overScrollMode="never">
       <Formik
         initialValues={{mobileNumber: '', passcode: ''}}
         validationSchema={validationSchema}
@@ -116,8 +115,11 @@ const LoginScreen = ({navigation, AuthCheck}: LoginScreenProps) => {
                     placeholderTextColor={colors.black}
                     style={styles.mobileInput}
                     keyboardType="number-pad"
-                    onChangeText={handleChange('mobileNumber')}
                     value={values.mobileNumber}
+                    onChangeText={text => {
+                      const numericText = text.replace(/[^0-9]/g, '');
+                      handleChange('mobileNumber')(numericText);
+                    }}
                     maxLength={10}
                   />
                   <PhoneIcon
@@ -141,10 +143,17 @@ const LoginScreen = ({navigation, AuthCheck}: LoginScreenProps) => {
                 {touched.passcode && errors.passcode && (
                   <Text style={styles.errorText}>{errors.passcode}</Text>
                 )}
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('forgetPasscodeScreen')}>
-                  <Text style={styles.forgotPasscode}>Forgot Passcode?</Text>
-                </TouchableOpacity>
+                <View style={styles.forgotPasscodeContainer}>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('forgetPasscodeScreen')}
+                    style={{
+                      width: responsiveWidth(50),
+                      display: 'flex',
+                      alignItems: 'flex-end',
+                    }}>
+                    <Text style={styles.forgotPasscode}>Forgot Passcode?</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
 
               <View style={styles.customerSellerContainer}>
@@ -260,11 +269,15 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(2.2),
     color: colors.black,
   },
+
+  forgotPasscodeContainer: {
+    display: 'flex',
+    alignItems: 'flex-end',
+  },
   forgotPasscode: {
     fontFamily: fonts.montserrat.semiBold,
     fontSize: responsiveFontSize(2.2),
     color: colors.red,
-    alignSelf: 'flex-end',
     marginVertical: 15,
   },
   customerSellerContainer: {

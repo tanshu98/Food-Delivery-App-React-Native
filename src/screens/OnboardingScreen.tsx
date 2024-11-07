@@ -1,11 +1,9 @@
 import React, {useRef, useState} from 'react';
 import {
-  Dimensions,
   Image,
   ImageBackground,
   ImageSourcePropType,
   Platform,
-  SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
@@ -29,60 +27,22 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {colors} from '../constants/Colors';
 import {fonts} from '../constants/Fonts';
+import carouselData, { CarouselItemData } from '../config/carouselData';
 
-const {width: screenWidth} = Dimensions.get('window');
 
 interface OnboardingScreenProps {
   navigation: any;
 }
 
-interface CarouselItemData {
-  id: number;
-  image: ImageSourcePropType | undefined;
-  title: string;
-  subTitle: string;
-  icon: string;
-}
-
-const data: CarouselItemData[] = [
-  {
-    id: 1,
-    image: carouselOne,
-    title: 'We have Quality Chef',
-    subTitle: 'It is a long established fact that a reader will be distracted',
-    icon: 'keyboard-arrow-right',
-  },
-  {
-    id: 2,
-    image: carouselTwo,
-    title: 'Swift Delivery',
-    subTitle: 'It is a long established fact that a reader will be distracted',
-    icon: 'keyboard-arrow-right',
-  },
-  {
-    id: 3,
-    image: carouselThree,
-    title: 'Choose your Tasty Food',
-    subTitle: 'It is a long established fact that a reader will be distracted',
-    icon: 'keyboard-arrow-right',
-  },
-  {
-    id: 4,
-    image: carouselFour,
-    title: '10% Discount On first order',
-    subTitle: 'It is a long established fact that a reader will be distracted',
-    icon: 'keyboard-arrow-right',
-  },
-];
 
 const OnboardingScreen = ({navigation}: OnboardingScreenProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const carouselRef = useRef<any>(null);
 
   const handleNextSlide = () => {
-    if (activeIndex === data.length - 1) {
+    if (activeIndex === carouselData.length - 1) {
       // Navigate to the login screen if it's the last slide
-      navigation.navigate('loginScreen');
+      // navigation.navigate('loginScreen');
     } else {
       // Otherwise, move to the next slide
       const nextIndex = activeIndex + 1;
@@ -91,14 +51,14 @@ const OnboardingScreen = ({navigation}: OnboardingScreenProps) => {
     }
   };
   
-  const renderItem = ({item}: {item: CarouselItemData}) => {
+  const renderItem = ({item}: {item:CarouselItemData }) => {
     return (
       <View style={styles.carouselItem}>
         <ImageBackground
           source={item.image}
           resizeMode="cover"
           style={styles.OnboardingBg}>
-          {activeIndex !== data.length - 1 && (
+          {activeIndex !== carouselData.length - 1 && (
             <TouchableOpacity
               style={styles.skipButton}
               onPress={() => navigation.navigate('loginScreen')}>
@@ -146,7 +106,7 @@ const OnboardingScreen = ({navigation}: OnboardingScreenProps) => {
       />
       <Carousel
         ref={carouselRef}
-        data={data}
+        data={carouselData}
         //@ts-ignore
         renderItem={renderItem}
         sliderWidth={responsiveScreenWidth(100)}
@@ -156,7 +116,7 @@ const OnboardingScreen = ({navigation}: OnboardingScreenProps) => {
         loop={false}
         autoplay={true}
         onSnapToItem={index => {setActiveIndex(index)
-          if(index === data.length - 1){
+          if(index === carouselData.length - 1){
             carouselRef.current.stopAutoplay()
             setTimeout(() => navigation.navigate('loginScreen'), 3000);
           }
@@ -164,7 +124,7 @@ const OnboardingScreen = ({navigation}: OnboardingScreenProps) => {
       />
       <Pagination
         activeDotIndex={activeIndex}
-        dotsLength={data.length}
+        dotsLength={carouselData.length}
         dotStyle={styles.activeDot}
         inactiveDotStyle={styles.inactiveDot}
         containerStyle={styles.paginationContainer}

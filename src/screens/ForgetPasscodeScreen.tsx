@@ -24,13 +24,11 @@ import PhoneIcon from 'react-native-vector-icons/MaterialIcons';
 import { handleSendOtp,handleVerifyOtp } from '../redux/slices/AuthSlice';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../redux/store/store';
-import Toast from 'react-native-toast-message';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import notifee, { AndroidImportance } from '@notifee/react-native';
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 
 
 interface ForgetPasscodeScreenProps {
-  navigation: any;
+  navigation: NavigationProp<ParamListBase>;
 }
 
 // Yup validation schema
@@ -51,13 +49,10 @@ const ForgetPasscodeScreen = ({navigation}: ForgetPasscodeScreenProps) => {
       }
 
       const forgetPasscode = await dispatch(handleSendOtp(userData));
-      console.log('forgetPasscode', forgetPasscode);
 
       // @ts-ignore
       if (forgetPasscode?.error?.message != 'Rejected') {
-        // console.log('forgetPasscode', forgetPasscode?.payload?.data?.otp);
         
-    //   await AsyncStorage.setItem('forgetPasscodeToken', JSON.stringify(forgetPasscode));
       navigation.navigate('otpVerificationScreen', {...userData,otp:forgetPasscode?.payload?.data?.otp})
       }
     }
@@ -84,9 +79,6 @@ const ForgetPasscodeScreen = ({navigation}: ForgetPasscodeScreenProps) => {
       <Formik
         initialValues={{mobileNumber: ''}}
         validationSchema={validationSchema}
-        // onSubmit={values => {
-        //   console.log('Form values', values);
-        // }}>
         onSubmit={submitHandler}>
         {({
           handleChange,

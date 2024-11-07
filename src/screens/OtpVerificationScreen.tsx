@@ -24,6 +24,7 @@ import {handleSendOtp, handleVerifyOtp} from '../redux/slices/AuthSlice';
 import {useDispatch} from 'react-redux';
 import {AppDispatch} from '../redux/store/store';
 import notifee, {AndroidImportance} from '@notifee/react-native';
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 
 interface UserData {
   mobile_no: string;
@@ -31,7 +32,7 @@ interface UserData {
   otp: string;
 }
 interface OtpVerificationScreenProps {
-  navigation: any;
+  navigation: NavigationProp<ParamListBase>;
   route: {
     params: UserData;
   };
@@ -44,7 +45,6 @@ const OtpVerificationScreen = ({
   const dispatch = useDispatch<AppDispatch>();
   const [userOtp, setUserOtp] = useState('');
   const [otp, setOtp] = useState(route.params.otp);
-  console.log('route', route.params);
 
   const handleOtpChange = (otp: string) => {
     setUserOtp(otp);
@@ -59,11 +59,6 @@ const OtpVerificationScreen = ({
 
     // @ts-ignore
     if (resendOtp?.error?.message != 'Rejected') {
-      // onDisplayNotification(resendOtp?.payload?.data?.otp);
-      console.log(
-        'resendOtp?.payload?.data?.otp',
-        resendOtp?.payload?.data?.otp,
-      );
       onDisplayNotification(resendOtp?.payload?.data?.otp);
       const newOtp = resendOtp?.payload?.data?.otp; // Extract the new OTP
       setOtp(newOtp); // Update the OTP in state
@@ -86,10 +81,6 @@ const OtpVerificationScreen = ({
         otp: userOtp,
       }),
     );
-    console.log(
-      'otpVerification----OTPVERIFICATIONSCREEN ---INSIDE HANDLE SUBMIT FUNCTION',
-      otpVerification,
-    );
 
     // @ts-ignore
     if (otpVerification?.error?.message != 'Rejected') {
@@ -107,17 +98,14 @@ const OtpVerificationScreen = ({
   };
 
   async function onDisplayNotification(otp: string) {
-    // Request permissions (required for iOS)
     await notifee.requestPermission()
 
-    // Create a channel (required for Android)
     const channelId = await notifee.createChannel({
       id: 'default',
       name: 'Default Channel',
       importance:AndroidImportance.HIGH
     });
 
-    // Display a notification
     await notifee.displayNotification({
       title: 'Otp is generated successfully',
       body: otp,
@@ -193,8 +181,6 @@ const styles = StyleSheet.create({
     width: responsiveWidth(100),
     height: responsiveWidth(110),
     opacity: 1,
-    // alignItems: 'center',
-    // flexDirection: 'row',
     gap: 10,
     paddingVertical: 50,
   },
@@ -273,11 +259,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.darkRed,
     padding: 15,
     borderRadius: 25,
-    // fontSize: 'bold'
     fontWeight: 'bold',
   },
   otpVerifyButton: {
-    // width: responsiveWidth(90),
     marginHorizontal: 15,
     backgroundColor: colors.green,
     borderRadius: 50,

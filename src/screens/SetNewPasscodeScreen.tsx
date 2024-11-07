@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   ImageBackground,
   StatusBar,
@@ -22,6 +22,7 @@ import KeyboardWrapper from '../components/KeyboardWrapper';
 import { handleUpdatePassword } from '../redux/slices/AuthSlice';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../redux/store/store';
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 
 
 interface UserData {
@@ -31,13 +32,12 @@ interface UserData {
 }
 
 interface SetNewPasscodeScreenProps {
-    navigation: any;
+    navigation:  NavigationProp<ParamListBase>;
     route: {
         params: UserData;
     }
 }
 
-// Validation Schema using Yup
 const validationSchema = Yup.object().shape({
   newPasscode: Yup.string()
     .required('New Passcode is required')
@@ -49,26 +49,9 @@ const validationSchema = Yup.object().shape({
 
 const SetNewPasscodeScreen = ({ navigation, route }: SetNewPasscodeScreenProps) => {
 
-    console.log('route.params----SET NEW PASSWORD', route.params);
-    // const [updateNewPassword, setUpdateNewPassword] = useState({
-    //     mobile_no: route.params.mobile_no,
-    //     country_code: route.params.country_code,
-    //     // otp: route.params.otp,
-    //     newPassword: '',
-    //     confirmPassword: '',
-    // })
-
     const dispatch = useDispatch<AppDispatch>()
 
- 
-        // setUpdateNewPassword(prev => ({
-        //     ...prev,
-        //     newPassword: valesnewPasscode,
-        //     confirmPassword: confirmPasscode
-        // }))
-    
   const handleSubmit =async (values: { newPasscode: string; confirmPasscode: string }) => {
-    // console.log('Passcode set successfully:', values);
     const passcodeData = {
         mobile_no: route.params.mobile_no,
         country_code: route.params.country_code,
@@ -80,12 +63,10 @@ const SetNewPasscodeScreen = ({ navigation, route }: SetNewPasscodeScreenProps) 
         const updatePasswordData = await dispatch(handleUpdatePassword(passcodeData));
         // @ts-ignore
         if (updatePasswordData?.error?.message != 'Rejected') {
-            console.log('Inside updatePasswordData', updatePasswordData);
             
             
             navigation.navigate('loginScreen');
         } else {
-            // console.log('updatePasswordData----', updatePasswordData);
             console.log('Hello World!!!!!');
             
         }

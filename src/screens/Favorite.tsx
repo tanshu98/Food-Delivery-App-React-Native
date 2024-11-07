@@ -6,9 +6,10 @@ import { fonts } from '../constants/Fonts'
 import RightArrowIcon from 'react-native-vector-icons/AntDesign';
 import { ChickenTikka,PizzaSpecial,VegDumBiryani,ChikckenBiryani } from '../assets'
 import BellIcon from 'react-native-vector-icons/FontAwesome5';
+import { NavigationProp, ParamListBase } from '@react-navigation/native'
 
 interface IProps {
-    navigation: any;
+    navigation: NavigationProp<ParamListBase>;
 }
 
 
