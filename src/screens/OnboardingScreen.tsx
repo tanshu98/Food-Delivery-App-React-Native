@@ -12,10 +12,6 @@ import {
 } from 'react-native';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {
-  carouselOne,
-  carouselTwo,
-  carouselThree,
-  carouselFour,
   onboardingEllipse,
 } from '../assets';
 import {
@@ -28,10 +24,11 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {colors} from '../constants/Colors';
 import {fonts} from '../constants/Fonts';
 import carouselData, { CarouselItemData } from '../config/carouselData';
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 
 
 interface OnboardingScreenProps {
-  navigation: any;
+  navigation: NavigationProp<ParamListBase>;
 }
 
 
@@ -41,10 +38,8 @@ const OnboardingScreen = ({navigation}: OnboardingScreenProps) => {
 
   const handleNextSlide = () => {
     if (activeIndex === carouselData.length - 1) {
-      // Navigate to the login screen if it's the last slide
-      // navigation.navigate('loginScreen');
+      navigation.navigate('loginScreen');
     } else {
-      // Otherwise, move to the next slide
       const nextIndex = activeIndex + 1;
       setActiveIndex(nextIndex);
       carouselRef.current?.snapToItem(nextIndex);

@@ -88,7 +88,7 @@ const BottomTabNavigation = () => {
       />
 
       <Tab.Screen
-        name="offers"
+        name="Offers"
         options={{
             headerShown: true,
             title: 'Best Offers',

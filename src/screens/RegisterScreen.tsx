@@ -243,7 +243,6 @@ const RegisterScreen = ({navigation}: RegisterScreenProps) => {
                   placeholder={{
                     label: 'State',
                     value: null,
-                    // color: colors.black,
                   }}
                   onValueChange={value => {
                     setFieldValue('state', value);
@@ -368,6 +367,8 @@ const styles = StyleSheet.create({
   },
   termsText: {
     fontSize: responsiveFontSize(2),
+    color: colors.black,
+    fontFamily: fonts.montserrat.semiBold,
   },
   loginButton: {
     backgroundColor: colors.green,

@@ -31,9 +31,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AppDispatch} from '../redux/store/store';
 import {useDispatch} from 'react-redux';
 import Toast from 'react-native-toast-message';
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 
 interface LoginScreenProps {
-  navigation: any;
+  navigation: NavigationProp<ParamListBase>;
   AuthCheck: () => void;
 }
 

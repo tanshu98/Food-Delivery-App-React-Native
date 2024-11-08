@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   },
   offersBannerContainer: {
     marginVertical: 10,
-    marginHorizontal: 20,
+    marginHorizontal: 15,
   },
   offerOne: {
     height: responsiveHeight(14),

@@ -17,10 +17,10 @@ import {colors} from '../constants/Colors';
 import {fonts} from '../constants/Fonts';
 import BellIcon from 'react-native-vector-icons/FontAwesome5';
 import PlusIcon from 'react-native-vector-icons/AntDesign';
-import { HandleSingleRestaurantBestChoice } from '../redux/slices/HomeSlice';
+import { BestChoice, HandleSingleRestaurantBestChoice } from '../redux/slices/HomeSlice';
 
 interface IBestChoisesProp {
-    data: HandleSingleRestaurantBestChoice[];
+    data: HandleSingleRestaurantBestChoice[] ;
 }
 
 interface BestChoisesData {
@@ -51,8 +51,8 @@ const BestChoises: React.FC<IBestChoisesProp> = ({data}) => {
       <View style={[styles.card, {backgroundColor}]}>
         <Image source={Pizza} style={styles.image} />
         <View style={styles.itemContainer}>
-          <Text style={styles.itemTitle}>{name}</Text>
-          <Text style={styles.itemPrice}>{price}</Text>
+          <Text ellipsizeMode='tail' numberOfLines={1} style={styles.itemTitle}>{name}</Text>
+          <Text style={styles.itemPrice}>₹{price}</Text>
           <BellIcon name="concierge-bell" size={20} color={colors.black} />
           <Text style={styles.itemRestaurantName}>{category}</Text>
         </View>
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginRight: 15,
     alignItems: 'center',
-    paddingVertical: responsiveHeight(2),
+    paddingVertical: responsiveHeight(1),
     marginHorizontal: 10,
     width: responsiveWidth(40),
     justifyContent: 'center',
@@ -113,13 +113,14 @@ const styles = StyleSheet.create({
     position: 'relative',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: responsiveHeight(1.3),
+    gap: responsiveHeight(1.2),
   },
   itemTitle: {
     marginTop: 50,
     fontFamily: fonts.bai.semiBold,
     fontSize: responsiveFontSize(2.5),
     color: colors.black,
+    // textOverflow:'ellipsis'
   },
   itemPrice: {
     fontFamily: fonts.montserrat.semiBold,

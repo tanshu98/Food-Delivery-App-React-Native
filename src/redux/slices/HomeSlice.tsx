@@ -122,18 +122,61 @@ export interface HandleSingleRestaurant {
   updatedAt: string;
 }
 
+// export interface HandleSingleRestaurantBestChoice {
+//   _id: string;
+//   name: string;
+//   description: string;
+//   category: string;
+//   categoryId: string;
+//   images: string[];
+//   subCategory?: string;
+//   price: number;
+//   quantity: number;
+//   units: string;
+//   businessId: string;
+//   discountPrice?: number;
+//   weight: number;
+//   isActive: boolean;
+//   packingCharge: number;
+//   sizes: string[];
+//   isTodaySpecial: boolean;
+//   specialDayDate: string | null;
+//   isBestChoice: boolean;
+//   createdAt: string;
+//   updatedAt: string;
+// }
+
 export interface HandleSingleRestaurantBestChoice {
   _id: string;
   name: string;
   description: string;
   category: string;
-  categoryId: string;
+  categoryId: string |  {
+    _id: string;
+    name: string;
+    description: string;
+    createdAt: string;
+    updatedAt: string;
+  };
   images: string[];
   subCategory?: string;
   price: number;
   quantity: number;
   units: string;
-  businessId: string;
+  businessId: string |    {
+    location: {
+      type: 'Point';
+      coordinates: number[];
+    };
+    _id: string;
+    ownerId: string;
+    businessName: string;
+    ownerName: string;
+    email: string;
+    accountCompleted: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
   discountPrice?: number;
   weight: number;
   isActive: boolean;
@@ -152,7 +195,7 @@ export interface InitialState {
   RestaurantNearbyProducts: RestaurantNearbyProduct[];
   HandleSingleRestaurantBestChoices: HandleSingleRestaurantBestChoice[];
   HandleSingleRestaurant: HandleSingleRestaurant;
-  BestChoices: BestChoice[];
+  BestChoices: HandleSingleRestaurantBestChoice[];
   loading: boolean;
   error: string;
 }
@@ -189,7 +232,7 @@ export const getTodaySpecial = createAsyncThunk(
       if (!token) {
         return rejectWithValue('Token not found');
       }
-      const response = await fetch('http://192.168.1.13:8089/todayspecials', {
+      const response = await fetch('http://192.168.1.52:8089/todayspecials', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -226,7 +269,7 @@ export const getRestaurantNearby = createAsyncThunk(
       const lat = 17.448294;
       const long = 78.394587;
       const response = await fetch(
-        `http://192.168.1.13:8089/business/nearby?lat=${lat}&long=${long}`,
+        `http://192.168.1.52:8089/business/nearby?lat=${lat}&long=${long}`,
         {
           method: 'GET',
           headers: {
@@ -255,7 +298,7 @@ export const handleSingleRestaurant = createAsyncThunk(
     }
     try {
       const response = await fetch(
-        `http://192.168.1.13:8089/business/${buseinessId}`,
+        `http://192.168.1.52:8089/business/${buseinessId}`,
         {
           method: 'GET',
           headers: {
@@ -291,7 +334,7 @@ export const handleSingleRestaurantTodaySpecial = createAsyncThunk(
     }
     try {
       const response = await fetch(
-        `http://192.168.1.13:8089/todayspecials/business/${buseinessId}`,
+        `http://192.168.1.52:8089/todayspecials/business/${buseinessId}`,
         {
           method: 'GET',
           headers: {
@@ -321,12 +364,13 @@ export const handleBestChoice = createAsyncThunk(
   'getBestChoice',
   async (_, {rejectWithValue}) => {
     const token = await AsyncStorage.getItem('loginToken');
+    console.log('token--handleBestChoice', token);
     if (!token) {
       return rejectWithValue('Token not found!');
     }
     try {
       const response = await fetch(
-        `http://192.168.1.13:8089/bestchoice/best-choice}`,
+        `http://192.168.1.52:8089/bestchoice/best-choice`,
         {
           method: 'GET',
           headers: {
@@ -337,9 +381,14 @@ export const handleBestChoice = createAsyncThunk(
       );
 
       const result = await response.json();
+      console.log('result---handleBestChoice', result);
       if (response.ok) {
-        return result;
+        return result.data.bestChoices;
       } else {
+        console.log(
+          'rejectWithValue(result.error.error);',
+          rejectWithValue(result.error.error),
+        );
         return rejectWithValue(result.error.error);
       }
     } catch (error: unknown) {
@@ -362,7 +411,7 @@ export const handleSingleRestaurantBestChoice = createAsyncThunk(
         return rejectWithValue('Token is not found!');
       }
       const response = await fetch(
-        `http://192.168.1.13:8089/bestchoice/business/${buseinessId}`,
+        `http://192.168.1.52:8089/bestchoice/business/${buseinessId}`,
         {
           method: 'GET',
           headers: {

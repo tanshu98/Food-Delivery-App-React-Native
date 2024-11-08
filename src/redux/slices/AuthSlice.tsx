@@ -83,7 +83,7 @@ export const loginUser = createAsyncThunk(
 
 
     try {
-      const response = await fetch('http://192.168.1.13:8089/user/login', {
+      const response = await fetch('http://192.168.1.52:8089/user/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ export const registerUser = createAsyncThunk(
       role,
     };
     try {
-      const response = await fetch('http://192.168.1.13:8089/user/signUp', {
+      const response = await fetch('http://192.168.1.52:8089/user/signUp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -158,7 +158,7 @@ export const handleSendOtp = createAsyncThunk(
     };
 
     try {
-      const response = await fetch('http://192.168.1.13:8089/user/sendOtp', {
+      const response = await fetch('http://192.168.1.52:8089/user/sendOtp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -191,7 +191,7 @@ export const handleVerifyOtp = createAsyncThunk(
     };
 
     try {
-      const response = await fetch('http://192.168.1.13:8089/user/verifyOtp', {
+      const response = await fetch('http://192.168.1.52:8089/user/verifyOtp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -225,7 +225,7 @@ export const handleUpdatePassword = createAsyncThunk(
     };
 
     try {
-      const response = await fetch('http://192.168.1.13:8089/user/updatePassword', {
+      const response = await fetch('http://192.168.1.52:8089/user/updatePassword', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Image,  StyleSheet, View } from 'react-native';
-import {  responsiveScreenWidth, responsiveWidth } from 'react-native-responsive-dimensions';
+import {  responsiveHeight, responsiveScreenWidth, responsiveWidth } from 'react-native-responsive-dimensions';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { colors } from '../constants/Colors';
 import { carouselData, CarouselItemData } from '../config/HomeCarouselData';
@@ -68,21 +68,24 @@ const styles = StyleSheet.create({
     borderRadius: 15, 
   },
   paginationContainer: {
+    paddingVertical:0,
+    paddingTop:responsiveHeight(2),
+    
   },
   activeDot: {
     backgroundColor: colors.red,
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginHorizontal: 5,
+    width: 12,
+    height: 12,
+    borderRadius: 100,
+    // marginHorizontal: 5,
   },
   inactiveDot: {
     backgroundColor: colors.white,
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    marginHorizontal: 5,
-    borderWidth: 2,
+    width: 25,
+    height: 25,
+    borderRadius: 100,
+    // marginHorizontal: 5,
+    borderWidth: 5,
     borderColor: colors.green,
   },
 });

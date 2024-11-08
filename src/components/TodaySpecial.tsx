@@ -32,8 +32,8 @@ export const TodaySpecial = ({data, handleNavigate, disableText}: IProps) => {
         <View style={styles.itemDetailsContainer}>
           <Text style={styles.itemTitle}>{item.name}</Text>
           <View style={styles.priceContainer}>
-            <Text style={styles.currentPrice}>{item.discountPrice}</Text>
-            <Text style={styles.oldPrice}>{item.price}</Text>
+            <Text style={styles.currentPrice}>₹{item.discountPrice}</Text>
+            <Text style={styles.oldPrice}>₹{item.price}</Text>
           </View>
           <View style={styles.restaurantContainer}>
             <BellIcon

@@ -10,17 +10,20 @@ import {colors} from '../constants/Colors';
 import RestaurantNearby from '../components/RestaurantNearby';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../redux/store/store';
-import {getTodaySpecial} from '../redux/slices/HomeSlice';
+import {getTodaySpecial, handleBestChoice} from '../redux/slices/HomeSlice';
 
 const HomeScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const {todaySpecials} = useSelector((state: RootState) => state.HomeSlice);
+  const getBestChoicesData = useSelector((state:RootState)=> state.HomeSlice.BestChoices)
 
   const handleNavigate = () => {
     navigation.navigate('todaySpecialScreen', {data: todaySpecials});
   };
+
   useEffect(() => {
     dispatch(getTodaySpecial());
+    dispatch(handleBestChoice());
   }, [dispatch]);
   return (
     <View style={styles.container}>
@@ -33,7 +36,7 @@ const HomeScreen = ({navigation}: any) => {
         <HomeHeader navigation={navigation} />
         <HomeTopComponent />
         <HomeCarousal />
-        <BestChoises />
+        <BestChoises data={getBestChoicesData} />
         <TodaySpecial
           navigation={navigation}
           data={todaySpecials}
